@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable name="shoppingItem" type="com.example.hishab.models.entities.ShoppingItem"/>
+        <variable name="category" type="com.example.hishab.models.entities.Category"/>
+        <variable name="purchaseItem" type="com.example.hishab.models.entities.PurchaseItem"/>
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <EditText
+        android:id="@+id/et_product_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Product name"
+        android:text="@={shoppingItem.itemName}"
+        app:layout_constraintBaseline_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <EditText
+        android:id="@+id/et_category"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="45dp"
+        android:hint="Caterory"
+        android:text="@={category.categoryName}"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/et_cost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Cost"
+        android:inputType="number"
+        android:text="@={`` + purchaseItem.cost}"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/et_category" />
+        <EditText
+            android:id="@+id/et_date_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_cost"
+            android:hint="purchase date"
+            />
+    <Button
+        android:id="@+id/btn_submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/et_date_time"
+        android:text="submit"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

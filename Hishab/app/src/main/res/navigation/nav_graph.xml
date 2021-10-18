@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/categoryDetailsFragment">
+
+    <fragment
+        android:id="@+id/addShoppingFragment"
+        android:name="com.example.hishab.fragments.AddShoppingFragment"
+        android:label="fragment_add_shopping"
+        tools:layout="@layout/fragment_add_shopping" >
+        <action
+            android:id="@+id/action_addShoppingFragment_to_purchaseHistoryFragment"
+            app:destination="@id/purchaseHistoryFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/purchaseHistoryFragment"
+        android:name="com.example.hishab.fragments.PurchaseHistoryFragment"
+        android:label="fragment_purchase_history"
+        tools:layout="@layout/fragment_purchase_history" >
+        <action
+            android:id="@+id/action_purchaseHistoryFragment_to_addShoppingFragment"
+            app:destination="@id/addShoppingFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/categoryDetailsFragment"
+        android:name="com.example.hishab.fragments.CategoryDetailsFragment"
+        android:label="fragment_category_details"
+        tools:layout="@layout/fragment_category_details" />
+</navigation>
