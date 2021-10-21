@@ -15,13 +15,14 @@ import com.example.hishab.adapter.CategoryCostAdapter
 import com.example.hishab.adapter.PurchaseItemsAdapter
 import com.example.hishab.viewmodel.AddShoppingViewModel
 import com.example.hishab.viewmodel.CategoryCostViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.*
 
-
+@AndroidEntryPoint
 class CategoryDetailsFragment : Fragment() {
     private lateinit var vm: CategoryCostViewModel
     override fun onCreateView(

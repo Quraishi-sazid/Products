@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.hishab.adapter.PurchaseItemsAdapter
 import com.example.hishab.R
 import com.example.hishab.db.AppDatabase
+import com.example.hishab.di.ProgressDataFactory
 import com.example.hishab.repository.ShoppingRepository
 //import com.example.hishab.databinding.FragmentPurchaseHistoryBinding
 import com.example.hishab.viewmodel.PurchaseHistoryViewModel
@@ -24,8 +25,8 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class PurchaseHistoryFragment : Fragment() {
-/*    @Inject
-    lateinit var database: AppDatabase*/
+    @Inject
+    lateinit var progressDataFactory: ProgressDataFactory
     val purchaseHistoryViewModel:PurchaseHistoryViewModel by viewModels()
     lateinit var NavController:NavController
     lateinit var recyclerView: RecyclerView
@@ -38,12 +39,13 @@ class PurchaseHistoryFragment : Fragment() {
         val inflate = inflater.inflate(R.layout.fragment_purchase_history, container, false)
         NavController =findNavController()
 
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(Dispatchers.Main).launch {//Main thread query needs to be changed
             purchaseHistoryViewModel.getPurchaseItems()
             withContext (Dispatchers.Main) {
                 recyclerView = inflate.findViewById<RecyclerView>(R.id.recycler_view)!!
                 recyclerView.layoutManager=LinearLayoutManager(activity)
-                recyclerView.adapter= PurchaseItemsAdapter(purchaseHistoryViewModel.purchaseHistoryList)
+                var test=progressDataFactory.create(purchaseHistoryViewModel.purchaseHistoryList)
+                recyclerView.adapter= test
             }
         }
         val fab = inflate.findViewById<FloatingActionButton>(R.id.fab);

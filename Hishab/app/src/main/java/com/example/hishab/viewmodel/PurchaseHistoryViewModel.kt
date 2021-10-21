@@ -13,7 +13,8 @@ class PurchaseHistoryViewModel @Inject constructor(app:Application):AndroidViewM
     @Inject
     lateinit var repository:ShoppingRepository
 
-    suspend fun getPurchaseItems() {
+    suspend fun getPurchaseItems()
+    {
         purchaseHistoryList = repository.getPurchaseHistory();
     }
 }

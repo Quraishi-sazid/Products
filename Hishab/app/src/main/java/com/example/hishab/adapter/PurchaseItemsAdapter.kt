@@ -10,9 +10,11 @@ import com.example.hishab.R
 import com.example.hishab.databinding.LayoutPurchaseItemBinding
 import com.example.hishab.models.entities.PurchaseHistory
 import com.example.hishab.utils.Util
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 import kotlin.collections.ArrayList
 
-class PurchaseItemsAdapter(public val dataSet: List<PurchaseHistory>):RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class PurchaseItemsAdapter @AssistedInject constructor(@Assisted dataSet: List<PurchaseHistory>):RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     public val objectList=ArrayList<Any>()
     init {
         var pMonth="";

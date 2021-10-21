@@ -10,8 +10,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class AddShoppingViewModel @Inject constructor (app:Application) :AndroidViewModel(app) {
-
+class AddShoppingViewModel @Inject constructor (app:Application) :AndroidViewModel(app)
+{
     @Inject
     lateinit var shoppingItem:ShoppingItem
     @Inject

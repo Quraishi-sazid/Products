@@ -11,13 +11,13 @@ import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 
-/*@EntryPoint
+@EntryPoint
 @InstallIn(SingletonComponent::class)
 interface FooEntryPoint {
     val database: AppDatabase
-}*/
+}
 
-/*
+
 @Module
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
@@ -31,9 +31,10 @@ object DatabaseModule {
                 app.applicationContext,
                 AppDatabase::class.java,
                 "hishab_database"
-            ).fallbackToDestructiveMigration().
+            ).allowMainThreadQueries().
+            fallbackToDestructiveMigration().
             build()
             return instance
         }
     }
-}*/
+}
