@@ -8,16 +8,13 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import java.util.*
-
-
+import javax.inject.Inject
 
 
 @Entity(tableName = "purchase_table")
-class PurchaseItem(
-    private @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "purchase_id") var purchaseId: Int = 0,
-    private @ColumnInfo(name = "cost") var cost: Int
-): BaseObservable() {
-
+class PurchaseItem @Inject constructor (): BaseObservable() {
+    private @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "purchase_id") var purchaseId: Int = 0
+    private @ColumnInfo(name = "cost") var cost: Int=0
     @Bindable
     public fun getPurchaseId():Int
     {

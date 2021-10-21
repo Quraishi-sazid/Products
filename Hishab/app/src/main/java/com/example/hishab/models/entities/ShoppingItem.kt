@@ -6,11 +6,13 @@ import androidx.databinding.Bindable
 import androidx.room.*
 import com.example.hishab.BR
 import com.example.hishab.repository.ShoppingRepository
+import javax.inject.Inject
 
 @Entity(tableName = "shopping_table")
-data class ShoppingItem(private @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "shopping_id") var _itemId:Int=0,private @ColumnInfo(name = "item_name")  var ItemName:String=""):
+class ShoppingItem @Inject constructor():
     BaseObservable() {
-
+    private @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "shopping_id") var _itemId:Int=0
+    private @ColumnInfo(name = "item_name")  var ItemName:String=""
 
     @Bindable
     public fun getItemName():String

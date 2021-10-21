@@ -11,27 +11,30 @@ import android.widget.CalendarView
 import android.widget.EditText
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.hishab.R
 import com.example.hishab.databinding.FragmentAddShoppingBinding
+import com.example.hishab.models.entities.ShoppingItem
 import com.example.hishab.viewmodel.AddShoppingViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class AddShoppingFragment : Fragment() {
 
     private lateinit var binding: FragmentAddShoppingBinding
-    private lateinit var vm:AddShoppingViewModel
+    private val vm:AddShoppingViewModel by viewModels()
     val myCalendar = Calendar.getInstance()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding= DataBindingUtil.inflate(inflater,R.layout.fragment_add_shopping,container,false)
-        vm=ViewModelProvider(this).get(AddShoppingViewModel::class.java)
         binding.shoppingItem=vm.shoppingItem
         binding.purchaseItem=vm.purchaseItem
         binding.category=vm.category

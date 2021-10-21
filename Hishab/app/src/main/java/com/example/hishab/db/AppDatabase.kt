@@ -13,6 +13,7 @@ import com.example.hishab.models.entities.PurchaseItem
 import com.example.hishab.db.dao.PurchaseShoppingCategoryDao
 import com.example.hishab.models.entities.ShoppingItem
 import com.example.hishab.utils.Converters
+import javax.inject.Inject
 
 
 @Database(entities = arrayOf(Category::class,ShoppingItem::class,PurchaseItem::class), version = 4)
@@ -23,8 +24,8 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun PurchaseDao(): PurchaseDao
     abstract fun PurchaseShoppingCategoryDao(): PurchaseShoppingCategoryDao
 
-
-    private var INSTANCE: AppDatabase? = null
+    @Inject
+    lateinit var INSTANCE: AppDatabase
 
     companion object {
         @Volatile
@@ -36,13 +37,11 @@ abstract class AppDatabase : RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "hishab_database"
-                ).fallbackToDestructiveMigration().
-                build()
+                ).fallbackToDestructiveMigration().build()
                 INSTANCE = instance
                 instance
             }
         }
-
     }
 
 }

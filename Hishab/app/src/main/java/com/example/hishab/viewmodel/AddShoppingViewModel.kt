@@ -6,14 +6,20 @@ import com.example.hishab.models.entities.Category
 import com.example.hishab.models.entities.PurchaseItem
 import com.example.hishab.models.entities.ShoppingItem
 import com.example.hishab.repository.ShoppingRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class AddShoppingViewModel(app:Application) :AndroidViewModel(app) {
+@HiltViewModel
+class AddShoppingViewModel @Inject constructor (app:Application) :AndroidViewModel(app) {
 
-    var shoppingItem=ShoppingItem(0,"");
-    var purchaseItem=PurchaseItem(0,0);
-    var category=Category();
-
-    private val repository=ShoppingRepository(app)
+    @Inject
+    lateinit var shoppingItem:ShoppingItem
+    @Inject
+    lateinit var purchaseItem:PurchaseItem
+    @Inject
+    lateinit var category:Category
+    @Inject
+    lateinit var repository:ShoppingRepository
 
     suspend fun get():List<Category>
     {

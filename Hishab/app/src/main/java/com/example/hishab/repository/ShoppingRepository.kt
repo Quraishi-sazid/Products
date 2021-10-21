@@ -6,17 +6,24 @@ import com.example.hishab.db.dao.CategoryDao
 import com.example.hishab.db.dao.PurchaseDao
 import com.example.hishab.db.dao.PurchaseShoppingCategoryDao
 import com.example.hishab.db.dao.ShoppingDao
+//import com.example.hishab.di.FooEntryPoint
 import com.example.hishab.models.CategoryAndShoppingItem
 import com.example.hishab.models.CategoryCostModel
 import com.example.hishab.models.entities.*
+import dagger.hilt.EntryPoint
+import dagger.hilt.EntryPoints
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Inject
 
-class ShoppingRepository(application: Application) {
+
+class ShoppingRepository (application: Application) {
     private var categoryDao: CategoryDao
     private var shoppingDao: ShoppingDao
     private var purchaseDao: PurchaseDao
     private var purchaseShoppingCategoryDao: PurchaseShoppingCategoryDao
-    private val database = AppDatabase.getDatabase(application)
-
+    //var database= EntryPoints.get(application,FooEntryPoint::class.java).database
+    var database= AppDatabase.getDatabase(application)
     init {
         categoryDao=database.CategoryDao()
         shoppingDao=database.ShoppingDao()

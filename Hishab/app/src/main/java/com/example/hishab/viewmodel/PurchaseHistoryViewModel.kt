@@ -5,10 +5,13 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hishab.models.entities.PurchaseHistory
 import com.example.hishab.repository.ShoppingRepository
-
-class PurchaseHistoryViewModel(app:Application):AndroidViewModel(app) {
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
+@HiltViewModel
+class PurchaseHistoryViewModel @Inject constructor(app:Application):AndroidViewModel(app) {
     lateinit var purchaseHistoryList:List<PurchaseHistory>
-    private val repository= ShoppingRepository(app)
+    @Inject
+    lateinit var repository:ShoppingRepository
 
     suspend fun getPurchaseItems() {
         purchaseHistoryList = repository.getPurchaseHistory();
