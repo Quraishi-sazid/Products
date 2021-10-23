@@ -20,7 +20,6 @@ class Category @Inject constructor () :BaseObservable() {
     }
     fun setCategoryName(value:String)
     {
-        Util.getMonthFromDateTime(35);
         CategoryName=value
         notifyPropertyChanged(BR.categoryName)
     }

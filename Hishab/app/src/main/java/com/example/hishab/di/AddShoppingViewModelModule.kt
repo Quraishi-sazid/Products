@@ -12,10 +12,6 @@ import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 
-@AssistedFactory
-interface ProgressDataFactory {
-    fun create(dataSet: List<PurchaseHistory>): PurchaseItemsAdapter
-}
 
 
 @Module
@@ -26,8 +22,10 @@ object ViewModelModule {
     @Provides
     fun provideRepository(app: Application):ShoppingRepository
     {
-        //val application=app as Application
         return  ShoppingRepository(app)
     }
+
+
+
 
 }

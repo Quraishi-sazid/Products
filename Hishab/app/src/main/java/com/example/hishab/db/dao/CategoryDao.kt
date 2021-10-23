@@ -11,7 +11,7 @@ interface CategoryDao {
     @Insert
     suspend fun insertAll(vararg  categories: Category)
     @Query("SELECT * FROM category")
-    suspend fun getAll(): List<Category>
+    suspend fun getAll():  List<Category>
     @Query("SELECT * FROM category where category_name like :name")
     suspend fun getCategoryIdFromName(name:String): Category
     @Query("Select * FROM category where category_id=:id")

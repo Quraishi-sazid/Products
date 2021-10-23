@@ -21,11 +21,6 @@ class AddShoppingViewModel @Inject constructor (app:Application) :AndroidViewMod
     @Inject
     lateinit var repository:ShoppingRepository
 
-    suspend fun get():List<Category>
-    {
-        val all = repository.getAll()
-        return  all;
-    }
 
     suspend fun insertPurchaseItem() {
         var queriedCategory=repository.getCategoryIdFromName(category.getCategoryName());

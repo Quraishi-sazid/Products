@@ -1,6 +1,7 @@
 package com.example.hishab.repository
 
 import android.app.Application
+import androidx.lifecycle.LiveData
 import com.example.hishab.db.AppDatabase
 import com.example.hishab.db.dao.CategoryDao
 import com.example.hishab.db.dao.PurchaseDao
@@ -35,10 +36,6 @@ class ShoppingRepository (application: Application) {
     {
         categoryDao.insertAll(category)
     }
-    suspend fun getAll():List<Category>
-    {
-        return categoryDao.getAll();
-    }
 
     suspend fun getCategoryIdFromName(name:String):Category
     {
@@ -64,11 +61,11 @@ class ShoppingRepository (application: Application) {
     {
         return purchaseDao.getAllPurchase()
     }
-    suspend fun getPurchaseHistory():List<PurchaseHistory>
+    suspend fun getPurchaseHistory(): LiveData<List<PurchaseHistory>>//live data needed
     {
         return purchaseShoppingCategoryDao.getPurchaseHistory()
     }
-    suspend fun getTotalCostByCategoryFromDate():List<CategoryCostModel>
+    suspend fun getTotalCostByCategoryFromDate():List<CategoryCostModel>//live data needed
     {
         return purchaseDao.getTotalCostByCategoryFromDate(0,0,0)
     }

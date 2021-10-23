@@ -1,43 +1,63 @@
 package com.example.hishab.adapter
 
+import android.provider.ContactsContract.CommonDataKinds.Note
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hishab.R
 import com.example.hishab.databinding.LayoutPurchaseItemBinding
 import com.example.hishab.models.entities.PurchaseHistory
 import com.example.hishab.utils.Util
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
-import kotlin.collections.ArrayList
 
-class PurchaseItemsAdapter @AssistedInject constructor(@Assisted dataSet: List<PurchaseHistory>):RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    public val objectList=ArrayList<Any>()
-    init {
-        var pMonth="";
-        for (it in dataSet)
-        {
-            val month_name=Util.getMonthForInt(it.getMonth())
-            if(!pMonth.equals(month_name))
-            {
-                objectList.add(month_name);
-                pMonth=month_name
+
+class PurchaseItemsAdapter(): ListAdapter<Any, RecyclerView.ViewHolder>(diffUtilCallBack) {
+
+    companion object
+    {
+       var diffUtilCallBack= object : DiffUtil.ItemCallback<Any>(){
+            override fun areItemsTheSame(oldItem: Any, newItem: Any): Boolean {
+                if(!Util.getType(oldItem).equals(Util.getType(newItem)))
+                {
+                    return false;
+                }
+                if(oldItem is String && newItem is String)
+                    return  oldItem.equals(newItem)
+                else if(oldItem is PurchaseHistory && newItem is PurchaseHistory)
+                {
+                   return oldItem.getPurchaseId()==newItem.getPurchaseId()
+                }
+                return false
             }
-            objectList.add(it)
-        }
 
+            override fun areContentsTheSame(oldItem: Any, newItem: Any): Boolean {
+                if(oldItem is PurchaseHistory && newItem is PurchaseHistory)
+                {
+                    val b = oldItem.getCategoryName().equals(newItem.getCategoryName()) &&
+                            oldItem.getItemName().equals(newItem.getItemName()) &&
+                            oldItem.getCost() == newItem.getCost() &&
+                            oldItem.getDay() == newItem.getDay() &&
+                            oldItem.getMonth() == newItem.getMonth() &&
+                            oldItem.getYear() == newItem.getYear()
+                    return b;
+                }
+                return true
+            }
+        }
     }
+    //private lateinit var objectList:List<Any>;
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         if(viewType==1)
         {
             val binding: LayoutPurchaseItemBinding = DataBindingUtil.inflate(
-                LayoutInflater.from(parent.context),
-                R.layout.layout_purchase_item,
-                parent,
-                false
+                    LayoutInflater.from(parent.context),
+                    R.layout.layout_purchase_item,
+                    parent,
+                    false
             )
             return ViewHolder(binding)
         }
@@ -51,25 +71,23 @@ class PurchaseItemsAdapter @AssistedInject constructor(@Assisted dataSet: List<P
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if(holder is ViewHolder)
         {
-            holder.bind(objectList.get(position) as PurchaseHistory)
+            holder.bind(getItem(position) as PurchaseHistory)
         }
         else if(holder is MonthViewHolder)
         {
-            holder.textview.setText(objectList.get(position) as String)
+            holder.textview.setText(getItem(position) as String)
         }
 
     }
 
-    override fun getItemCount(): Int {
-            return objectList.size
-    }
-
     override fun getItemViewType(position: Int): Int {
-        if(objectList.get(position) is String)
+        if(getItem(position) is String)
             return 2;
         else
             return 1;
     }
+
+
 
     class ViewHolder(val binding: LayoutPurchaseItemBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(purchaseHistory: PurchaseHistory)

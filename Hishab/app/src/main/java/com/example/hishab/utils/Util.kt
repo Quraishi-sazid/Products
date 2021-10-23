@@ -4,10 +4,6 @@ import java.text.DateFormatSymbols
 
 class Util {
     companion object{
-        fun getMonthFromDateTime(x: Int):Int
-        {
-            return x%34;
-        }
 
         fun getMonthForInt(num: Int): String {
             var month = "wrong"
@@ -18,5 +14,10 @@ class Util {
             }
             return month
         }
+        fun getType(item:Any):String?
+        {
+            return item::class.simpleName
+        }
+
     }
 }

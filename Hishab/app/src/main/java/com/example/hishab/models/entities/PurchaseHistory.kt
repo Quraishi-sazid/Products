@@ -6,6 +6,7 @@ import java.text.DateFormatSymbols
 import java.util.*
 
 data class PurchaseHistory(
+    private val purchaseId: Int?,
     private val categoryName: String?,
     private val ItemName: String,
     private val cost: Int,
@@ -55,6 +56,10 @@ data class PurchaseHistory(
             monthString = months[month-1]
         }
         return monthString.substring(0,3)+"\n"+day
+    }
+    fun getPurchaseId():Int?
+    {
+        return purchaseId;
     }
 
 }
