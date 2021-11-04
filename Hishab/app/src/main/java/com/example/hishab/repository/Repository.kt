@@ -2,7 +2,6 @@ package com.example.hishab.repository
 
 import android.app.Application
 import androidx.lifecycle.LiveData
-import com.example.hishab.db.AppDatabase
 import com.example.hishab.db.dao.CategoryDao
 import com.example.hishab.db.dao.PurchaseDao
 import com.example.hishab.db.dao.PurchaseShoppingCategoryDao
@@ -12,11 +11,7 @@ import com.example.hishab.di.FooEntryPoint
 import com.example.hishab.models.CategoryAndShoppingItem
 import com.example.hishab.models.CategoryCostModel
 import com.example.hishab.models.entities.*
-import dagger.hilt.EntryPoint
 import dagger.hilt.EntryPoints
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Inject
 
 
 class ShoppingRepository (application: Application) {
@@ -70,6 +65,14 @@ class ShoppingRepository (application: Application) {
         return purchaseDao.getTotalCostByCategoryFromDate(0,0,0)
     }
 
+    suspend fun deletePurchaseHistory(position: Int) {
+         purchaseDao.deleteByPurchaseId(position)
+    }
 
-
+    suspend fun updatePurchaseItem(
+        shoppingItem: ShoppingItem,
+        purchaseItem: PurchaseItem
+    ) {
+        purchaseDao.update(shoppingItem.itemId,purchaseItem.getPurchaseId(),purchaseItem.getCost(),purchaseItem.day,purchaseItem.month,purchaseItem.year);
+    }
 }
