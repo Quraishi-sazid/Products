@@ -86,7 +86,9 @@ class PurchaseItemsAdapter(): ListAdapter<Any, RecyclerView.ViewHolder>(diffUtil
         else
             return 1;
     }
-
+    fun getElementAt(pos:Int):Any{
+        return getItem(pos);
+    }
 
 
     class ViewHolder(val binding: LayoutPurchaseItemBinding): RecyclerView.ViewHolder(binding.root) {

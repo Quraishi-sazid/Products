@@ -10,11 +10,12 @@ import com.example.hishab.di.FooEntryPoint
 //import com.example.hishab.di.FooEntryPoint
 import com.example.hishab.models.CategoryAndShoppingItem
 import com.example.hishab.models.CategoryCostModel
+import com.example.hishab.models.DateModel
 import com.example.hishab.models.entities.*
 import dagger.hilt.EntryPoints
 
 
-class ShoppingRepository (application: Application) {
+class Repository (application: Application) {
     private var categoryDao: CategoryDao
     private var shoppingDao: ShoppingDao
     private var purchaseDao: PurchaseDao
@@ -74,5 +75,9 @@ class ShoppingRepository (application: Application) {
         purchaseItem: PurchaseItem
     ) {
         purchaseDao.update(shoppingItem.itemId,purchaseItem.getPurchaseId(),purchaseItem.getCost(),purchaseItem.day,purchaseItem.month,purchaseItem.year);
+    }
+
+    suspend fun getdetailsOfCategoryfromDate(categoryId: Int, dateModel: DateModel):LiveData<List<PurchaseHistory>> {
+       return purchaseShoppingCategoryDao.getdetailsOfCategoryfromDate(categoryId,dateModel.day,dateModel.month,dateModel.year)
     }
 }

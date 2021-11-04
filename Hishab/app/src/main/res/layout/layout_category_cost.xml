@@ -7,6 +7,7 @@
             type="com.example.hishab.models.CategoryCostModel" />
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/cl_category_cost_item"
     android:layout_width="match_parent"
     android:layout_height="56dp">
     <TextView

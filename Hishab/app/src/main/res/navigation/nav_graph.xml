@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/purchaseHistoryFragment">
+    app:startDestination="@id/categoryDetailsFragment">
 
     <fragment
         android:id="@+id/addShoppingFragment"
@@ -13,6 +13,12 @@
         <action
             android:id="@+id/action_addShoppingFragment_to_purchaseHistoryFragment"
             app:destination="@id/purchaseHistoryFragment" />
+        <argument
+            android:name="editHistory"
+            app:argType="com.example.hishab.models.entities.PurchaseHistory"
+            app:nullable="true"
+            android:defaultValue="@null"
+            />
     </fragment>
     <fragment
         android:id="@+id/purchaseHistoryFragment"
@@ -22,10 +28,23 @@
         <action
             android:id="@+id/action_purchaseHistoryFragment_to_addShoppingFragment"
             app:destination="@id/addShoppingFragment" />
+        <argument
+            android:name="purchaseId"
+            app:argType="integer"
+            android:defaultValue="-1" />
+        <argument
+            android:name="dateModel"
+            app:argType="com.example.hishab.models.DateModel"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
     <fragment
         android:id="@+id/categoryDetailsFragment"
-        android:name="com.example.hishab.fragments.CategoryDetailsFragment"
+        android:name="com.example.hishab.fragments.CategoryCostFragment"
         android:label="fragment_category_details"
-        tools:layout="@layout/fragment_category_details" />
+        tools:layout="@layout/fragment_category_details" >
+        <action
+            android:id="@+id/action_categoryDetailsFragment_to_purchaseHistoryFragment"
+            app:destination="@id/purchaseHistoryFragment" />
+    </fragment>
 </navigation>

@@ -1,11 +1,9 @@
 package com.example.hishab.models.entities
 
-import android.app.Application
 import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
 import androidx.room.*
 import com.example.hishab.BR
-import com.example.hishab.repository.ShoppingRepository
 import javax.inject.Inject
 
 @Entity(tableName = "shopping_table")

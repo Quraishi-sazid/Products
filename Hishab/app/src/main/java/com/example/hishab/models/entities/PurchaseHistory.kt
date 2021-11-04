@@ -2,6 +2,7 @@ package com.example.hishab.models.entities
 
 import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
+import java.io.Serializable
 import java.text.DateFormatSymbols
 import java.util.*
 
@@ -13,8 +14,10 @@ data class PurchaseHistory(
     private val descrip: String,
     private val day: Int,
     private val month: Int,
-    private val year: Int
-):BaseObservable()
+    private val year: Int,
+    private val categoryId:Int?,
+    private val shoppingId:Int?
+):BaseObservable(),Serializable
 {
     @Bindable
     fun getCategoryName():String?{
@@ -61,5 +64,16 @@ data class PurchaseHistory(
     {
         return purchaseId;
     }
+
+    fun getCategoryId():Int?
+    {
+        return categoryId;
+    }
+
+    fun getShoppingId():Int?
+    {
+        return shoppingId;
+    }
+
 
 }
