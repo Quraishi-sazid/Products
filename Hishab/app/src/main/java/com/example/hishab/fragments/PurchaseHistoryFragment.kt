@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hishab.R
 import com.example.hishab.adapter.PurchaseItemsAdapter
+import com.example.hishab.models.entities.Category
+import com.example.hishab.models.entities.CategoryAndProductModel
 import com.example.hishab.repository.Repository
 import com.example.hishab.utils.SwipeToDeleteCallback
 //import com.example.hishab.databinding.FragmentPurchaseHistoryBinding
@@ -30,6 +32,8 @@ class PurchaseHistoryFragment : Fragment() {
     lateinit var recyclerView: RecyclerView
     var adapter=PurchaseItemsAdapter()
     val args: PurchaseHistoryFragmentArgs by navArgs()
+    lateinit var categoryAndProductModelList:List<CategoryAndProductModel>
+    lateinit var distinctCategoryList:List<Category?>
     @Inject
     lateinit var repository: Repository
     override fun onCreateView(
@@ -45,6 +49,12 @@ class PurchaseHistoryFragment : Fragment() {
                     val convertedList = purchaseHistoryViewModel.convert(it);
                     adapter.submitList(convertedList)
                 })
+                purchaseHistoryViewModel.getProductCategoryList().observe(viewLifecycleOwner,{
+                    categoryAndProductModelList=it
+                    distinctCategoryList = categoryAndProductModelList.distinctBy { it.getCategoryId() }.map { it.getCategoryId()?.let { it1 ->
+                        it.getCategoryName()?.let { it2 -> Category(it1, it2) }
+                    } }
+                });
             }
         }
         else
@@ -56,14 +66,19 @@ class PurchaseHistoryFragment : Fragment() {
                     val convertedList = purchaseHistoryViewModel.convert(it);
                     adapter.submitList(convertedList)
                 })
+                purchaseHistoryViewModel.getProductCategoryList().observe(viewLifecycleOwner,{
+                    categoryAndProductModelList=it
+                });
             }
         }
         recyclerView = inflate.findViewById<RecyclerView>(R.id.recycler_view)!!
         recyclerView.layoutManager=LinearLayoutManager(activity)
         recyclerView.adapter= adapter;
-        val fab = inflate.findViewById<FloatingActionButton>(R.id.fab);
+        val fab = inflate.findViewById<FloatingActionButton>(R.id.fab)
+
         fab.setOnClickListener(View.OnClickListener {
-          findNavController().navigate(R.id.action_purchaseHistoryFragment_to_addShoppingFragment)
+            val action = PurchaseHistoryFragmentDirections.actionPurchaseHistoryFragmentToAddShoppingFragment(categoryAndProductModelList.toTypedArray(),distinctCategoryList.toTypedArray())
+            findNavController().navigate(action);
         })
         ItemTouchHelper(SwipeToDeleteCallback(context,adapter,purchaseHistoryViewModel,this)).attachToRecyclerView(recyclerView)
         return inflate

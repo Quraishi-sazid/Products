@@ -2,10 +2,7 @@ package com.example.hishab.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import com.example.hishab.models.entities.Category
-import com.example.hishab.models.entities.PurchaseHistory
-import com.example.hishab.models.entities.PurchaseItem
-import com.example.hishab.models.entities.ShoppingItem
+import com.example.hishab.models.entities.*
 import com.example.hishab.repository.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -26,9 +23,24 @@ class AddShoppingViewModel @Inject constructor (app:Application) :AndroidViewMod
 
 
     suspend fun insertPurchaseItem() {
-        var queriedCategory = getCategory()
-        var quariedShoppingItem = getShoppingItem(queriedCategory)
-        purchaseItem.shoppingId=quariedShoppingItem.itemId
+        if(shoppingItem.itemId==0)
+        {
+            if(category.categoryId!=0)
+            {
+                var quariedShoppingItem = getShoppingItem(category)
+                purchaseItem.shoppingId=quariedShoppingItem.itemId
+            }
+            else
+            {
+                var queriedCategory = getCategory()
+                var quariedShoppingItem = getShoppingItem(queriedCategory)
+                purchaseItem.shoppingId=quariedShoppingItem.itemId
+            }
+        }
+        else
+        {
+            purchaseItem.shoppingId=shoppingItem.itemId
+        }
         repository.insertPurchaseItem(purchaseItem)
     }
 
@@ -47,6 +59,7 @@ class AddShoppingViewModel @Inject constructor (app:Application) :AndroidViewMod
         }
         return quariedShoppingItem
     }
+
 
     private suspend fun getCategory(): Category {
         var queriedCategory = repository.getCategoryIdFromName(category.getCategoryName());
@@ -67,8 +80,6 @@ class AddShoppingViewModel @Inject constructor (app:Application) :AndroidViewMod
             updatePurchaseHistory.getItemName()?.let { shoppingItem.setItemName(it) }
             updatePurchaseHistory.getCategoryName()?.let{category.setCategoryName(it)}
         }
-
-
     }
 
     suspend fun updatePurchaseItem(updatePurchaseHistory: PurchaseHistory) {
@@ -77,4 +88,7 @@ class AddShoppingViewModel @Inject constructor (app:Application) :AndroidViewMod
         updatePurchaseHistory.getPurchaseId()?.let { purchaseItem.setPurchaseId(it) }
         repository.updatePurchaseItem(quariedShoppingItem,purchaseItem)
     }
+    /*suspend fun getProductCategoryList(): List<CategoryAndProductModel> {
+        return repository.getProductCategoryList()
+    }*/
 }

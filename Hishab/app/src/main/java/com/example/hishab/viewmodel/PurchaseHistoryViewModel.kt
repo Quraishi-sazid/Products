@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import com.example.hishab.models.DateModel
+import com.example.hishab.models.entities.CategoryAndProductModel
 import com.example.hishab.models.entities.PurchaseHistory
 import com.example.hishab.repository.Repository
 import com.example.hishab.utils.Util
@@ -42,5 +43,9 @@ class PurchaseHistoryViewModel @Inject constructor(app:Application):AndroidViewM
 
     suspend fun delete(position:Int) {
         repository.deletePurchaseHistory(position);
+    }
+
+    suspend fun getProductCategoryList(): LiveData<List<CategoryAndProductModel>> {
+        return repository.getProductCategoryList()
     }
 }

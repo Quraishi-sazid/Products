@@ -80,4 +80,8 @@ class Repository (application: Application) {
     suspend fun getdetailsOfCategoryfromDate(categoryId: Int, dateModel: DateModel):LiveData<List<PurchaseHistory>> {
        return purchaseShoppingCategoryDao.getdetailsOfCategoryfromDate(categoryId,dateModel.day,dateModel.month,dateModel.year)
     }
+    fun getProductCategoryList():LiveData<List<CategoryAndProductModel>>
+    {
+        return shoppingDao.getProductCategoryList()
+    }
 }

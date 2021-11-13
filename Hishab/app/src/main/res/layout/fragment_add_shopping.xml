@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/et_product_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -20,7 +20,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/et_category"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

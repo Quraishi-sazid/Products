@@ -52,10 +52,10 @@ class SwipeToDeleteCallback(var context: Context?,var listAdapter: PurchaseItems
         else
             run {
                 var purchaseHistory =(listAdapter.getElementAt(viewHolder.adapterPosition) as PurchaseHistory)
-                var directions=PurchaseHistoryFragmentDirections.actionPurchaseHistoryFragmentToAddShoppingFragment()
+            /*    var directions=PurchaseHistoryFragmentDirections.actionPurchaseHistoryFragmentToAddShoppingFragment()
                 directions.editHistory=purchaseHistory
                 purchaseHistoryFragment.findNavController()
-                    .navigate(directions)
+                    .navigate(directions)*/
             }
 
 

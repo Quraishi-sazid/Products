@@ -3,18 +3,21 @@ package com.example.hishab.fragments
 import android.app.DatePickerDialog
 import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.hishab.R
 import com.example.hishab.databinding.FragmentAddShoppingBinding
+import com.example.hishab.models.entities.Category
+import com.example.hishab.models.entities.CategoryAndProductModel
 import com.example.hishab.models.entities.PurchaseHistory
 import com.example.hishab.viewmodel.AddShoppingViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,20 +26,41 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 @AndroidEntryPoint
-class AddShoppingFragment : Fragment() {
+class AddShoppingFragment : DialogFragment() {
 
     private lateinit var binding: FragmentAddShoppingBinding
     private val addShoppingViewModel:AddShoppingViewModel by viewModels()
     private lateinit var updatePurchaseHistory:PurchaseHistory
     val myCalendar = Calendar.getInstance()
     val args: AddShoppingFragmentArgs by navArgs()
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding= DataBindingUtil.inflate(inflater,R.layout.fragment_add_shopping,container,false)
+        binding= DataBindingUtil.inflate(inflater, R.layout.fragment_add_shopping, container, false)
         binding.shoppingItem=addShoppingViewModel.shoppingItem
         binding.purchaseItem=addShoppingViewModel.purchaseItem
         binding.category=addShoppingViewModel.category
+
+                binding.etProductName.setAdapter(context?.let {
+                    ArrayAdapter<CategoryAndProductModel>(
+                        it, android.R.layout.simple_dropdown_item_1line, args.productCategoryArray)
+                })
+                binding.etProductName.setOnItemClickListener(AdapterView.OnItemClickListener(){ adapterView: AdapterView<*>, view1: View, position: Int, id: Long ->
+                    val item = adapterView.adapter.getItem(position)
+                    val categoryAndProductModel = item as CategoryAndProductModel;
+                        addShoppingViewModel.category.setCategoryName(categoryAndProductModel.getCategoryName()!!)
+                    addShoppingViewModel.shoppingItem.itemId= categoryAndProductModel.getProductId()!!;
+                })
+        binding.etCategory.setAdapter(context?.let {
+            ArrayAdapter<Category>(
+                it, android.R.layout.simple_dropdown_item_1line, args.distinctCategoryArray)
+        })
+        binding.etCategory.setOnItemClickListener(AdapterView.OnItemClickListener(){ adapterView: AdapterView<*>, view1: View, position: Int, id: Long ->
+            val item = adapterView.adapter.getItem(position)
+            addShoppingViewModel.category = item as Category;
+        })
+
         if(args.editHistory==null)
         {
             addShoppingViewModel.isUpdating=false
@@ -52,13 +76,19 @@ class AddShoppingFragment : Fragment() {
                 binding.etDateTime.setText(dateTimeString)
         }
         setButtonClick()
-        binding.etDateTime.transformIntoDatePicker(requireContext(), "MM/dd/yyyy",myCalendar,
+        binding.etDateTime.transformIntoDatePicker(
+            requireContext(), "MM/dd/yyyy", myCalendar,
             Date()
         );
         return binding.root
     }
 
-    fun EditText.transformIntoDatePicker(context: Context, format: String,myCalendar:Calendar ,maxDate: Date? = null) {
+    fun EditText.transformIntoDatePicker(
+        context: Context,
+        format: String,
+        myCalendar: Calendar,
+        maxDate: Date? = null
+    ) {
         isFocusableInTouchMode = false
         isClickable = true
         isFocusable = false
@@ -77,10 +107,15 @@ class AddShoppingFragment : Fragment() {
             datePickerDialog=DatePickerDialog(
                 context, datePickerOnDataSetListener, myCalendar
                     .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                myCalendar.get(Calendar.DAY_OF_MONTH))
+                myCalendar.get(Calendar.DAY_OF_MONTH)
+            )
             if(addShoppingViewModel.isUpdating)
             {
-                datePickerDialog.updateDate(updatePurchaseHistory.getYear(),updatePurchaseHistory.getMonth(),updatePurchaseHistory.getDay())
+                datePickerDialog.updateDate(
+                    updatePurchaseHistory.getYear(),
+                    updatePurchaseHistory.getMonth(),
+                    updatePurchaseHistory.getDay()
+                )
             }
 
                 datePickerDialog.run {
@@ -91,6 +126,7 @@ class AddShoppingFragment : Fragment() {
     }
     private fun setButtonClick() {
         binding.btnSubmit.setOnClickListener(View.OnClickListener {
+
             if(!addShoppingViewModel.isUpdating)
             {
                 CoroutineScope(Dispatchers.IO).launch {
