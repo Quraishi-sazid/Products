@@ -15,9 +15,6 @@ import javax.inject.Inject
 class Category @Inject constructor () :BaseObservable(),Parcelable {
     @PrimaryKey(autoGenerate = true) @androidx.room.ColumnInfo(name="category_id") var  categoryId:Int=0
     @ColumnInfo(name="category_name") private var CategoryName:String=""
-
-
-
     @Bindable
     fun getCategoryName():String
     {

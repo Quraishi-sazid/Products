@@ -53,7 +53,7 @@ class PurchaseItem @Inject constructor (): BaseObservable() {
    public @ColumnInfo(name = "month") var month: Int = 0
    public @ColumnInfo(name = "year") var year: Int = 0
 
-    @ColumnInfo(name = "shopping_id") var shoppingId:Int=0
+    @ColumnInfo(name = "product_id") var shoppingId:Int=0
 
 }
 

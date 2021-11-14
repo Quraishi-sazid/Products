@@ -16,8 +16,8 @@ interface ShoppingDao {
     @Transaction
     @Query("select * from category")
     suspend fun getShoppingTable():List<CategoryAndShoppingItem>
-    @Query("select * from shopping_table where item_name=:itemName and category_id=:categoryId")
+    @Query("select * from product_table where product_name=:itemName and category_id=:categoryId")
     suspend fun getShoppingItemFromItemNameAndCategoryId(itemName:String,categoryId:Int):ShoppingItem
-    @Query("select s.item_name as productName,s.shopping_id as productId,c.category_id as categoryId,c.category_name as categoryName from shopping_table s inner join category c where s.category_id==c.category_id")
+    @Query("select s.product_name as productName,s.product_id as productId,c.category_id as categoryId,c.category_name as categoryName from product_table s inner join category c where s.category_id==c.category_id")
     fun getProductCategoryList():LiveData<List<CategoryAndProductModel>>
 }

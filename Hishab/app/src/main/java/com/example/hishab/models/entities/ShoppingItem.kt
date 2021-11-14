@@ -6,11 +6,11 @@ import androidx.room.*
 import com.example.hishab.BR
 import javax.inject.Inject
 
-@Entity(tableName = "shopping_table")
+@Entity(tableName = "product_table")
 class ShoppingItem @Inject constructor():
     BaseObservable() {
-    private @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "shopping_id") var _itemId:Int=0
-    private @ColumnInfo(name = "item_name")  var ItemName:String=""
+    private @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "product_id") var _itemId:Int=0
+    private @ColumnInfo(name = "product_name")  var ItemName:String=""
 
     @Bindable
     public fun getItemName():String
