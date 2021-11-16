@@ -2,6 +2,7 @@ package com.example.hishab.repository
 
 import android.app.Application
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.hishab.db.dao.CategoryDao
 import com.example.hishab.db.dao.PurchaseDao
 import com.example.hishab.db.dao.PurchaseShoppingCategoryDao
@@ -41,13 +42,10 @@ class Repository (application: Application) {
     {
         shoppingDao.insertAll(shoppingItem)
     }
-    suspend fun getShoppingList():List<CategoryAndShoppingItem>
-    {
-        return shoppingDao.getShoppingTable();
-    }
     suspend fun getShoppingItemFromNameAndCId(itemName:String,categoryId:Int):ShoppingItem
     {
-        return shoppingDao.getShoppingItemFromItemNameAndCategoryId(itemName,categoryId);
+        return ShoppingItem()
+        //return shoppingDao.getShoppingItemFromItemNameAndCategoryId(itemName,categoryId);
     }
     suspend fun insertPurchaseItem(purchaseItem:PurchaseItem)
     {
@@ -59,11 +57,13 @@ class Repository (application: Application) {
     }
     suspend fun getPurchaseHistory(): LiveData<List<PurchaseHistory>>//live data needed
     {
-        return purchaseShoppingCategoryDao.getPurchaseHistory()
+        //return purchaseShoppingCategoryDao.getPurchaseHistory()
+        return MutableLiveData<List<PurchaseHistory>>();
     }
     suspend fun getTotalCostByCategoryFromDate():List<CategoryCostModel>//live data needed
     {
-        return purchaseDao.getTotalCostByCategoryFromDate(0,0,0)
+        //return purchaseDao.getTotalCostByCategoryFromDate(0,0,0)
+        return ArrayList<CategoryCostModel>()
     }
 
     suspend fun deletePurchaseHistory(position: Int) {
@@ -74,14 +74,16 @@ class Repository (application: Application) {
         shoppingItem: ShoppingItem,
         purchaseItem: PurchaseItem
     ) {
-        purchaseDao.update(shoppingItem.itemId,purchaseItem.getPurchaseId(),purchaseItem.getCost(),purchaseItem.day,purchaseItem.month,purchaseItem.year);
+        //purchaseDao.update(shoppingItem.productId,purchaseItem.getPurchaseId(),purchaseItem.getCost(),purchaseItem.day,purchaseItem.month,purchaseItem.year);
     }
 
     suspend fun getdetailsOfCategoryfromDate(categoryId: Int, dateModel: DateModel):LiveData<List<PurchaseHistory>> {
-       return purchaseShoppingCategoryDao.getdetailsOfCategoryfromDate(categoryId,dateModel.day,dateModel.month,dateModel.year)
+       //return purchaseShoppingCategoryDao.getdetailsOfCategoryfromDate(categoryId,dateModel.day,dateModel.month,dateModel.year)
+        return MutableLiveData<List<PurchaseHistory>>();
     }
     fun getProductCategoryList():LiveData<List<CategoryAndProductModel>>
     {
-        return shoppingDao.getProductCategoryList()
+       // return shoppingDao.getProductCategoryList()
+        return MutableLiveData<List<CategoryAndProductModel>>()
     }
 }

@@ -36,6 +36,7 @@ class PurchaseItem @Inject constructor (): BaseObservable() {
         notifyPropertyChanged(BR.cost)
     }
     private @ColumnInfo(name = "description") var description=""
+    public @ColumnInfo(name = "buying_id") var buyingId=0
     @Bindable
     public fun getDescription():String
     {
@@ -47,13 +48,15 @@ class PurchaseItem @Inject constructor (): BaseObservable() {
         notifyPropertyChanged(BR.description)
     }
 
+    //private @ColumnInfo(name = "shopping_id") var s=""
+
 
    // public @ColumnInfo(name = "createdAt") var createdAt: Date? = null
-   public @ColumnInfo(name = "day") var day: Int = 0
+/*   public @ColumnInfo(name = "day") var day: Int = 0
    public @ColumnInfo(name = "month") var month: Int = 0
-   public @ColumnInfo(name = "year") var year: Int = 0
+   public @ColumnInfo(name = "year") var year: Int = 0*/
 
-    @ColumnInfo(name = "product_id") var shoppingId:Int=0
+    @ColumnInfo(name = "product_id") var productId:Int=0
 
 }
 

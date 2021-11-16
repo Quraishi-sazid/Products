@@ -23,37 +23,37 @@ class AddShoppingViewModel @Inject constructor (app:Application) :AndroidViewMod
 
 
     suspend fun insertPurchaseItem() {
-        if(shoppingItem.itemId==0)
+        if(shoppingItem.productId==0)
         {
             if(category.categoryId!=0)
             {
                 var quariedShoppingItem = getShoppingItem(category)
-                purchaseItem.shoppingId=quariedShoppingItem.itemId
+                purchaseItem.productId=quariedShoppingItem.productId
             }
             else
             {
                 var queriedCategory = getCategory()
                 var quariedShoppingItem = getShoppingItem(queriedCategory)
-                purchaseItem.shoppingId=quariedShoppingItem.itemId
+                purchaseItem.productId=quariedShoppingItem.productId
             }
         }
         else
         {
-            purchaseItem.shoppingId=shoppingItem.itemId
+            purchaseItem.productId=shoppingItem.productId
         }
         repository.insertPurchaseItem(purchaseItem)
     }
 
     private suspend fun getShoppingItem(queriedCategory: Category): ShoppingItem {
         var quariedShoppingItem = repository.getShoppingItemFromNameAndCId(
-            shoppingItem.getItemName(),
+            shoppingItem.getProductName(),
             category.categoryId
         );
         if (quariedShoppingItem == null) {
             shoppingItem.CategoryId = queriedCategory.categoryId
             repository.insertShopping(shoppingItem)
             quariedShoppingItem = repository.getShoppingItemFromNameAndCId(
-                shoppingItem.getItemName(),
+                shoppingItem.getProductName(),
                 queriedCategory.categoryId
             );
         }
@@ -77,7 +77,7 @@ class AddShoppingViewModel @Inject constructor (app:Application) :AndroidViewMod
         {
             updatePurchaseHistory.getPurchaseId()?.let { purchaseItem.setPurchaseId(it) };
             updatePurchaseHistory.getCost()?.let { purchaseItem.setCost(it) };
-            updatePurchaseHistory.getItemName()?.let { shoppingItem.setItemName(it) }
+            updatePurchaseHistory.getItemName()?.let { shoppingItem.setProductName(it) }
             updatePurchaseHistory.getCategoryName()?.let{category.setCategoryName(it)}
         }
     }

@@ -50,7 +50,7 @@ class AddShoppingFragment : DialogFragment() {
                     val item = adapterView.adapter.getItem(position)
                     val categoryAndProductModel = item as CategoryAndProductModel;
                         addShoppingViewModel.category.setCategoryName(categoryAndProductModel.getCategoryName()!!)
-                    addShoppingViewModel.shoppingItem.itemId= categoryAndProductModel.getProductId()!!;
+                    addShoppingViewModel.shoppingItem.productId= categoryAndProductModel.getProductId()!!;
                 })
         binding.etCategory.setAdapter(context?.let {
             ArrayAdapter<Category>(
@@ -130,9 +130,9 @@ class AddShoppingFragment : DialogFragment() {
             if(!addShoppingViewModel.isUpdating)
             {
                 CoroutineScope(Dispatchers.IO).launch {
-                    addShoppingViewModel.purchaseItem.day=myCalendar.get(Calendar.DAY_OF_MONTH)
+/*                    addShoppingViewModel.purchaseItem.day=myCalendar.get(Calendar.DAY_OF_MONTH)
                     addShoppingViewModel.purchaseItem.month=myCalendar.get(Calendar.MONTH)+1
-                    addShoppingViewModel.purchaseItem.year=myCalendar.get(Calendar.YEAR)
+                    addShoppingViewModel.purchaseItem.year=myCalendar.get(Calendar.YEAR)*/
                     addShoppingViewModel.insertPurchaseItem()
                     withContext(Dispatchers.Main)
                     {
@@ -145,9 +145,9 @@ class AddShoppingFragment : DialogFragment() {
             else
             {
                 CoroutineScope(Dispatchers.IO).launch {
-                    addShoppingViewModel.purchaseItem.day=myCalendar.get(Calendar.DAY_OF_MONTH)
+/*                    addShoppingViewModel.purchaseItem.day=myCalendar.get(Calendar.DAY_OF_MONTH)
                     addShoppingViewModel.purchaseItem.month=myCalendar.get(Calendar.MONTH)+1
-                    addShoppingViewModel.purchaseItem.year=myCalendar.get(Calendar.YEAR)
+                    addShoppingViewModel.purchaseItem.year=myCalendar.get(Calendar.YEAR)*/
                     addShoppingViewModel.updatePurchaseItem(updatePurchaseHistory)
                     withContext(Dispatchers.Main)
                     {

@@ -4,7 +4,6 @@ import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
 import java.io.Serializable
 import java.text.DateFormatSymbols
-import java.util.*
 
 data class PurchaseHistory(
     private val purchaseId: Int?,
@@ -16,7 +15,7 @@ data class PurchaseHistory(
     private val month: Int,
     private val year: Int,
     private val categoryId:Int?,
-    private val shoppingId:Int?
+    private val productId:Int?
 ):BaseObservable(),Serializable
 {
     @Bindable
@@ -72,7 +71,7 @@ data class PurchaseHistory(
 
     fun getShoppingId():Int?
     {
-        return shoppingId;
+        return productId;
     }
 
 
