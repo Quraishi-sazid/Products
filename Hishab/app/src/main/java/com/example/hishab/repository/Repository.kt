@@ -3,13 +3,9 @@ package com.example.hishab.repository
 import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.hishab.db.dao.CategoryDao
-import com.example.hishab.db.dao.PurchaseDao
-import com.example.hishab.db.dao.PurchaseShoppingCategoryDao
-import com.example.hishab.db.dao.ShoppingDao
+import com.example.hishab.db.dao.*
 import com.example.hishab.di.FooEntryPoint
 //import com.example.hishab.di.FooEntryPoint
-import com.example.hishab.models.CategoryAndShoppingItem
 import com.example.hishab.models.CategoryCostModel
 import com.example.hishab.models.DateModel
 import com.example.hishab.models.entities.*
@@ -21,31 +17,33 @@ class Repository (application: Application) {
     private var shoppingDao: ShoppingDao
     private var purchaseDao: PurchaseDao
     private var purchaseShoppingCategoryDao: PurchaseShoppingCategoryDao
+    private var buyingDao: BuyingDao
+    private var customDateDao: DateDao
     var database= EntryPoints.get(application, FooEntryPoint::class.java).database
-    //var database= AppDatabase.getDatabase(application)
     init {
         categoryDao=database.CategoryDao()
         shoppingDao=database.ShoppingDao()
         purchaseDao=database.PurchaseDao()
         purchaseShoppingCategoryDao=database.PurchaseShoppingCategoryDao()
+        buyingDao=database.BuyingDao()
+        customDateDao=database.customDao()
     }
-    suspend fun insertCategory(category: Category)
+    suspend fun insertCategory(category: Category):Long
     {
-        categoryDao.insertAll(category)
+        return categoryDao.insertAll(category)
     }
 
     suspend fun getCategoryIdFromName(name:String):Category
     {
         return categoryDao.getCategoryIdFromName(name);
     }
-    suspend fun insertShopping(shoppingItem:ShoppingItem)
+    suspend fun insertShopping(shoppingItem:ShoppingItem):Long
     {
-        shoppingDao.insertAll(shoppingItem)
+        return shoppingDao.insert(shoppingItem)
     }
-    suspend fun getShoppingItemFromNameAndCId(itemName:String,categoryId:Int):ShoppingItem
+    suspend fun getShoppingItemFromNameAndCId(itemName:String,categoryId:Long):ShoppingItem
     {
-        return ShoppingItem()
-        //return shoppingDao.getShoppingItemFromItemNameAndCategoryId(itemName,categoryId);
+        return shoppingDao.getShoppingItemFromItemNameAndCategoryId(itemName,categoryId);
     }
     suspend fun insertPurchaseItem(purchaseItem:PurchaseItem)
     {
@@ -66,7 +64,7 @@ class Repository (application: Application) {
         return ArrayList<CategoryCostModel>()
     }
 
-    suspend fun deletePurchaseHistory(position: Int) {
+    suspend fun deletePurchaseHistory(position: Long) {
          purchaseDao.deleteByPurchaseId(position)
     }
 
@@ -83,7 +81,26 @@ class Repository (application: Application) {
     }
     fun getProductCategoryList():LiveData<List<CategoryAndProductModel>>
     {
-       // return shoppingDao.getProductCategoryList()
-        return MutableLiveData<List<CategoryAndProductModel>>()
+        return shoppingDao.getProductCategoryList()
+       // return MutableLiveData<List<CategoryAndProductModel>>()
+    }
+
+    suspend fun getLatestBuyingId():Long {
+       return buyingDao.getLatestBuyingId()
+    }
+    suspend fun getDateId(customDate:CustomDate):Long
+    {
+        var qDate=customDateDao.getDateId(customDate.getDay(),customDate.getMonth(),customDate.getYear())
+        if(qDate==null)
+        {
+            customDateDao.insert(customDate)//need to take return value from here
+            qDate=customDateDao.getDateId(customDate.getDay(),customDate.getMonth(),customDate.getYear())
+        }
+        return qDate.getDateId()
+    }
+    suspend fun insertBuyingItem(buyItem:BuyItem):Long
+    {
+      var a= buyingDao.insert(buyItem)
+        return  a
     }
 }

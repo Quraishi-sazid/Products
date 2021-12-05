@@ -17,7 +17,7 @@ interface PurchaseDao {
     /*@Query("select c.category_id as CategoryId,c.category_name as CategoryName,sum(p.cost) as Cost from purchase_table p inner join product_table s on p.purchase_id=s._productId inner join category c on s.category_id=c.category_id where p.day>=:day and p.month>=:month and p.year>=:year group by c.category_id")
     suspend fun getTotalCostByCategoryFromDate(day:Int,month:Int,year:Int):List<CategoryCostModel>*/
     @Query("delete from purchase_table where purchase_id=:purchaseId")
-    suspend fun deleteByPurchaseId(purchaseId: Int)
+    suspend fun deleteByPurchaseId(purchaseId: Long)
     @Query("update purchase_table set product_id=:itemId,cost=:cost where purchase_id=:purchaseId")
     suspend fun update(
         itemId: Int,

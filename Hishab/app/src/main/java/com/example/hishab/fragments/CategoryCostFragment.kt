@@ -5,24 +5,20 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hishab.R
-import com.example.hishab.`interface`.INavigationCallback
+import com.example.hishab.changedinter.INavigationCallback
 import com.example.hishab.adapter.CategoryCostAdapter
-import com.example.hishab.adapter.PurchaseItemsAdapter
 import com.example.hishab.models.DateModel
-import com.example.hishab.viewmodel.AddShoppingViewModel
 import com.example.hishab.viewmodel.CategoryCostViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.*
 
 @AndroidEntryPoint
 class CategoryCostFragment : Fragment() {

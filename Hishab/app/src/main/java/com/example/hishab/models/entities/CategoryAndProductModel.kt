@@ -5,15 +5,15 @@ import android.os.Parcelable
 import java.io.Serializable
 
 data class CategoryAndProductModel(
-    private val productId:Int,
-    private val categoryId:Int,
+    private val productId:Long,
+    private val categoryId:Long,
     private val categoryName:String?,
     private val productName:String?
     ):Parcelable{
 
     constructor(parcel: Parcel) : this(
-        parcel.readInt(),
-        parcel.readInt(),
+        parcel.readLong(),
+        parcel.readLong(),
         parcel.readString(),
         parcel.readString()
     ) {
@@ -29,16 +29,16 @@ data class CategoryAndProductModel(
     fun getProductName():String?{
         return productName
     }
-    fun getCategoryId():Int?{
+    fun getCategoryId():Long?{
         return categoryId
     }
-    fun getProductId():Int?{
+    fun getProductId():Long?{
         return productId
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeInt(productId)
-        parcel.writeInt(categoryId)
+        parcel.writeLong(productId)
+        parcel.writeLong(categoryId)
         parcel.writeString(categoryName)
         parcel.writeString(productName)
     }

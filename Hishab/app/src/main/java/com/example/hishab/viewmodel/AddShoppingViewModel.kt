@@ -23,9 +23,9 @@ class AddShoppingViewModel @Inject constructor (app:Application) :AndroidViewMod
 
 
     suspend fun insertPurchaseItem() {
-        if(shoppingItem.productId==0)
+        if(shoppingItem.productId==0L)
         {
-            if(category.categoryId!=0)
+            if(category.categoryId!=0L)
             {
                 var quariedShoppingItem = getShoppingItem(category)
                 purchaseItem.productId=quariedShoppingItem.productId

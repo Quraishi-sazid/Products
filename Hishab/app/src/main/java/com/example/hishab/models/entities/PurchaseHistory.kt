@@ -6,7 +6,7 @@ import java.io.Serializable
 import java.text.DateFormatSymbols
 
 data class PurchaseHistory(
-    private val purchaseId: Int?,
+    private val purchaseId: Long?,
     private val categoryName: String?,
     private val ItemName: String,
     private val cost: Int,
@@ -14,8 +14,8 @@ data class PurchaseHistory(
     private val day: Int,
     private val month: Int,
     private val year: Int,
-    private val categoryId:Int?,
-    private val productId:Int?
+    private val categoryId:Long?,
+    private val productId:Long?
 ):BaseObservable(),Serializable
 {
     @Bindable
@@ -59,17 +59,17 @@ data class PurchaseHistory(
         }
         return monthString.substring(0,3)+"\n"+day
     }
-    fun getPurchaseId():Int?
+    fun getPurchaseId():Long?
     {
         return purchaseId;
     }
 
-    fun getCategoryId():Int?
+    fun getCategoryId():Long?
     {
         return categoryId;
     }
 
-    fun getShoppingId():Int?
+    fun getShoppingId():Long?
     {
         return productId;
     }

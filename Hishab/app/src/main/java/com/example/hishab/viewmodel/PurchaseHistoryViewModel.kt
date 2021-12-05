@@ -41,7 +41,7 @@ class PurchaseHistoryViewModel @Inject constructor(app:Application):AndroidViewM
         return objectList
     }
 
-    suspend fun delete(position:Int) {
+    suspend fun delete(position:Long) {
         repository.deletePurchaseHistory(position);
     }
 

@@ -13,14 +13,14 @@ import javax.inject.Inject
 
 @Entity(tableName = "purchase_table")
 class PurchaseItem @Inject constructor (): BaseObservable() {
-    private @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "purchase_id") var purchaseId: Int = 0
+    private @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "purchase_id") var purchaseId: Long = 0
     private @ColumnInfo(name = "cost") var cost: Int=0
     @Bindable
-    public fun getPurchaseId():Int
+    public fun getPurchaseId():Long
     {
         return purchaseId
     }
-    public fun setPurchaseId(value: Int)
+    public fun setPurchaseId(value: Long)
     {
         purchaseId=value
         notifyPropertyChanged(BR.purchaseId)
@@ -36,7 +36,7 @@ class PurchaseItem @Inject constructor (): BaseObservable() {
         notifyPropertyChanged(BR.cost)
     }
     private @ColumnInfo(name = "description") var description=""
-    public @ColumnInfo(name = "buying_id") var buyingId=0
+    public @ColumnInfo(name = "buying_id") var buyingId=0L
     @Bindable
     public fun getDescription():String
     {
@@ -47,16 +47,7 @@ class PurchaseItem @Inject constructor (): BaseObservable() {
         description=value
         notifyPropertyChanged(BR.description)
     }
-
-    //private @ColumnInfo(name = "shopping_id") var s=""
-
-
-   // public @ColumnInfo(name = "createdAt") var createdAt: Date? = null
-/*   public @ColumnInfo(name = "day") var day: Int = 0
-   public @ColumnInfo(name = "month") var month: Int = 0
-   public @ColumnInfo(name = "year") var year: Int = 0*/
-
-    @ColumnInfo(name = "product_id") var productId:Int=0
+    @ColumnInfo(name = "product_id") var productId:Long=0
 
 }
 

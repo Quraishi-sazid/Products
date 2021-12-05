@@ -5,24 +5,21 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.example.hishab.db.dao.CategoryDao
-import com.example.hishab.db.dao.PurchaseDao
-import com.example.hishab.db.dao.ShoppingDao
-import com.example.hishab.models.entities.Category
-import com.example.hishab.models.entities.PurchaseItem
-import com.example.hishab.db.dao.PurchaseShoppingCategoryDao
-import com.example.hishab.models.entities.ShoppingItem
+import com.example.hishab.db.dao.*
+import com.example.hishab.models.entities.*
 import com.example.hishab.utils.Converters
 import javax.inject.Inject
 
 
-@Database(entities = arrayOf(Category::class,ShoppingItem::class,PurchaseItem::class), version = 4)
+@Database(entities = arrayOf(Category::class,ShoppingItem::class,PurchaseItem::class,BuyItem::class,CustomDate::class), version = 4)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun ShoppingDao(): ShoppingDao
     abstract fun CategoryDao(): CategoryDao
     abstract fun PurchaseDao(): PurchaseDao
+    abstract fun BuyingDao(): BuyingDao
     abstract fun PurchaseShoppingCategoryDao(): PurchaseShoppingCategoryDao
+    abstract fun customDao(): DateDao
 
     @Inject
     lateinit var INSTANCE: AppDatabase

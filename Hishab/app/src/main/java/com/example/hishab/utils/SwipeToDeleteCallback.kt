@@ -123,7 +123,7 @@ class SwipeToDeleteCallback(var context: Context?,var listAdapter: PurchaseItems
         background = ColorDrawable(Color.RED)
     }
 
-    fun showAlertDialog(context:Context,title:String,message:String,pos:Int?)
+    fun showAlertDialog(context:Context,title:String,message:String,pos:Long?)
     {
         AlertDialog.Builder(context)
             .setTitle(title)

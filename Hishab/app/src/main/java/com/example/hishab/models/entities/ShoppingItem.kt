@@ -9,7 +9,7 @@ import javax.inject.Inject
 @Entity(tableName = "product_table")
 class ShoppingItem @Inject constructor():
     BaseObservable() {
-    private @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "product_id") var _productId:Int=0
+    private @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "product_id") var _productId:Long=0
     private @ColumnInfo(name = "product_name")  var productName:String=""
 
     @Bindable
@@ -24,8 +24,8 @@ class ShoppingItem @Inject constructor():
         notifyPropertyChanged(BR.itemName)
 
     }
-    @ColumnInfo(name="category_id") var  CategoryId:Int=0
-    var productId:Int
+    @ColumnInfo(name="category_id") var  CategoryId:Long=0
+    var productId:Long
         get() = _productId
         set(value)
         {

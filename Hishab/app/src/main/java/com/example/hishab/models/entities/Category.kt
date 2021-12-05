@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 @Entity(tableName= "category")
 class Category @Inject constructor () :BaseObservable(),Parcelable {
-    @PrimaryKey(autoGenerate = true) @androidx.room.ColumnInfo(name="category_id") var  categoryId:Int=0
+    @PrimaryKey(autoGenerate = true) @androidx.room.ColumnInfo(name="category_id") var  categoryId:Long=0
     @ColumnInfo(name="category_name") private var CategoryName:String=""
     @Bindable
     fun getCategoryName():String
@@ -28,17 +28,17 @@ class Category @Inject constructor () :BaseObservable(),Parcelable {
 
 
     constructor(parcel: Parcel) : this() {
-        categoryId = parcel.readInt()
+        categoryId = parcel.readLong()
         CategoryName = parcel.readString()!!
     }
-    constructor(categoryId:Int,categoryName:String):this()
+    constructor(categoryId:Long,categoryName:String):this()
     {
         this.categoryId=categoryId
         this.setCategoryName(categoryName)
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeInt(categoryId)
+        parcel.writeLong(categoryId)
         parcel.writeString(CategoryName)
     }
 

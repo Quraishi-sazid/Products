@@ -77,8 +77,8 @@ class PurchaseHistoryFragment : Fragment() {
         val fab = inflate.findViewById<FloatingActionButton>(R.id.fab)
 
         fab.setOnClickListener(View.OnClickListener {
-            val action = PurchaseHistoryFragmentDirections.actionPurchaseHistoryFragmentToAddShoppingFragment(categoryAndProductModelList.toTypedArray(),distinctCategoryList.toTypedArray())
-            findNavController().navigate(action);
+           // val action = PurchaseHistoryFragmentDirections.actionPurchaseHistoryFragmentToAddShoppingFragment(categoryAndProductModelList.toTypedArray(),distinctCategoryList.toTypedArray())
+           // findNavController().navigate(action);
         })
         ItemTouchHelper(SwipeToDeleteCallback(context,adapter,purchaseHistoryViewModel,this)).attachToRecyclerView(recyclerView)
         return inflate
