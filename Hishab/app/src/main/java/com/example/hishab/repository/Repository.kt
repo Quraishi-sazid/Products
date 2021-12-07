@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.hishab.db.dao.*
 import com.example.hishab.di.FooEntryPoint
+import com.example.hishab.models.BuyingHistory
 //import com.example.hishab.di.FooEntryPoint
 import com.example.hishab.models.CategoryCostModel
 import com.example.hishab.models.DateModel
@@ -102,5 +103,15 @@ class Repository (application: Application) {
     {
       var a= buyingDao.insert(buyItem)
         return  a
+    }
+    suspend fun getPurchaseHistoryFromBuyingId(buyingId:Long):List<PurchaseHistory>
+    {
+        return purchaseShoppingCategoryDao.getPurchaseHistoryByBuingId(buyingId)
+    }
+
+    suspend fun getBuingHistory():List<BuyingHistory>
+    {
+     //   return ArrayList<BuyingHistory>()
+        return buyingDao.getBuyingHistory()
     }
 }

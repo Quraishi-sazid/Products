@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="buyingHistory"
+            type="com.example.hishab.models.BuyingHistory" />
+    </data>
+    <RelativeLayout
+        android:id="@+id/rv_buying_list_item"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:padding="8dp">
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{buyingHistory.dateFormatted}"
+            />
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{buyingHistory.timeFormatted}"
+            android:layout_alignParentBottom="true"
+            />
+        <TextView
+            android:id="@+id/tv_cost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:text="@{``+buyingHistory.totalCost}"
+            />
+        <TextView
+            android:id="@+id/tv_total_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:text="@{``+buyingHistory.totalItem}"
+            />
+    </RelativeLayout>
+
+</layout>

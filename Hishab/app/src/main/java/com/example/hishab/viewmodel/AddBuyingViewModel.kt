@@ -11,6 +11,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddBuyingViewModel @Inject constructor (app: Application) : AndroidViewModel(app) {
+    var isUpdating: Boolean=false
+
     @Inject
     lateinit var repository: Repository
     var buyingId:Long=-1
@@ -77,6 +79,10 @@ class AddBuyingViewModel @Inject constructor (app: Application) : AndroidViewMod
             addItemProxy.purchaseItem.productId=addItemProxy.shoppingItem.productId
         }
         repository.insertPurchaseItem(addItemProxy.purchaseItem)
+    }
+
+    suspend fun getPurchaseHistoryByBuyingId(buyingId: Long):List<PurchaseHistory> {
+       return repository.getPurchaseHistoryFromBuyingId(buyingId)
     }
 
 }

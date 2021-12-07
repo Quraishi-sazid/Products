@@ -7,18 +7,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.navigation.NavController
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hishab.R
 import com.example.hishab.adapter.PurchaseItemsAdapter
+import com.example.hishab.changedinter.IHandleAlertDialog
+import com.example.hishab.changedinter.ISwipeItemCallback
 import com.example.hishab.models.entities.Category
 import com.example.hishab.models.entities.CategoryAndProductModel
+import com.example.hishab.models.entities.PurchaseHistory
 import com.example.hishab.repository.Repository
 import com.example.hishab.utils.SwipeToDeleteCallback
+import com.example.hishab.utils.Util
 //import com.example.hishab.databinding.FragmentPurchaseHistoryBinding
 import com.example.hishab.viewmodel.PurchaseHistoryViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -34,6 +36,8 @@ class PurchaseHistoryFragment : Fragment() {
     val args: PurchaseHistoryFragmentArgs by navArgs()
     lateinit var categoryAndProductModelList:List<CategoryAndProductModel>
     lateinit var distinctCategoryList:List<Category?>
+    lateinit var swipeItemCallback: ISwipeItemCallback
+    lateinit var handleAlertDialog: IHandleAlertDialog
     @Inject
     lateinit var repository: Repository
     override fun onCreateView(
@@ -80,7 +84,51 @@ class PurchaseHistoryFragment : Fragment() {
            // val action = PurchaseHistoryFragmentDirections.actionPurchaseHistoryFragmentToAddShoppingFragment(categoryAndProductModelList.toTypedArray(),distinctCategoryList.toTypedArray())
            // findNavController().navigate(action);
         })
-        ItemTouchHelper(SwipeToDeleteCallback(context,adapter,purchaseHistoryViewModel,this)).attachToRecyclerView(recyclerView)
+        setHandleAlertDialog()
+        setSwipeItemCallback()
+        ItemTouchHelper(SwipeToDeleteCallback(context,swipeItemCallback)).attachToRecyclerView(recyclerView)
         return inflate
     }
+
+    private fun setSwipeItemCallback() {
+        swipeItemCallback= object: ISwipeItemCallback {
+            override fun onSwipeItem(viewHolder: RecyclerView.ViewHolder, direction: Int){
+                if(direction==ItemTouchHelper.LEFT)
+                {
+
+                    if(adapter.getElementAt(viewHolder.adapterPosition) is PurchaseHistory)
+                    {
+                        context?.let { Util.showItemSwipeDeleteAlertDialog(it,"Delete Entry","Do you want to delete this entry?",(adapter.getElementAt(viewHolder.adapterPosition) as PurchaseHistory).getPurchaseId(),handleAlertDialog) }
+                    }
+                }
+                else
+                    ItemTouchHelper.LEFT
+                run {
+                    var purchaseHistory =(adapter.getElementAt(viewHolder.adapterPosition) as PurchaseHistory)
+                    /*    var directions=PurchaseHistoryFragmentDirections.actionPurchaseHistoryFragmentToAddShoppingFragment()
+                        directions.editHistory=purchaseHistory
+                        purchaseHistoryFragment.findNavController()
+                            .navigate(directions)*/
+                }
+            }
+        }
+    }
+    private fun setHandleAlertDialog() {
+        handleAlertDialog=object :IHandleAlertDialog{
+            override fun onHandleDialog(isYes: Boolean, deleteId: Long) {
+                if(isYes)
+                {
+                    CoroutineScope(Dispatchers.IO).launch{
+                        purchaseHistoryViewModel.delete(deleteId)
+                    }
+                }
+                else
+                {
+                    adapter.notifyDataSetChanged()
+                }
+            }
+        }
+    }
+
+
 }

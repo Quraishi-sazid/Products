@@ -17,4 +17,8 @@ interface PurchaseShoppingCategoryDao {
     fun getPurchaseHistoryByItemName(itemName:String):List<PurchaseHistory>
     @Query("select purchase_id as purchaseId, category_name as categoryName,productName as ItemName,cost as cost ,description as descrip,day as day,month as month,year as year from category inner join product_table on category.category_id=product_table.category_id inner join purchase_table on product_table._productId=purchase_table.productId where category.category_id=:categoryId and day>=:day and month>=:month and year>=:year order by purchase_id desc")
     fun getdetailsOfCategoryfromDate(categoryId: Int, day: Int, month: Int, year: Int):LiveData<List<PurchaseHistory>>
-*/}
+*/
+   @Query("select purchase_id as purchaseId,category_name as categoryName,product_name as ItemName,cost as cost ,description as descrip,-1 as day,-1 as month,-1 as year,category.category_id as categoryId,product_table.product_id as productId from category inner join product_table on category.category_id=product_table.category_id inner join purchase_table on product_table.product_id=purchase_table.product_id where buying_id=:buyingId order by purchase_id desc")
+   fun getPurchaseHistoryByBuingId(buyingId:Long): List<PurchaseHistory>
+
+}

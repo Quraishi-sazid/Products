@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/addBuyingFragment">
+    app:startDestination="@id/buyingHistoryListFragment">
 
     <dialog
         android:id="@+id/addShoppingFragment"
@@ -33,6 +33,11 @@
         <argument
             android:name="buyingListSize"
             app:argType="integer" />
+        <argument
+            android:name="addItemProxy"
+            app:argType="com.example.hishab.models.AddItemProxy"
+            app:nullable="true"
+            android:defaultValue="@null" />
 
     </dialog>
     <fragment
@@ -70,5 +75,17 @@
         <action
             android:id="@+id/action_addBuyingFragment_to_addShoppingFragment"
             app:destination="@id/addShoppingFragment" />
+        <argument
+            android:name="buyingId"
+            app:argType="integer"
+            android:defaultValue="-1" />
+    </fragment>
+    <fragment
+        android:id="@+id/buyingHistoryListFragment"
+        android:name="com.example.hishab.adapter.BuyingHistoryListFragment"
+        android:label="BuyingHistoryListFragment" >
+        <action
+            android:id="@+id/action_buyingHistoryListFragment_to_addBuyingFragment"
+            app:destination="@id/addBuyingFragment" />
     </fragment>
 </navigation>

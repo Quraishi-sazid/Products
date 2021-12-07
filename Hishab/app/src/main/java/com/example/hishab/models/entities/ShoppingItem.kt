@@ -32,6 +32,14 @@ class ShoppingItem @Inject constructor():
             _productId=value
         }
 
+    fun copyOf():ShoppingItem
+    {
+        var shoppingItem=ShoppingItem()
+        shoppingItem.CategoryId=CategoryId
+        shoppingItem.productId=productId
+        shoppingItem.productName=""+productName;
+        return shoppingItem
+    }
 
 
 }

@@ -59,5 +59,12 @@ class Category @Inject constructor () :BaseObservable(),Parcelable {
             return arrayOfNulls(size)
         }
     }
+    fun copyOf():Category
+    {
+        var category=Category()
+        category.categoryId=categoryId
+        category.setCategoryName(""+CategoryName)
+        return category
+    }
 
 }

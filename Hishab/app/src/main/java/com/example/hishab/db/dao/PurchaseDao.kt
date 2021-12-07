@@ -19,10 +19,6 @@ interface PurchaseDao {
     @Query("delete from purchase_table where purchase_id=:purchaseId")
     suspend fun deleteByPurchaseId(purchaseId: Long)
     @Query("update purchase_table set product_id=:itemId,cost=:cost where purchase_id=:purchaseId")
-    suspend fun update(
-        itemId: Int,
-        purchaseId: Int,
-        cost: Int,
-    )
+    suspend fun update(itemId: Int,purchaseId: Int,cost: Int)
 
 }

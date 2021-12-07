@@ -11,22 +11,29 @@ import android.widget.EditText
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hishab.R
 import com.example.hishab.adapter.BuyingAdapter
 import com.example.hishab.changedinter.IAddProductCallback
+import com.example.hishab.changedinter.IHandleAlertDialog
+import com.example.hishab.changedinter.ISwipeItemCallback
 import com.example.hishab.databinding.FragmentAddBuyingBinding
 import com.example.hishab.models.AddItemProxy
 import com.example.hishab.models.entities.Category
 import com.example.hishab.models.entities.CategoryAndProductModel
 import com.example.hishab.models.entities.CustomDate
+import com.example.hishab.utils.SwipeToDeleteCallback
+import com.example.hishab.utils.Util
 import com.example.hishab.viewmodel.AddBuyingViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -38,18 +45,28 @@ class AddBuyingFragment : Fragment() {
     lateinit var recyclerView: RecyclerView
     lateinit var addProductCallBack:IAddProductCallback
     var adapter=BuyingAdapter()
+    val args: AddBuyingFragmentArgs by navArgs()
     private val viewModel: AddBuyingViewModel by viewModels()
     lateinit var categoryAndProductModelList:List<CategoryAndProductModel>
     lateinit var distinctCategoryList:List<Category?>
+    lateinit var swipeItemCallback: ISwipeItemCallback
+    lateinit var handleAlertDialog: IHandleAlertDialog
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_buying, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_buying, container, false)
+        viewModel.buyingId= args.buyingId.toLong()
+        if(viewModel.buyingId!=-1L)
+            viewModel.isUpdating=true
         getExistingCategoryAndProducts()
+        setSwipeItemCallback()
         setRecyclerView()
         setProductCallback()
         handleSubmitButtonClick()
+        setHandleAlertDialog()
+        if(viewModel.isUpdating)
+            handleUpdateProduct()
         binding.etDateTime.transformIntoDatePicker(
             requireContext(), "MM/dd/yyyy", myCalendar,
             Date()
@@ -57,15 +74,40 @@ class AddBuyingFragment : Fragment() {
         return binding.root;
     }
 
+    private fun handleUpdateProduct() {
+        CoroutineScope(Dispatchers.IO).launch {
+            var purchaseHistoryList= viewModel.getPurchaseHistoryByBuyingId(viewModel.buyingId)
+            var proxyId=1
+            purchaseHistoryList?.forEach({
+                adapter.dataSource.add(Util.convertPurchaseHistoryToAddItemProxy(proxyId.toLong(),viewModel.buyingId,it))
+                proxyId++
+            })
+            withContext(Dispatchers.Main)
+            {
+                adapter.submitList(adapter.dataSource)
+            }
+        }
+    }
+
+    private fun setHandleAlertDialog() {
+        handleAlertDialog=object :IHandleAlertDialog{
+            override fun onHandleDialog(isYes: Boolean, deleteId: Long) {
+                if(!viewModel.isUpdating)
+                {
+                   var addItemProxy=adapter.dataSource.filter { it.proxyId==deleteId }[0]
+                    adapter.dataSource.remove(addItemProxy)
+                    adapter.submitList(adapter.dataSource)
+                }
+            }
+        }
+    }
+
     private fun handleSubmitButtonClick() {
         binding.btnSubmit.setOnClickListener(View.OnClickListener {
-            val c = Calendar.getInstance()
-            var cDate=CustomDate(c.get(Calendar.YEAR),c.get(Calendar.MONTH),c.get(Calendar.DAY_OF_MONTH))
+            var cDate=CustomDate(myCalendar.get(Calendar.YEAR),myCalendar.get(Calendar.MONTH),myCalendar.get(Calendar.DAY_OF_MONTH))
             CoroutineScope(Dispatchers.Main).launch {
-                viewModel.insertShopping(adapter.dataSource, cDate,c.timeInMillis)
+                viewModel.insertShopping(adapter.dataSource, cDate,myCalendar.timeInMillis)
             }
-
-
         })
     }
 
@@ -84,15 +126,20 @@ class AddBuyingFragment : Fragment() {
 
         binding.root.findViewById<FloatingActionButton>(R.id.fab)
             .setOnClickListener(View.OnClickListener {
-                val actionAddBuyingFragmentToAddShoppingFragment =
-                    AddBuyingFragmentDirections.actionAddBuyingFragmentToAddShoppingFragment(
-                        categoryAndProductModelList.toTypedArray(),
-                        distinctCategoryList.toTypedArray(),
-                        adapter.currentList.size
-                    )
-                actionAddBuyingFragmentToAddShoppingFragment.callback = addProductCallBack
-                findNavController().navigate(actionAddBuyingFragmentToAddShoppingFragment)
+                goToAddDialog()
             })
+    }
+
+    private fun goToAddDialog(addItemProxy: AddItemProxy?=null) {
+        val actionAddBuyingFragmentToAddShoppingFragment =
+            AddBuyingFragmentDirections.actionAddBuyingFragmentToAddShoppingFragment(
+                categoryAndProductModelList.toTypedArray(),
+                distinctCategoryList.toTypedArray(),
+                if(addItemProxy==null) adapter.currentList.size+1 else addItemProxy.proxyId.toInt()
+            )
+        actionAddBuyingFragmentToAddShoppingFragment.addItemProxy=addItemProxy
+        actionAddBuyingFragmentToAddShoppingFragment.callback = addProductCallBack
+        findNavController().navigate(actionAddBuyingFragmentToAddShoppingFragment)
     }
 
     private fun setProductCallback() {
@@ -100,6 +147,10 @@ class AddBuyingFragment : Fragment() {
             override fun onAddedCallback(product: AddItemProxy){
                 adapter.dataSource.add(product)
                 adapter.submitList(adapter.dataSource)
+            }
+            override fun onUpdateCallBack(product: AddItemProxy) {
+                adapter.submitList(adapter.dataSource)
+                adapter.notifyDataSetChanged()
             }
         }
     }
@@ -140,5 +191,25 @@ class AddBuyingFragment : Fragment() {
         recyclerView = binding.root.findViewById<RecyclerView>(R.id.rv_add_buying)!!
         recyclerView.layoutManager= LinearLayoutManager(activity)
         recyclerView.adapter=adapter
+        ItemTouchHelper(SwipeToDeleteCallback(context,swipeItemCallback)).attachToRecyclerView(recyclerView)
+    }
+    private fun setSwipeItemCallback() {
+        swipeItemCallback= object: ISwipeItemCallback {
+            override fun onSwipeItem(viewHolder: RecyclerView.ViewHolder, direction: Int){
+                if(direction==ItemTouchHelper.LEFT)
+                {
+                    CoroutineScope(Dispatchers.IO).launch{
+                        var id=adapter.getElementAt(viewHolder.adapterPosition).proxyId
+                        activity?.runOnUiThread(Runnable {
+                            Util.showItemSwipeDeleteAlertDialog(context!!,"Delete Entry","Do you want to delete this entry?",id,handleAlertDialog)
+                        })
+                    }
+                }
+                else
+                {
+                    goToAddDialog(adapter.dataSource[viewHolder.adapterPosition])
+                }
+            }
+        }
     }
 }

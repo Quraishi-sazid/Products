@@ -51,6 +51,10 @@ class BuyingAdapter: ListAdapter<AddItemProxy, ViewHolder>(diffUtilCallBack) {
         }
     }
 
+    fun getElementAt(pos: Int):AddItemProxy {
+        return getItem(pos);
+    }
+
 
     class ViewHolder(val binding: LayoutPurchaseItemInputBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(addItemProxy: AddItemProxy)

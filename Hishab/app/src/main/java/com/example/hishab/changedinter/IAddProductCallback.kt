@@ -5,4 +5,5 @@ import java.io.Serializable
 
 interface IAddProductCallback:Serializable {
     fun onAddedCallback(product:AddItemProxy){}
+    fun onUpdateCallBack(product:AddItemProxy){}
 }
