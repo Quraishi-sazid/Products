@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hishab.R
 import com.example.hishab.adapter.PurchaseItemsAdapter
-import com.example.hishab.changedinter.ISwipeItemCallback
+import com.example.hishab.interfaces.ISwipeItemCallback
 
 /*
 * This class is used to draw a delete background when swipe is done.

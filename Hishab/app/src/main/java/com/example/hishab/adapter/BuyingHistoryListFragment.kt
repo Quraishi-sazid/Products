@@ -11,7 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hishab.R
-import com.example.hishab.changedinter.INavigationCallback
+import com.example.hishab.interfaces.INavigationCallback
 import com.example.hishab.databinding.FragmentBuyingHistoryListBinding
 import com.example.hishab.models.BuyingHistory
 import com.example.hishab.viewmodel.BuyingHistoryListViewModel

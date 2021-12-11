@@ -27,7 +27,7 @@
             app:argType="com.example.hishab.models.entities.Category[]" />
         <argument
             android:name="callback"
-            app:argType="com.example.hishab.changedinter.IAddProductCallback"
+            app:argType="com.example.hishab.interfaces.IAddProductCallback"
             app:nullable="true"
             android:defaultValue="@null" />
         <argument

@@ -1,4 +1,4 @@
-package com.example.hishab.changedinter
+package com.example.hishab.interfaces
 
 interface INavigationCallback {
     fun navigate(data:Any)

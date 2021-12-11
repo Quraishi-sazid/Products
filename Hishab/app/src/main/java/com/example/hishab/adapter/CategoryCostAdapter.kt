@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hishab.R
-import com.example.hishab.changedinter.INavigationCallback
+import com.example.hishab.interfaces.INavigationCallback
 import com.example.hishab.databinding.LayoutCategoryCostBinding
 import com.example.hishab.models.CategoryCostModel
 

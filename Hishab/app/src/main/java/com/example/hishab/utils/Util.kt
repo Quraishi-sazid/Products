@@ -3,7 +3,7 @@ package com.example.hishab.utils
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
-import com.example.hishab.changedinter.IHandleAlertDialog
+import com.example.hishab.interfaces.IHandleAlertDialog
 import com.example.hishab.models.BuyingItemProxy
 import com.example.hishab.models.entities.Category
 import com.example.hishab.models.entities.PurchaseHistory

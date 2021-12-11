@@ -7,7 +7,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hishab.R
 import com.example.hishab.adapter.BuyingListAdapter.ViewHolder
-import com.example.hishab.changedinter.INavigationCallback
+import com.example.hishab.interfaces.INavigationCallback
 import com.example.hishab.databinding.LayoutBuyingItemBinding
 import com.example.hishab.models.BuyingHistory
 

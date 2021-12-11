@@ -1,4 +1,4 @@
-package com.example.hishab.changedinter
+package com.example.hishab.interfaces
 
 import com.example.hishab.models.BuyingItemProxy
 import java.io.Serializable

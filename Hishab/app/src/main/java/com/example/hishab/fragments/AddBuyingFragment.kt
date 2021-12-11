@@ -17,9 +17,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hishab.R
 import com.example.hishab.adapter.BuyingAdapter
-import com.example.hishab.changedinter.IAddProductCallback
-import com.example.hishab.changedinter.IHandleAlertDialog
-import com.example.hishab.changedinter.ISwipeItemCallback
+import com.example.hishab.interfaces.IAddProductCallback
+import com.example.hishab.interfaces.IHandleAlertDialog
+import com.example.hishab.interfaces.ISwipeItemCallback
 import com.example.hishab.databinding.FragmentAddBuyingBinding
 import com.example.hishab.models.BuyingItemProxy
 import com.example.hishab.models.entities.Category
