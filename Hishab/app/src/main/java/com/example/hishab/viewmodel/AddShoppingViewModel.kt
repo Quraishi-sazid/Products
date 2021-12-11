@@ -11,7 +11,7 @@ import javax.inject.Inject
 class AddShoppingViewModel @Inject constructor (app:Application) :AndroidViewModel(app)
 {
     @Inject
-    lateinit var shoppingItem:ShoppingItem
+    lateinit var product:Product
     @Inject
     lateinit var purchaseItem:PurchaseItem
     @Inject
@@ -19,7 +19,7 @@ class AddShoppingViewModel @Inject constructor (app:Application) :AndroidViewMod
     @Inject
     lateinit var repository:Repository
     lateinit var backUpCategory: Category
-    lateinit var backUpShoppingItem: ShoppingItem
+    lateinit var backUpProduct: Product
 
     var isUpdating=false
 
@@ -32,7 +32,7 @@ class AddShoppingViewModel @Inject constructor (app:Application) :AndroidViewMod
         {
             updatePurchaseHistory.getPurchaseId()?.let { purchaseItem.setPurchaseId(it) };
             updatePurchaseHistory.getCost()?.let { purchaseItem.setCost(it) };
-            updatePurchaseHistory.getItemName()?.let { shoppingItem.setProductName(it) }
+            updatePurchaseHistory.getItemName()?.let { product.setProductName(it) }
             updatePurchaseHistory.getCategoryName()?.let{category.setCategoryName(it)}
         }
     }
@@ -51,11 +51,11 @@ class AddShoppingViewModel @Inject constructor (app:Application) :AndroidViewMod
                 category.categoryId=-1
             }
         }
-        if(!backUpShoppingItem.getProductName().equals(backUpShoppingItem.getProductName()))
+        if(!backUpProduct.getProductName().equals(backUpProduct.getProductName()))
         {
-            if(backUpShoppingItem.productId==shoppingItem.productId)
+            if(backUpProduct.productId==product.productId)
             {
-                shoppingItem.productId=-1
+                product.productId=-1
             }
         }
     }

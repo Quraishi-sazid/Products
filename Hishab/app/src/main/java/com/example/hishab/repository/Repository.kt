@@ -37,11 +37,11 @@ class Repository(application: Application) {
         return categoryDao.getCategoryIdFromName(name);
     }
 
-    suspend fun insertShopping(shoppingItem: ShoppingItem): Long {
-        return shoppingDao.insert(shoppingItem)
+    suspend fun insertShopping(product: Product): Long {
+        return shoppingDao.insert(product)
     }
 
-    suspend fun getShoppingItemFromNameAndCId(itemName: String, categoryId: Long): ShoppingItem {
+    suspend fun getShoppingItemFromNameAndCId(itemName: String, categoryId: Long): Product {
         return shoppingDao.getShoppingItemFromItemNameAndCategoryId(itemName, categoryId);
     }
 
@@ -68,10 +68,10 @@ class Repository(application: Application) {
     }
 
     suspend fun updatePurchaseItem(
-        shoppingItem: ShoppingItem,
+        product: Product,
         purchaseItem: PurchaseItem
     ) {
-        //purchaseDao.update(shoppingItem.productId,purchaseItem.getPurchaseId(),purchaseItem.getCost(),purchaseItem.day,purchaseItem.month,purchaseItem.year);
+        //purchaseDao.update(product.productId,purchaseItem.getPurchaseId(),purchaseItem.getCost(),purchaseItem.day,purchaseItem.month,purchaseItem.year);
     }
 
     suspend fun getdetailsOfCategoryfromDate(

@@ -35,13 +35,13 @@ class AddShoppingFragment : DialogFragment() {
         if(args.buyingItemProxy!=null)
         {
             addShoppingViewModel.isUpdating=true
-            addShoppingViewModel.shoppingItem= args.buyingItemProxy!!.shoppingItem
+            addShoppingViewModel.product= args.buyingItemProxy!!.product
             addShoppingViewModel.category= args.buyingItemProxy!!.category
             addShoppingViewModel.purchaseItem= args.buyingItemProxy!!.purchaseItem
             addShoppingViewModel.backUpCategory=addShoppingViewModel.category.copyOf()
-            addShoppingViewModel.backUpShoppingItem=addShoppingViewModel.shoppingItem.copyOf()
+            addShoppingViewModel.backUpProduct=addShoppingViewModel.product.copyOf()
         }
-        binding.shoppingItem=addShoppingViewModel.shoppingItem
+        binding.product=addShoppingViewModel.product
         binding.purchaseItem=addShoppingViewModel.purchaseItem
         binding.category=addShoppingViewModel.category
 
@@ -53,7 +53,7 @@ class AddShoppingFragment : DialogFragment() {
                     val item = adapterView.adapter.getItem(position)
                     val categoryAndProductModel = item as CategoryAndProductModel;
                         addShoppingViewModel.category.setCategoryName(categoryAndProductModel.getCategoryName()!!)
-                    addShoppingViewModel.shoppingItem.productId= categoryAndProductModel.getProductId()!!;
+                    addShoppingViewModel.product.productId= categoryAndProductModel.getProductId()!!;
                 })
         binding.etCategory.setAdapter(context?.let {
             ArrayAdapter<Category>(
@@ -77,7 +77,7 @@ class AddShoppingFragment : DialogFragment() {
                 }
                 else
                 {
-                    args.callback?.onAddedCallback(BuyingItemProxy((args.buyingListSize).toLong(),addShoppingViewModel.category,addShoppingViewModel.shoppingItem,addShoppingViewModel.purchaseItem))
+                    args.callback?.onAddedCallback(BuyingItemProxy((args.buyingListSize).toLong(),addShoppingViewModel.category,addShoppingViewModel.product,addShoppingViewModel.purchaseItem))
                 }
                dismiss()
         })

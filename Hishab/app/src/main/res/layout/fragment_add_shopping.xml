@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
-        <variable name="shoppingItem" type="com.example.hishab.models.entities.ShoppingItem"/>
+        <variable name="product" type="com.example.hishab.models.entities.Product"/>
         <variable name="category" type="com.example.hishab.models.entities.Category"/>
         <variable name="purchaseItem" type="com.example.hishab.models.entities.PurchaseItem"/>
     </data>
@@ -15,7 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="Product name"
-        android:text="@={shoppingItem.productName}"
+        android:text="@={product.productName}"
         app:layout_constraintBaseline_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />

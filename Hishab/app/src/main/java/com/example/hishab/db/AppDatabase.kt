@@ -11,7 +11,7 @@ import com.example.hishab.utils.Converters
 import javax.inject.Inject
 
 
-@Database(entities = arrayOf(Category::class,ShoppingItem::class,PurchaseItem::class,BuyItem::class,CustomDate::class), version = 4)
+@Database(entities = arrayOf(Category::class,Product::class,PurchaseItem::class,BuyItem::class,CustomDate::class), version = 4)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun ShoppingDao(): ShoppingDao

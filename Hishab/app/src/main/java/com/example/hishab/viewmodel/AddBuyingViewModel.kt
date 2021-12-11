@@ -23,17 +23,17 @@ class AddBuyingViewModel @Inject constructor(app: Application) : AndroidViewMode
 
     private suspend fun getShoppingItem(
         category: Category,
-        shoppingItem: ShoppingItem
-    ): ShoppingItem {
+        product: Product
+    ): Product {
 
         var quariedShoppingItem = repository.getShoppingItemFromNameAndCId(
-            shoppingItem.getProductName(),
+            product.getProductName(),
             category.categoryId
         )
         if (quariedShoppingItem == null) {
-            shoppingItem.CategoryId = category.categoryId
-            shoppingItem.productId = repository.insertShopping(shoppingItem)
-            return shoppingItem
+            product.categoryId = category.categoryId
+            product.productId = repository.insertShopping(product)
+            return product
         }
         return quariedShoppingItem
     }
@@ -63,19 +63,19 @@ class AddBuyingViewModel @Inject constructor(app: Application) : AndroidViewMode
 
 
     suspend fun insertOrUpdatePurchaseItem(buyingItemProxy: BuyingItemProxy) {
-        if (buyingItemProxy.shoppingItem.productId == 0L) {
+        if (buyingItemProxy.product.productId == 0L) {
             if (buyingItemProxy.category.categoryId != 0L) {
                 var quariedShoppingItem =
-                    getShoppingItem(buyingItemProxy.category, buyingItemProxy.shoppingItem)
+                    getShoppingItem(buyingItemProxy.category, buyingItemProxy.product)
                 buyingItemProxy.purchaseItem.productId = quariedShoppingItem.productId
             } else {
                 var queriedCategory = getCategory(buyingItemProxy.category)
                 var quariedShoppingItem =
-                    getShoppingItem(queriedCategory, buyingItemProxy.shoppingItem)
+                    getShoppingItem(queriedCategory, buyingItemProxy.product)
                 buyingItemProxy.purchaseItem.productId = quariedShoppingItem.productId
             }
         } else {
-            buyingItemProxy.purchaseItem.productId = buyingItemProxy.shoppingItem.productId
+            buyingItemProxy.purchaseItem.productId = buyingItemProxy.product.productId
         }
         if (!buyingItemProxy.isUpdating())
             repository.insertPurchaseItem(buyingItemProxy.purchaseItem)

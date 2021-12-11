@@ -49,7 +49,7 @@ class PurchaseItemsAdapter() : ListAdapter<Any, RecyclerView.ViewHolder>(diffUti
     //private lateinit var objectList:List<Any>;
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         when (viewType) {
-            ViewType.String.ordinal -> {
+            ViewType.PurchaseHistory.ordinal -> {
                 val binding: LayoutPurchaseItemBinding = DataBindingUtil.inflate(
                     LayoutInflater.from(parent.context),
                     R.layout.layout_purchase_item,
@@ -58,7 +58,7 @@ class PurchaseItemsAdapter() : ListAdapter<Any, RecyclerView.ViewHolder>(diffUti
                 )
                 return ViewHolder(binding)
             }
-            ViewType.PurchaseHistory.ordinal -> {
+           else-> {
                 val inflate = LayoutInflater.from(parent.context)
                     .inflate(R.layout.layout_month_item, parent, false)
                 return MonthViewHolder(inflate)

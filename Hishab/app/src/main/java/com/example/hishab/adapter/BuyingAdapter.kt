@@ -26,8 +26,8 @@ class BuyingAdapter : ListAdapter<BuyingItemProxy, ViewHolder>(diffUtilCallBack)
                     .equals(newItem.category.getCategoryName()) &&
                         oldItem.purchaseItem.getDescription()
                             .equals(newItem.purchaseItem.getDescription()) &&
-                        oldItem.shoppingItem.getProductName()
-                            .equals(newItem.shoppingItem.getProductName()) &&
+                        oldItem.product.getProductName()
+                            .equals(newItem.product.getProductName()) &&
                         oldItem.purchaseItem.getCost() == newItem.purchaseItem.getCost()
 
             }

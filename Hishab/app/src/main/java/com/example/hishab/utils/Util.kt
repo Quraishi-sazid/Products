@@ -8,7 +8,7 @@ import com.example.hishab.models.BuyingItemProxy
 import com.example.hishab.models.entities.Category
 import com.example.hishab.models.entities.PurchaseHistory
 import com.example.hishab.models.entities.PurchaseItem
-import com.example.hishab.models.entities.ShoppingItem
+import com.example.hishab.models.entities.Product
 import java.text.DateFormatSymbols
 
 
@@ -52,10 +52,10 @@ class Util {
             var category=Category()
             category.categoryId= purchaseHistory.getCategoryId()!!
             category.setCategoryName(purchaseHistory.getCategoryName()!!)
-            var shoppingItem=ShoppingItem()
+            var shoppingItem=Product()
             shoppingItem.productId= purchaseHistory.getShoppingId()!!
             shoppingItem.setProductName(purchaseHistory.getItemName()!!)
-            shoppingItem.CategoryId= purchaseHistory.getCategoryId()!!
+            shoppingItem.categoryId= purchaseHistory.getCategoryId()!!
             var purchaseItem=PurchaseItem()
             purchaseItem.setCost(purchaseHistory.getCost()!!)
             purchaseItem.setPurchaseId(purchaseHistory.getPurchaseId()!!)

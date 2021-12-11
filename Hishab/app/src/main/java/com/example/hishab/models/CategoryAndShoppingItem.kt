@@ -3,7 +3,7 @@ package com.example.hishab.models
 import androidx.room.Embedded
 import androidx.room.Relation
 import com.example.hishab.models.entities.Category
-import com.example.hishab.models.entities.ShoppingItem
+import com.example.hishab.models.entities.Product
 
 
 
@@ -12,6 +12,6 @@ data class CategoryAndShoppingItem(@Embedded val category: Category,
                                            parentColumn = "category_id",
                                            entityColumn = "category_id"
                                    )
-                                   val shoppingItems: List<ShoppingItem>
+                                   val products: List<Product>
                                    )
 
