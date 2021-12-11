@@ -2,6 +2,7 @@ package com.example.hishab.models
 
 import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
+import java.io.Serializable
 import java.text.DateFormatSymbols
 import java.util.concurrent.TimeUnit
 
@@ -14,7 +15,7 @@ data class BuyingHistory(
     private var month: Int,
     private var year: Int,
     private var time: Long
-):BaseObservable() {
+):BaseObservable(),Serializable {
 
     @Bindable
     fun getBuyingId():Long

@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import com.example.hishab.models.DateModel
 import com.example.hishab.models.entities.CategoryAndProductModel
+import com.example.hishab.models.entities.CustomDate
 import com.example.hishab.models.entities.PurchaseHistory
 import com.example.hishab.repository.Repository
 import com.example.hishab.utils.Util
@@ -21,11 +22,11 @@ class PurchaseHistoryViewModel @Inject constructor(app:Application):AndroidViewM
         return repository.getPurchaseHistory();
     }
 
-    suspend fun getdetailsOfCategoryfromDate(categoryId:Int,dateModel: DateModel):LiveData<List<PurchaseHistory>>
+    suspend fun getdetailsOfCategoryfromDate(categoryId:Int,dateModel: CustomDate):LiveData<List<PurchaseHistory>>
     {
         return repository.getdetailsOfCategoryfromDate(categoryId,dateModel);
     }
-    fun convert(list: List<PurchaseHistory>):List<Any> {
+    fun getDateSeparatedPurchaseHistoryList(list: List<PurchaseHistory>):List<Any> {
         var objectList=ArrayList<Any>()
         var pMonth="";
         for (it in list)

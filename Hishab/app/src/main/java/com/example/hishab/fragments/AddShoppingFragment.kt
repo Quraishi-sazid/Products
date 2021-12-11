@@ -1,15 +1,11 @@
 package com.example.hishab.fragments
 
-import android.app.DatePickerDialog
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.EditText
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
@@ -22,9 +18,6 @@ import com.example.hishab.models.entities.CategoryAndProductModel
 import com.example.hishab.models.entities.PurchaseHistory
 import com.example.hishab.viewmodel.AddShoppingViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.*
-import java.text.SimpleDateFormat
-import java.util.*
 
 @AndroidEntryPoint
 class AddShoppingFragment : DialogFragment() {

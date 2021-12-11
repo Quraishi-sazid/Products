@@ -38,7 +38,7 @@ class CategoryCostAdapter(public val dataSet: List<CategoryCostModel>,public val
     inner class CategoryCostAdapterViewHolder(val binding:LayoutCategoryCostBinding): RecyclerView.ViewHolder(binding.root) {
         init {
             binding.clCategoryCostItem.setOnClickListener(View.OnClickListener {
-                val model = dataSet.get(adapterPosition)
+                val model = dataSet[adapterPosition]
                 navCallback.navigate(model.getCategoryId())
             });
         }

@@ -9,9 +9,6 @@ import com.example.hishab.models.entities.Category
 import com.example.hishab.models.entities.PurchaseHistory
 import com.example.hishab.models.entities.PurchaseItem
 import com.example.hishab.models.entities.ShoppingItem
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.text.DateFormatSymbols
 
 
@@ -57,7 +54,7 @@ class Util {
             category.setCategoryName(purchaseHistory.getCategoryName()!!)
             var shoppingItem=ShoppingItem()
             shoppingItem.productId= purchaseHistory.getShoppingId()!!
-            shoppingItem.setProductName(purchaseHistory.getCategoryName()!!)
+            shoppingItem.setProductName(purchaseHistory.getItemName()!!)
             shoppingItem.CategoryId= purchaseHistory.getCategoryId()!!
             var purchaseItem=PurchaseItem()
             purchaseItem.setCost(purchaseHistory.getCost()!!)

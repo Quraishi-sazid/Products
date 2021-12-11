@@ -1,5 +1,5 @@
 package com.example.hishab.changedinter
 
 interface INavigationCallback {
-    fun navigate(id:Any)
+    fun navigate(data:Any)
 }

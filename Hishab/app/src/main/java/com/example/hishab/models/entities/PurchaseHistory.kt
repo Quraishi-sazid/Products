@@ -14,64 +14,67 @@ data class PurchaseHistory(
     private val day: Int,
     private val month: Int,
     private val year: Int,
-    private val categoryId:Long?,
-    private val productId:Long?
-):BaseObservable(),Serializable
-{
+    private val categoryId: Long?,
+    private val productId: Long?,
+    private val buyingId: Long?
+) : BaseObservable(), Serializable {
     @Bindable
-    fun getCategoryName():String?{
+    fun getCategoryName(): String? {
         return categoryName
     }
 
     @Bindable
-    fun getItemName():String?{
+    fun getItemName(): String? {
         return ItemName
     }
+
     @Bindable
-    fun getCost():Int?{
+    fun getCost(): Int? {
         return cost
     }
+
     @Bindable
-    fun getDescipt():String?{
+    fun getDescipt(): String? {
         return descrip
     }
-    fun getDay():Int{
+
+    fun getDay(): Int {
         return day
     }
-    fun getMonth():Int{
+
+    fun getMonth(): Int {
         return month
     }
-    fun getYear():Int{
+
+    fun getYear(): Int {
         return year
     }
-/*    @Bindable
-    fun getPurchaseDateMili():Date{
-        return purchaseDate
-    }*/
+
     @Bindable
-    fun getDateTimeString():String
-    {
+    fun getDateTimeString(): String {
         var monthString = "wrong"
         val dfs = DateFormatSymbols()
         val months: Array<String> = dfs.getMonths()
         if (month >= 1 && month <= 12) {
-            monthString = months[month-1]
+            monthString = months[month - 1]
         }
-        return monthString.substring(0,3)+"\n"+day
+        return monthString.substring(0, 3) + "\n" + day
     }
-    fun getPurchaseId():Long?
-    {
+
+    fun getPurchaseId(): Long? {
         return purchaseId;
     }
 
-    fun getCategoryId():Long?
-    {
+    fun getCategoryId(): Long? {
         return categoryId;
     }
 
-    fun getShoppingId():Long?
-    {
+    fun getShoppingId(): Long? {
         return productId;
+    }
+
+    fun getBuyingId(): Long? {
+        return buyingId;
     }
 
 

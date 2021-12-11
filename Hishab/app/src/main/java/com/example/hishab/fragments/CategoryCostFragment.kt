@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.hishab.R
 import com.example.hishab.changedinter.INavigationCallback
 import com.example.hishab.adapter.CategoryCostAdapter
-import com.example.hishab.models.DateModel
+import com.example.hishab.models.entities.CustomDate
 import com.example.hishab.viewmodel.CategoryCostViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -22,36 +22,37 @@ import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class CategoryCostFragment : Fragment() {
-    private lateinit var vm: CategoryCostViewModel
-    private lateinit var navCallback:INavigationCallback
-    val month=1
-    val day=1
-    val year=2000
+    private lateinit var categoryCostViewModel: CategoryCostViewModel
+    private lateinit var navCallback: INavigationCallback
+    val month = 1
+    val day = 1
+    val year = 2000
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val inflate = inflater.inflate(R.layout.fragment_category_details, container, false)
-        vm= ViewModelProvider(this).get(CategoryCostViewModel::class.java)
+        categoryCostViewModel = ViewModelProvider(this).get(CategoryCostViewModel::class.java)
         setNavCallBack()
         CoroutineScope(Dispatchers.IO).launch {
-            val getCategoryCostModels = vm.GetCategoryCostModels()
+            val getCategoryCostModels = categoryCostViewModel.getCategoryCostModels()
             withContext(Dispatchers.Main)
             {
-                val recyclerView=inflate.findViewById<RecyclerView>(R.id.rv_category_details)
-                recyclerView.layoutManager= LinearLayoutManager(activity)
-                recyclerView.adapter= CategoryCostAdapter(getCategoryCostModels,navCallback)
+                val categoryDetailsRecyclerView = inflate.findViewById<RecyclerView>(R.id.rv_category_details)
+                categoryDetailsRecyclerView.layoutManager = LinearLayoutManager(activity)
+                categoryDetailsRecyclerView.adapter = CategoryCostAdapter(getCategoryCostModels, navCallback)
             }
         }
         return inflate;
     }
 
     private fun setNavCallBack() {
-        navCallback= object : INavigationCallback {
+        navCallback = object : INavigationCallback {
             override fun navigate(categoryId: Any) {
-                val directions = CategoryCostFragmentDirections.actionCategoryDetailsFragmentToPurchaseHistoryFragment()
-                directions.purchaseId=categoryId as Int
-                directions.dateModel= DateModel(day, month, year)
+                val directions =
+                    CategoryCostFragmentDirections.actionCategoryDetailsFragmentToPurchaseHistoryFragment()
+                directions.categoryId = categoryId as Int
+                directions.customDateModel = CustomDate(day, month, year)
                 findNavController().navigate(directions)
             }
         }

@@ -13,12 +13,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.hishab.R
 import com.example.hishab.changedinter.INavigationCallback
 import com.example.hishab.databinding.FragmentBuyingHistoryListBinding
+import com.example.hishab.models.BuyingHistory
 import com.example.hishab.viewmodel.BuyingHistoryListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class BuyingHistoryListFragment : Fragment() {
@@ -41,10 +41,10 @@ class BuyingHistoryListFragment : Fragment() {
 
     private fun setNavigationCallBack() {
         navigationCallBack= object :INavigationCallback{
-            override fun navigate(id: Any) {
-                if(id is Long)
+            override fun navigate(buyingHistory: Any) {
+                if(buyingHistory is BuyingHistory)
                 {
-                    goToAddBuyingFragment(id)
+                    goToAddBuyingFragment(buyingHistory)
                 }
             }
 
@@ -58,9 +58,9 @@ class BuyingHistoryListFragment : Fragment() {
         })
     }
 
-    private fun goToAddBuyingFragment(buyingId:Long=-1L) {
+    private fun goToAddBuyingFragment(buyingHistory: BuyingHistory? =null) {
         var direction= BuyingHistoryListFragmentDirections.actionBuyingHistoryListFragmentToAddBuyingFragment()
-        direction.buyingId=buyingId.toInt()
+        direction.buyingHistory=buyingHistory
         findNavController().navigate(direction)
 
     }
@@ -73,12 +73,10 @@ class BuyingHistoryListFragment : Fragment() {
 
     private fun fetchBuyingList() {
         CoroutineScope(Dispatchers.Main).launch {
-            val buyingHistoryList = viewModel.getBuyingHistoryList()
-            withContext(Dispatchers.Main)
-            {
-                buyingListAdapter= BuyingListAdapter(buyingHistoryList,navigationCallBack)
+            viewModel.getBuyingHistoryLiveData().observe(viewLifecycleOwner,{
+                buyingListAdapter= BuyingListAdapter(it,navigationCallBack)
                 setRecyclerView()
-            }
+            })
         }
     }
 

@@ -1,5 +1,6 @@
 package com.example.hishab.db.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
@@ -14,5 +15,7 @@ interface BuyingDao {
     @Insert
     suspend fun insert(buyItem: BuyItem):Long
     @Query("select b.buying_id as buyingId,count(b.buying_id) as totalItem,sum(cost) totalCost,day as day,month as month,year as year,time as time from buying_entity b inner join purchase_table p on b.buying_id=p.buying_id inner join custom_date c on b.date_id=c.date_id group by b.buying_id")
-    suspend fun getBuyingHistory():List<BuyingHistory>
+    fun getBuyingHistory():LiveData<List<BuyingHistory>>
+    @Query("update buying_entity set date_id=:dateId where buying_id=:buyingId")
+    suspend fun updateDateId(dateId:Long,buyingId:Long)
 }

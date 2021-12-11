@@ -49,12 +49,12 @@
             android:id="@+id/action_purchaseHistoryFragment_to_addShoppingFragment"
             app:destination="@id/addShoppingFragment" />
         <argument
-            android:name="purchaseId"
+            android:name="categoryId"
             app:argType="integer"
             android:defaultValue="-1" />
         <argument
-            android:name="dateModel"
-            app:argType="com.example.hishab.models.DateModel"
+            android:name="customDateModel"
+            app:argType="com.example.hishab.models.entities.CustomDate"
             app:nullable="true"
             android:defaultValue="@null" />
     </fragment>
@@ -79,6 +79,11 @@
             android:name="buyingId"
             app:argType="integer"
             android:defaultValue="-1" />
+        <argument
+            android:name="buyingHistory"
+            app:argType="com.example.hishab.models.BuyingHistory"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
     <fragment
         android:id="@+id/buyingHistoryListFragment"
