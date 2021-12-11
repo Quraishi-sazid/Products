@@ -1,9 +1,9 @@
 package com.example.hishab.changedinter
 
-import com.example.hishab.models.AddItemProxy
+import com.example.hishab.models.BuyingItemProxy
 import java.io.Serializable
 
 interface IAddProductCallback:Serializable {
-    fun onAddedCallback(product:AddItemProxy){}
-    fun onUpdateCallBack(product:AddItemProxy){}
+    fun onAddedCallback(product:BuyingItemProxy){}
+    fun onUpdateCallBack(product:BuyingItemProxy){}
 }

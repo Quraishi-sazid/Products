@@ -12,7 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.example.hishab.R
 import com.example.hishab.databinding.FragmentAddShoppingBinding
-import com.example.hishab.models.AddItemProxy
+import com.example.hishab.models.BuyingItemProxy
 import com.example.hishab.models.entities.Category
 import com.example.hishab.models.entities.CategoryAndProductModel
 import com.example.hishab.models.entities.PurchaseHistory
@@ -32,12 +32,12 @@ class AddShoppingFragment : DialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding= DataBindingUtil.inflate(inflater, R.layout.fragment_add_shopping, container, false)
-        if(args.addItemProxy!=null)
+        if(args.buyingItemProxy!=null)
         {
             addShoppingViewModel.isUpdating=true
-            addShoppingViewModel.shoppingItem= args.addItemProxy!!.shoppingItem
-            addShoppingViewModel.category= args.addItemProxy!!.category
-            addShoppingViewModel.purchaseItem= args.addItemProxy!!.purchaseItem
+            addShoppingViewModel.shoppingItem= args.buyingItemProxy!!.shoppingItem
+            addShoppingViewModel.category= args.buyingItemProxy!!.category
+            addShoppingViewModel.purchaseItem= args.buyingItemProxy!!.purchaseItem
             addShoppingViewModel.backUpCategory=addShoppingViewModel.category.copyOf()
             addShoppingViewModel.backUpShoppingItem=addShoppingViewModel.shoppingItem.copyOf()
         }
@@ -73,11 +73,11 @@ class AddShoppingFragment : DialogFragment() {
                 if(addShoppingViewModel.isUpdating)
                 {
                     addShoppingViewModel.handleInformationChange()
-                    args.callback?.onUpdateCallBack(args.addItemProxy!!)
+                    args.callback?.onUpdateCallBack(args.buyingItemProxy!!)
                 }
                 else
                 {
-                    args.callback?.onAddedCallback(AddItemProxy((args.buyingListSize).toLong(),addShoppingViewModel.category,addShoppingViewModel.shoppingItem,addShoppingViewModel.purchaseItem))
+                    args.callback?.onAddedCallback(BuyingItemProxy((args.buyingListSize).toLong(),addShoppingViewModel.category,addShoppingViewModel.shoppingItem,addShoppingViewModel.purchaseItem))
                 }
                dismiss()
         })

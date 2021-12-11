@@ -21,7 +21,7 @@ import com.example.hishab.changedinter.IAddProductCallback
 import com.example.hishab.changedinter.IHandleAlertDialog
 import com.example.hishab.changedinter.ISwipeItemCallback
 import com.example.hishab.databinding.FragmentAddBuyingBinding
-import com.example.hishab.models.AddItemProxy
+import com.example.hishab.models.BuyingItemProxy
 import com.example.hishab.models.entities.Category
 import com.example.hishab.models.entities.CategoryAndProductModel
 import com.example.hishab.models.entities.CustomDate
@@ -167,27 +167,27 @@ class AddBuyingFragment : Fragment() {
             })
     }
 
-    private fun goToAddDialog(addItemProxy: AddItemProxy? = null) {
+    private fun goToAddDialog(buyingItemProxy: BuyingItemProxy? = null) {
         val actionAddBuyingFragmentToAddShoppingFragment =
             AddBuyingFragmentDirections.actionAddBuyingFragmentToAddShoppingFragment(
                 categoryAndProductModelList.toTypedArray(),
                 distinctCategoryList.toTypedArray(),
-                if (addItemProxy == null) adapter.currentList.size + 1 else addItemProxy.proxyId.toInt()
+                if (buyingItemProxy == null) adapter.currentList.size + 1 else buyingItemProxy.proxyId.toInt()
             )
-        actionAddBuyingFragmentToAddShoppingFragment.addItemProxy = addItemProxy
+        actionAddBuyingFragmentToAddShoppingFragment.buyingItemProxy = buyingItemProxy
         actionAddBuyingFragmentToAddShoppingFragment.callback = addProductCallBack
         findNavController().navigate(actionAddBuyingFragmentToAddShoppingFragment)
     }
 
     private fun setProductCallback() {
         addProductCallBack = object : IAddProductCallback {
-            override fun onAddedCallback(product: AddItemProxy) {
+            override fun onAddedCallback(product: BuyingItemProxy) {
                 product.setBuyingId(viewModel.buyingId)
                 adapter.dataSource.add(product)
                 adapter.submitList(adapter.dataSource)
             }
 
-            override fun onUpdateCallBack(product: AddItemProxy) {
+            override fun onUpdateCallBack(product: BuyingItemProxy) {
                 adapter.submitList(adapter.dataSource)
                 adapter.notifyDataSetChanged()
             }

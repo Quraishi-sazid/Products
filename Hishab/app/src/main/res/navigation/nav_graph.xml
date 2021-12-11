@@ -34,8 +34,8 @@
             android:name="buyingListSize"
             app:argType="integer" />
         <argument
-            android:name="addItemProxy"
-            app:argType="com.example.hishab.models.AddItemProxy"
+            android:name="buyingItemProxy"
+            app:argType="com.example.hishab.models.BuyingItemProxy"
             app:nullable="true"
             android:defaultValue="@null" />
 

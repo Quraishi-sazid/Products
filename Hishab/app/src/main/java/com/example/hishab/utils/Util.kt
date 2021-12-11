@@ -4,7 +4,7 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import com.example.hishab.changedinter.IHandleAlertDialog
-import com.example.hishab.models.AddItemProxy
+import com.example.hishab.models.BuyingItemProxy
 import com.example.hishab.models.entities.Category
 import com.example.hishab.models.entities.PurchaseHistory
 import com.example.hishab.models.entities.PurchaseItem
@@ -48,7 +48,7 @@ class Util {
                 .show()
         }
 
-        fun  convertPurchaseHistoryToAddItemProxy(proxyId:Long,buyingId:Long,purchaseHistory: PurchaseHistory): AddItemProxy {
+        fun  convertPurchaseHistoryToAddItemProxy(proxyId:Long,buyingId:Long,purchaseHistory: PurchaseHistory): BuyingItemProxy {
             var category=Category()
             category.categoryId= purchaseHistory.getCategoryId()!!
             category.setCategoryName(purchaseHistory.getCategoryName()!!)
@@ -62,7 +62,7 @@ class Util {
             purchaseItem.setDescription(purchaseHistory.getDescipt()!!)
             purchaseItem.productId=(purchaseHistory.getShoppingId()!!)
             purchaseItem.buyingId=buyingId
-            return AddItemProxy(proxyId,category,shoppingItem,purchaseItem)
+            return BuyingItemProxy(proxyId,category,shoppingItem,purchaseItem)
         }
     }
 }

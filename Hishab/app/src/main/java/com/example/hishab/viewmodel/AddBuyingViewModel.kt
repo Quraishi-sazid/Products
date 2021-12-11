@@ -3,7 +3,7 @@ package com.example.hishab.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import com.example.hishab.models.AddItemProxy
+import com.example.hishab.models.BuyingItemProxy
 import com.example.hishab.models.entities.*
 import com.example.hishab.repository.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -48,46 +48,46 @@ class AddBuyingViewModel @Inject constructor(app: Application) : AndroidViewMode
     }
 
     suspend fun insertBuying(
-        addItemProxyList: ArrayList<AddItemProxy>,
+        buyingItemProxyList: ArrayList<BuyingItemProxy>,
         customDate: CustomDate,
         time: Long
     ) {
         dateId = repository.getDateId(customDate)
         buyingId =
-            repository.insertBuyingItem(BuyItem(dateId, time, addItemProxyList.size.toLong()))
-        addItemProxyList.forEach {
+            repository.insertBuyingItem(BuyItem(dateId, time, buyingItemProxyList.size.toLong()))
+        buyingItemProxyList.forEach {
             it.purchaseItem.buyingId = buyingId
             insertOrUpdatePurchaseItem(it)
         }
     }
 
 
-    suspend fun insertOrUpdatePurchaseItem(addItemProxy: AddItemProxy) {
-        if (addItemProxy.shoppingItem.productId == 0L) {
-            if (addItemProxy.category.categoryId != 0L) {
+    suspend fun insertOrUpdatePurchaseItem(buyingItemProxy: BuyingItemProxy) {
+        if (buyingItemProxy.shoppingItem.productId == 0L) {
+            if (buyingItemProxy.category.categoryId != 0L) {
                 var quariedShoppingItem =
-                    getShoppingItem(addItemProxy.category, addItemProxy.shoppingItem)
-                addItemProxy.purchaseItem.productId = quariedShoppingItem.productId
+                    getShoppingItem(buyingItemProxy.category, buyingItemProxy.shoppingItem)
+                buyingItemProxy.purchaseItem.productId = quariedShoppingItem.productId
             } else {
-                var queriedCategory = getCategory(addItemProxy.category)
+                var queriedCategory = getCategory(buyingItemProxy.category)
                 var quariedShoppingItem =
-                    getShoppingItem(queriedCategory, addItemProxy.shoppingItem)
-                addItemProxy.purchaseItem.productId = quariedShoppingItem.productId
+                    getShoppingItem(queriedCategory, buyingItemProxy.shoppingItem)
+                buyingItemProxy.purchaseItem.productId = quariedShoppingItem.productId
             }
         } else {
-            addItemProxy.purchaseItem.productId = addItemProxy.shoppingItem.productId
+            buyingItemProxy.purchaseItem.productId = buyingItemProxy.shoppingItem.productId
         }
-        if (!addItemProxy.isUpdating())
-            repository.insertPurchaseItem(addItemProxy.purchaseItem)
+        if (!buyingItemProxy.isUpdating())
+            repository.insertPurchaseItem(buyingItemProxy.purchaseItem)
         else
-            repository.updatePurchaseItem(addItemProxy.purchaseItem)
+            repository.updatePurchaseItem(buyingItemProxy.purchaseItem)
     }
 
     suspend fun getPurchaseHistoryByBuyingId(buyingId: Long): List<PurchaseHistory> {
         return repository.getPurchaseHistoryFromBuyingId(buyingId)
     }
 
-    suspend fun updateBuying(dataSource: ArrayList<AddItemProxy>, buyingDate: CustomDate) {
+    suspend fun updateBuying(dataSource: ArrayList<BuyingItemProxy>, buyingDate: CustomDate) {
         dateId = repository.getDateId(buyingDate)
         repository.updateDateId(dateId, buyingId);
         dataSource.forEach { insertOrUpdatePurchaseItem(it) }

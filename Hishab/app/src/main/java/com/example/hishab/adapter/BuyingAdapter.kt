@@ -9,19 +9,19 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.hishab.R
 import com.example.hishab.databinding.LayoutPurchaseItemInputBinding
-import com.example.hishab.models.AddItemProxy
+import com.example.hishab.models.BuyingItemProxy
 
-class BuyingAdapter : ListAdapter<AddItemProxy, ViewHolder>(diffUtilCallBack) {
+class BuyingAdapter : ListAdapter<BuyingItemProxy, ViewHolder>(diffUtilCallBack) {
 
-    var dataSource = ArrayList<AddItemProxy>()
+    var dataSource = ArrayList<BuyingItemProxy>()
 
     companion object {
-        var diffUtilCallBack = object : DiffUtil.ItemCallback<AddItemProxy>() {
-            override fun areItemsTheSame(oldItem: AddItemProxy, newItem: AddItemProxy): Boolean {
+        var diffUtilCallBack = object : DiffUtil.ItemCallback<BuyingItemProxy>() {
+            override fun areItemsTheSame(oldItem: BuyingItemProxy, newItem: BuyingItemProxy): Boolean {
                 return oldItem.proxyId == newItem.proxyId
             }
 
-            override fun areContentsTheSame(oldItem: AddItemProxy, newItem: AddItemProxy): Boolean {
+            override fun areContentsTheSame(oldItem: BuyingItemProxy, newItem: BuyingItemProxy): Boolean {
                 return oldItem.category.getCategoryName()
                     .equals(newItem.category.getCategoryName()) &&
                         oldItem.purchaseItem.getDescription()
@@ -50,15 +50,15 @@ class BuyingAdapter : ListAdapter<AddItemProxy, ViewHolder>(diffUtilCallBack) {
         }
     }
 
-    fun getElementAt(pos: Int): AddItemProxy {
+    fun getElementAt(pos: Int): BuyingItemProxy {
         return getItem(pos);
     }
 
 
     class ViewHolder(val binding: LayoutPurchaseItemInputBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(addItemProxy: AddItemProxy) {
-            binding.product = addItemProxy
+        fun bind(buyingItemProxy: BuyingItemProxy) {
+            binding.product = buyingItemProxy
         }
     }
 
