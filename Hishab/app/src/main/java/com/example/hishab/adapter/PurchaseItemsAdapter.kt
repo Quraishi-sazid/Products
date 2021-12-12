@@ -1,6 +1,5 @@
 package com.example.hishab.adapter
 
-import android.provider.ContactsContract.CommonDataKinds.Note
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +10,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hishab.R
 import com.example.hishab.databinding.LayoutPurchaseItemBinding
-import com.example.hishab.models.entities.PurchaseHistory
+import com.example.hishab.models.PurchaseHistory
 import com.example.hishab.utils.Util
 
 

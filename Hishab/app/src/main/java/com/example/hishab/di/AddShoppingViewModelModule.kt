@@ -14,15 +14,10 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object ViewModelModule {
-
     @Singleton
     @Provides
     fun provideRepository(app: Application):Repository
     {
         return  Repository(app)
     }
-
-
-
-
 }

@@ -3,39 +3,33 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/buyingHistoryListFragment">
+    app:startDestination="@id/shoppingHistoryFragment">
 
     <dialog
-        android:id="@+id/addShoppingFragment"
-        android:name="com.example.hishab.fragments.AddShoppingFragment"
+        android:id="@+id/addPurchaseItemFragment"
+        android:name="com.example.hishab.fragments.AddPurchaseItemFragment"
         android:label="fragment_add_shopping"
-        tools:layout="@layout/fragment_add_shopping" >
+        tools:layout="@layout/fragment_add_purchase_item" >
         <action
-            android:id="@+id/action_addShoppingFragment_to_purchaseHistoryFragment"
+            android:id="@+id/action_addPurchaseItemFragment_to_purchaseHistoryFragment"
             app:destination="@id/purchaseHistoryFragment" />
         <argument
-            android:name="editHistory"
-            app:argType="com.example.hishab.models.entities.PurchaseHistory"
-            app:nullable="true"
-            android:defaultValue="@null"
-            />
-        <argument
             android:name="ProductCategoryArray"
-            app:argType="com.example.hishab.models.entities.CategoryAndProductModel[]"/>
+            app:argType="com.example.hishab.models.CategoryAndProductModel[]"/>
         <argument
             android:name="DistinctCategoryArray"
             app:argType="com.example.hishab.models.entities.Category[]" />
         <argument
             android:name="callback"
-            app:argType="com.example.hishab.interfaces.IAddProductCallback"
+            app:argType="com.example.hishab.interfaces.IAddOrUpdateProductCallback"
             app:nullable="true"
             android:defaultValue="@null" />
         <argument
             android:name="buyingListSize"
             app:argType="integer" />
         <argument
-            android:name="buyingItemProxy"
-            app:argType="com.example.hishab.models.BuyingItemProxy"
+            android:name="shoppingItemProxy"
+            app:argType="com.example.hishab.models.ShoppingItemProxy"
             app:nullable="true"
             android:defaultValue="@null" />
 
@@ -46,8 +40,8 @@
         android:label="fragment_purchase_history"
         tools:layout="@layout/fragment_purchase_history" >
         <action
-            android:id="@+id/action_purchaseHistoryFragment_to_addShoppingFragment"
-            app:destination="@id/addShoppingFragment" />
+            android:id="@+id/action_purchaseHistoryFragment_to_addPurchaseItemFragment"
+            app:destination="@id/addPurchaseItemFragment" />
         <argument
             android:name="categoryId"
             app:argType="integer"
@@ -68,29 +62,29 @@
             app:destination="@id/purchaseHistoryFragment" />
     </fragment>
     <fragment
-        android:id="@+id/addBuyingFragment"
-        android:name="com.example.hishab.fragments.AddBuyingFragment"
+        android:id="@+id/addShoppingFragment"
+        android:name="com.example.hishab.fragments.AddShoppingFragment"
         android:label="fragment_add_buying"
-        tools:layout="@layout/fragment_add_buying" >
+        tools:layout="@layout/fragment_add_shopping" >
         <action
-            android:id="@+id/action_addBuyingFragment_to_addShoppingFragment"
-            app:destination="@id/addShoppingFragment" />
+            android:id="@+id/action_addShoppingFragment_to_addPurchaseItemFragment"
+            app:destination="@id/addPurchaseItemFragment" />
         <argument
             android:name="buyingId"
             app:argType="integer"
             android:defaultValue="-1" />
         <argument
-            android:name="buyingHistory"
-            app:argType="com.example.hishab.models.BuyingHistory"
+            android:name="shoppingHistory"
+            app:argType="com.example.hishab.models.ShoppingHistory"
             app:nullable="true"
             android:defaultValue="@null" />
     </fragment>
     <fragment
-        android:id="@+id/buyingHistoryListFragment"
-        android:name="com.example.hishab.adapter.BuyingHistoryListFragment"
-        android:label="BuyingHistoryListFragment" >
+        android:id="@+id/shoppingHistoryFragment"
+        android:name="com.example.hishab.fragments.ShoppingHistoryFragment"
+        android:label="shoppingHistoryFragment" >
         <action
-            android:id="@+id/action_buyingHistoryListFragment_to_addBuyingFragment"
-            app:destination="@id/addBuyingFragment" />
+            android:id="@+id/action_shoppingHistoryFragment_to_addShoppingFragment"
+            app:destination="@id/addShoppingFragment" />
     </fragment>
 </navigation>

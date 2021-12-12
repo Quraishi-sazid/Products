@@ -4,18 +4,17 @@ import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import com.example.hishab.models.BuyingHistory
-import com.example.hishab.models.entities.BuyItem
-import com.example.hishab.models.entities.CustomDate
+import com.example.hishab.models.ShoppingHistory
+import com.example.hishab.models.entities.Shopping
 
 @Dao
 interface BuyingDao {
-    @Query("select max(buying_id) from buying_entity")
+    @Query("select max(shopping_id) from tbl_shopping")
     suspend fun getLatestBuyingId():Long
     @Insert
-    suspend fun insert(buyItem: BuyItem):Long
-    @Query("select b.buying_id as buyingId,count(b.buying_id) as totalItem,sum(cost) totalCost,day as day,month as month,year as year,time as time from buying_entity b inner join purchase_table p on b.buying_id=p.buying_id inner join custom_date c on b.date_id=c.date_id group by b.buying_id")
-    fun getBuyingHistory():LiveData<List<BuyingHistory>>
-    @Query("update buying_entity set date_id=:dateId where buying_id=:buyingId")
+    suspend fun insert(shopping: Shopping):Long
+    @Query("select b.shopping_id as buyingId,count(b.shopping_id) as totalItem,sum(cost) totalCost,day as day,month as month,year as year,time as time from tbl_shopping b inner join tbl_shopping_item p on b.shopping_id=p.shopping_id inner join custom_date c on b.date_id=c.date_id group by b.shopping_id")
+    fun getBuyingHistory():LiveData<List<ShoppingHistory>>
+    @Query("update tbl_shopping set date_id=:dateId where shopping_id=:buyingId")
     suspend fun updateDateId(dateId:Long,buyingId:Long)
 }

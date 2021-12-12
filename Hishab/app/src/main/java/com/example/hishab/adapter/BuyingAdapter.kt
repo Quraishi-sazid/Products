@@ -9,19 +9,19 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.hishab.R
 import com.example.hishab.databinding.LayoutPurchaseItemInputBinding
-import com.example.hishab.models.BuyingItemProxy
+import com.example.hishab.models.ShoppingItemProxy
 
-class BuyingAdapter : ListAdapter<BuyingItemProxy, ViewHolder>(diffUtilCallBack) {
+class BuyingAdapter : ListAdapter<ShoppingItemProxy, ViewHolder>(diffUtilCallBack) {
 
-    var dataSource = ArrayList<BuyingItemProxy>()
+    var dataSource = ArrayList<ShoppingItemProxy>()
 
     companion object {
-        var diffUtilCallBack = object : DiffUtil.ItemCallback<BuyingItemProxy>() {
-            override fun areItemsTheSame(oldItem: BuyingItemProxy, newItem: BuyingItemProxy): Boolean {
+        var diffUtilCallBack = object : DiffUtil.ItemCallback<ShoppingItemProxy>() {
+            override fun areItemsTheSame(oldItem: ShoppingItemProxy, newItem: ShoppingItemProxy): Boolean {
                 return oldItem.proxyId == newItem.proxyId
             }
 
-            override fun areContentsTheSame(oldItem: BuyingItemProxy, newItem: BuyingItemProxy): Boolean {
+            override fun areContentsTheSame(oldItem: ShoppingItemProxy, newItem: ShoppingItemProxy): Boolean {
                 return oldItem.category.getCategoryName()
                     .equals(newItem.category.getCategoryName()) &&
                         oldItem.purchaseItem.getDescription()
@@ -50,15 +50,15 @@ class BuyingAdapter : ListAdapter<BuyingItemProxy, ViewHolder>(diffUtilCallBack)
         }
     }
 
-    fun getElementAt(pos: Int): BuyingItemProxy {
+    fun getElementAt(pos: Int): ShoppingItemProxy {
         return getItem(pos);
     }
 
 
     class ViewHolder(val binding: LayoutPurchaseItemInputBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(buyingItemProxy: BuyingItemProxy) {
-            binding.product = buyingItemProxy
+        fun bind(shoppingItemProxy: ShoppingItemProxy) {
+            binding.product = shoppingItemProxy
         }
     }
 

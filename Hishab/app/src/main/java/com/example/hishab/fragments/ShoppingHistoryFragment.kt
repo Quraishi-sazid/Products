@@ -1,4 +1,4 @@
-package com.example.hishab.adapter
+package com.example.hishab.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -11,28 +11,29 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hishab.R
-import com.example.hishab.interfaces.INavigationCallback
-import com.example.hishab.databinding.FragmentBuyingHistoryListBinding
-import com.example.hishab.models.BuyingHistory
-import com.example.hishab.viewmodel.BuyingHistoryListViewModel
+import com.example.hishab.adapter.BuyingListAdapter
+import com.example.hishab.databinding.FragmentShoppingHistoryBinding
+import com.example.hishab.interfaces.IRecyclerViewItemClickCallback
+import com.example.hishab.models.ShoppingHistory
+import com.example.hishab.viewmodel.ShoppingHistoryViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class BuyingHistoryListFragment : Fragment() {
+class ShoppingHistoryFragment : Fragment() {
 
     private lateinit var buyingListAdapter: BuyingListAdapter
     private lateinit var recyclerView: RecyclerView
-    private lateinit var binding: FragmentBuyingHistoryListBinding
-    private lateinit var navigationCallBack:INavigationCallback
-    private val viewModel: BuyingHistoryListViewModel by viewModels()
+    private lateinit var binding: FragmentShoppingHistoryBinding
+    private lateinit var recyclerViewItemClickCallBack:IRecyclerViewItemClickCallback
+    private val viewModel: ShoppingHistoryViewModel by viewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_buying_history_list, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_shopping_history, container, false)
         fetchBuyingList()
         setButtonClick()
         setNavigationCallBack()
@@ -40,9 +41,9 @@ class BuyingHistoryListFragment : Fragment() {
     }
 
     private fun setNavigationCallBack() {
-        navigationCallBack= object :INavigationCallback{
-            override fun navigate(buyingHistory: Any) {
-                if(buyingHistory is BuyingHistory)
+        recyclerViewItemClickCallBack= object :IRecyclerViewItemClickCallback{
+            override fun onItemClick(buyingHistory: Any) {
+                if(buyingHistory is ShoppingHistory)
                 {
                     goToAddBuyingFragment(buyingHistory)
                 }
@@ -58,9 +59,10 @@ class BuyingHistoryListFragment : Fragment() {
         })
     }
 
-    private fun goToAddBuyingFragment(buyingHistory: BuyingHistory? =null) {
-        var direction= BuyingHistoryListFragmentDirections.actionBuyingHistoryListFragmentToAddBuyingFragment()
-        direction.buyingHistory=buyingHistory
+    private fun goToAddBuyingFragment(shoppingHistory: ShoppingHistory? =null) {
+        var direction=
+            ShoppingHistoryFragmentDirections.actionShoppingHistoryFragmentToAddShoppingFragment()
+        direction.shoppingHistory=shoppingHistory
         findNavController().navigate(direction)
 
     }
@@ -74,7 +76,7 @@ class BuyingHistoryListFragment : Fragment() {
     private fun fetchBuyingList() {
         CoroutineScope(Dispatchers.Main).launch {
             viewModel.getBuyingHistoryLiveData().observe(viewLifecycleOwner,{
-                buyingListAdapter= BuyingListAdapter(it,navigationCallBack)
+                buyingListAdapter= BuyingListAdapter(it,recyclerViewItemClickCallBack)
                 setRecyclerView()
             })
         }

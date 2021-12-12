@@ -5,7 +5,7 @@
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".adapter.BuyingHistoryListFragment">
+    tools:context=".fragments.ShoppingHistoryFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_buying_list"

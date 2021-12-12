@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
-        <variable name="purchaseHistory" type="com.example.hishab.models.entities.PurchaseHistory"/>
+        <variable name="purchaseHistory" type="com.example.hishab.models.PurchaseHistory"/>
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"

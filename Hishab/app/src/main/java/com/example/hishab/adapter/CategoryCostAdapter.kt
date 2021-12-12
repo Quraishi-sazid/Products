@@ -6,11 +6,11 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hishab.R
-import com.example.hishab.interfaces.INavigationCallback
+import com.example.hishab.interfaces.IRecyclerViewItemClickCallback
 import com.example.hishab.databinding.LayoutCategoryCostBinding
 import com.example.hishab.models.CategoryCostModel
 
-class CategoryCostAdapter(public val dataSet: List<CategoryCostModel>,public val navCallback:INavigationCallback):
+class CategoryCostAdapter(public val dataSet: List<CategoryCostModel>,public val navCallback:IRecyclerViewItemClickCallback):
     RecyclerView.Adapter<CategoryCostAdapter.CategoryCostAdapterViewHolder>() {
 
 
@@ -39,7 +39,7 @@ class CategoryCostAdapter(public val dataSet: List<CategoryCostModel>,public val
         init {
             binding.clCategoryCostItem.setOnClickListener(View.OnClickListener {
                 val model = dataSet[adapterPosition]
-                navCallback.navigate(model.getCategoryId())
+                navCallback.onItemClick(model.getCategoryId())
             });
         }
 

@@ -4,7 +4,7 @@
     <data>
         <variable
             name="product"
-            type="com.example.hishab.models.BuyingItemProxy" />
+            type="com.example.hishab.models.ShoppingItemProxy" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

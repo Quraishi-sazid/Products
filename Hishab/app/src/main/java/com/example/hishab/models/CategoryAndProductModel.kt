@@ -1,8 +1,7 @@
-package com.example.hishab.models.entities
+package com.example.hishab.models
 
 import android.os.Parcel
 import android.os.Parcelable
-import java.io.Serializable
 
 data class CategoryAndProductModel(
     private val productId:Long,

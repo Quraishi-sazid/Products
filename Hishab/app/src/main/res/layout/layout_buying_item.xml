@@ -3,8 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
         <variable
-            name="buyingHistory"
-            type="com.example.hishab.models.BuyingHistory" />
+            name="shoppingHistory"
+            type="com.example.hishab.models.ShoppingHistory" />
     </data>
     <RelativeLayout
         android:id="@+id/rv_buying_list_item"
@@ -15,13 +15,13 @@
             android:id="@+id/tv_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{buyingHistory.dateFormatted}"
+            android:text="@{shoppingHistory.dateFormatted}"
             />
         <TextView
             android:id="@+id/tv_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{buyingHistory.timeFormatted}"
+            android:text="@{shoppingHistory.timeFormatted}"
             android:layout_alignParentBottom="true"
             />
         <TextView
@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:text="@{``+buyingHistory.totalCost}"
+            android:text="@{``+shoppingHistory.totalCost}"
             />
         <TextView
             android:id="@+id/tv_total_item"
@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:text="@{``+buyingHistory.totalItem}"
+            android:text="@{``+shoppingHistory.totalItem}"
             />
     </RelativeLayout>
 

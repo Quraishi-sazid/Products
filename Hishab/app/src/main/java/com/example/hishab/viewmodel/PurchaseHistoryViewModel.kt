@@ -3,10 +3,9 @@ package com.example.hishab.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import com.example.hishab.models.DateModel
-import com.example.hishab.models.entities.CategoryAndProductModel
+import com.example.hishab.models.CategoryAndProductModel
 import com.example.hishab.models.entities.CustomDate
-import com.example.hishab.models.entities.PurchaseHistory
+import com.example.hishab.models.PurchaseHistory
 import com.example.hishab.repository.Repository
 import com.example.hishab.utils.Util
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,7 +23,7 @@ class PurchaseHistoryViewModel @Inject constructor(app:Application):AndroidViewM
 
     suspend fun getdetailsOfCategoryfromDate(categoryId:Int,dateModel: CustomDate):LiveData<List<PurchaseHistory>>
     {
-        return repository.getdetailsOfCategoryfromDate(categoryId,dateModel);
+        return repository.getDetailsOfCategoryfromDate(categoryId,dateModel);
     }
     fun getDateSeparatedPurchaseHistoryList(list: List<PurchaseHistory>):List<Any> {
         var objectList=ArrayList<Any>()

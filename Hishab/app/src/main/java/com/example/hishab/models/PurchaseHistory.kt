@@ -1,4 +1,4 @@
-package com.example.hishab.models.entities
+package com.example.hishab.models
 
 import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable

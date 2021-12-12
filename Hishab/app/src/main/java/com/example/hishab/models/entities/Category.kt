@@ -59,7 +59,7 @@ class Category @Inject constructor () :BaseObservable(),Parcelable {
             return arrayOfNulls(size)
         }
     }
-    fun copyOf():Category
+    fun deepCopy():Category
     {
         var category=Category()
         category.categoryId=categoryId

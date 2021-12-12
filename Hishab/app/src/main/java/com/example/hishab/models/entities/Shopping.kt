@@ -5,14 +5,14 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 
-@Entity(tableName = "buying_entity")
-data class BuyItem(
+@Entity(tableName = "tbl_shopping")
+data class Shopping(
     private @ColumnInfo(name = "date_id") var dateId: Long = 0,
     private @ColumnInfo(name = "time") var time: Long = 0,
-    private @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "buying_id") var buyingId: Long = 0
+    private @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "shopping_id") var shoppingId: Long = 0
 ) {
-    fun getBuyingId(): Long {
-        return buyingId;
+    fun getShoppingId(): Long {
+        return shoppingId;
     }
 
     fun getDateId(): Long {

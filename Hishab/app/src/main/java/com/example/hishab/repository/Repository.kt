@@ -4,27 +4,28 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import com.example.hishab.db.dao.*
 import com.example.hishab.di.FooEntryPoint
-import com.example.hishab.models.BuyingHistory
-//import com.example.hishab.di.FooEntryPoint
+import com.example.hishab.models.ShoppingHistory
+import com.example.hishab.models.CategoryAndProductModel
 import com.example.hishab.models.CategoryCostModel
+import com.example.hishab.models.PurchaseHistory
 import com.example.hishab.models.entities.*
 import dagger.hilt.EntryPoints
 
 
 class Repository(application: Application) {
     private var categoryDao: CategoryDao
-    private var shoppingDao: ShoppingDao
+    private var productDao: ProductDao
     private var purchaseDao: PurchaseDao
-    private var purchaseShoppingCategoryDao: PurchaseShoppingCategoryDao
+    private var purchaseHistoryDao: PurchaseHistoryDao
     private var buyingDao: BuyingDao
     private var customDateDao: DateDao
     var database = EntryPoints.get(application, FooEntryPoint::class.java).database
 
     init {
         categoryDao = database.CategoryDao()
-        shoppingDao = database.ShoppingDao()
+        productDao = database.ShoppingDao()
         purchaseDao = database.PurchaseDao()
-        purchaseShoppingCategoryDao = database.PurchaseShoppingCategoryDao()
+        purchaseHistoryDao = database.PurchaseShoppingCategoryDao()
         buyingDao = database.BuyingDao()
         customDateDao = database.customDao()
     }
@@ -38,47 +39,36 @@ class Repository(application: Application) {
     }
 
     suspend fun insertShopping(product: Product): Long {
-        return shoppingDao.insert(product)
+        return productDao.insert(product)
     }
 
     suspend fun getShoppingItemFromNameAndCId(itemName: String, categoryId: Long): Product {
-        return shoppingDao.getShoppingItemFromItemNameAndCategoryId(itemName, categoryId);
+        return productDao.getShoppingItemFromItemNameAndCategoryId(itemName, categoryId);
     }
 
     suspend fun insertPurchaseItem(purchaseItem: PurchaseItem) {
         return purchaseDao.insertAll(purchaseItem)
     }
 
-    suspend fun getPurchaseItems(): List<PurchaseItem> {
-        return purchaseDao.getAllPurchase()
-    }
-
     suspend fun getPurchaseHistory(): LiveData<List<PurchaseHistory>>//live data needed
     {
-        return purchaseShoppingCategoryDao.getPurchaseHistory()
+        return purchaseHistoryDao.getPurchaseHistory()
     }
 
     suspend fun getTotalCostByCategoryFromDate(): List<CategoryCostModel>//live data needed
     {
-        return purchaseDao.getTotalCostByCategoryFromDate(0,0,0)
+        return purchaseDao.getTotalCostByCategoryFromDate(0, 0, 0)
     }
 
     suspend fun deletePurchaseHistory(position: Long) {
         purchaseDao.deleteByPurchaseId(position)
     }
 
-    suspend fun updatePurchaseItem(
-        product: Product,
-        purchaseItem: PurchaseItem
-    ) {
-        //purchaseDao.update(product.productId,purchaseItem.getPurchaseId(),purchaseItem.getCost(),purchaseItem.day,purchaseItem.month,purchaseItem.year);
-    }
-
-    suspend fun getdetailsOfCategoryfromDate(
+    suspend fun getDetailsOfCategoryfromDate(
         categoryId: Int,
         dateModel: CustomDate
     ): LiveData<List<PurchaseHistory>> {
-        return purchaseShoppingCategoryDao.getDetailsOfCategoryFromDate(
+        return purchaseHistoryDao.getCategoryDetailsFromDate(
             categoryId,
             dateModel.getDay(),
             dateModel.getMonth(),
@@ -87,12 +77,7 @@ class Repository(application: Application) {
     }
 
     fun getProductCategoryList(): LiveData<List<CategoryAndProductModel>> {
-        return shoppingDao.getProductCategoryList()
-        // return MutableLiveData<List<CategoryAndProductModel>>()
-    }
-
-    suspend fun getLatestBuyingId(): Long {
-        return buyingDao.getLatestBuyingId()
+        return productDao.getProductCategoryList()
     }
 
     suspend fun getDateId(customDate: CustomDate): Long {
@@ -103,6 +88,7 @@ class Repository(application: Application) {
         )
         if (qDate == null) {
             customDateDao.insert(customDate)//need to take return value from here
+            //room doesn't support object field in query. so primitive types are sent
             qDate = customDateDao.getDateId(
                 customDate.getDay(),
                 customDate.getMonth(),
@@ -112,15 +98,15 @@ class Repository(application: Application) {
         return qDate.getDateId()
     }
 
-    suspend fun insertBuyingItem(buyItem: BuyItem): Long {
-        return buyingDao.insert(buyItem)
+    suspend fun insertBuyingItem(shopping: Shopping): Long {
+        return buyingDao.insert(shopping)
     }
 
     suspend fun getPurchaseHistoryFromBuyingId(buyingId: Long): List<PurchaseHistory> {
-        return purchaseShoppingCategoryDao.getPurchaseHistoryByBuyingId(buyingId)
+        return purchaseHistoryDao.getPurchaseHistoryByBuyingId(buyingId)
     }
 
-    suspend fun getBuingHistory(): LiveData<List<BuyingHistory>> {
+    suspend fun getBuingHistory(): LiveData<List<ShoppingHistory>> {
         return buyingDao.getBuyingHistory()
     }
 

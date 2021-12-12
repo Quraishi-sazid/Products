@@ -7,7 +7,7 @@ import java.text.DateFormatSymbols
 import java.util.concurrent.TimeUnit
 
 
-data class BuyingHistory(
+data class ShoppingHistory(
     private var buyingId: Long,
     private var totalCost: Int,
     private var totalItem: Int,

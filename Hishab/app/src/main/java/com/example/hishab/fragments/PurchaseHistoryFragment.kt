@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hishab.R
 import com.example.hishab.adapter.PurchaseItemsAdapter
-import com.example.hishab.models.entities.CategoryAndProductModel
 import com.example.hishab.repository.Repository
 //import com.example.hishab.databinding.FragmentPurchaseHistoryBinding
 import com.example.hishab.viewmodel.PurchaseHistoryViewModel

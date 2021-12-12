@@ -35,7 +35,7 @@ class Product @Inject constructor() :
             _productId = value
         }
 
-    fun copyOf(): Product {
+    fun deepCopy(): Product {
         var shoppingItem = Product()
         shoppingItem.categoryId = categoryId
         shoppingItem.productId = productId

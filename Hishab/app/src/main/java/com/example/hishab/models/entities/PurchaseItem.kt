@@ -11,43 +11,53 @@ import java.util.*
 import javax.inject.Inject
 
 
-@Entity(tableName = "purchase_table")
-class PurchaseItem @Inject constructor (): BaseObservable() {
-    private @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "purchase_id") var purchaseId: Long = 0
-    private @ColumnInfo(name = "cost") var cost: Int=0
+@Entity(tableName = "tbl_shopping_item")
+class PurchaseItem @Inject constructor() : BaseObservable() {
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "purchase_id")
+    private var purchaseId: Long = 0
+
+    @ColumnInfo(name = "cost")
+    private var cost: Int = 0
+
+    private @ColumnInfo(name = "description")
+    var description = ""
+
+    @ColumnInfo(name = "shopping_id")
+    var shoppingId = 0L
+
+    @ColumnInfo(name = "product_id")
+    var productId: Long = 0
+
     @Bindable
-    public fun getPurchaseId():Long
-    {
+    public fun getPurchaseId(): Long {
         return purchaseId
     }
-    public fun setPurchaseId(value: Long)
-    {
-        purchaseId=value
+
+    public fun setPurchaseId(value: Long) {
+        purchaseId = value
         notifyPropertyChanged(BR.purchaseId)
     }
+
     @Bindable
-    public fun getCost():Int
-    {
+    public fun getCost(): Int {
         return cost
     }
-    public fun setCost(value: Int)
-    {
-        cost=value
+
+    public fun setCost(value: Int) {
+        cost = value
         notifyPropertyChanged(BR.cost)
     }
-    private @ColumnInfo(name = "description") var description=""
-    public @ColumnInfo(name = "buying_id") var buyingId=0L
+
+
     @Bindable
-    public fun getDescription():String
-    {
+    fun getDescription(): String {
         return description
     }
-    public fun setDescription(value: String)
-    {
-        description=value
+
+    fun setDescription(value: String) {
+        description = value
         notifyPropertyChanged(BR.description)
     }
-    @ColumnInfo(name = "product_id") var productId:Long=0
-
 }
 

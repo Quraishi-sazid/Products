@@ -10,7 +10,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hishab.R
-import com.example.hishab.interfaces.INavigationCallback
+import com.example.hishab.interfaces.IRecyclerViewItemClickCallback
 import com.example.hishab.adapter.CategoryCostAdapter
 import com.example.hishab.models.entities.CustomDate
 import com.example.hishab.viewmodel.CategoryCostViewModel
@@ -23,7 +23,7 @@ import kotlinx.coroutines.withContext
 @AndroidEntryPoint
 class CategoryCostFragment : Fragment() {
     private lateinit var categoryCostViewModel: CategoryCostViewModel
-    private lateinit var navCallback: INavigationCallback
+    private lateinit var navCallback: IRecyclerViewItemClickCallback
     val month = 1
     val day = 1
     val year = 2000
@@ -47,8 +47,8 @@ class CategoryCostFragment : Fragment() {
     }
 
     private fun setNavCallBack() {
-        navCallback = object : INavigationCallback {
-            override fun navigate(categoryId: Any) {
+        navCallback = object : IRecyclerViewItemClickCallback {
+            override fun onItemClick(categoryId: Any) {
                 val directions =
                     CategoryCostFragmentDirections.actionCategoryDetailsFragmentToPurchaseHistoryFragment()
                 directions.categoryId = categoryId as Int

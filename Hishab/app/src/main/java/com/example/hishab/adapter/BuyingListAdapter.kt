@@ -7,12 +7,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hishab.R
 import com.example.hishab.adapter.BuyingListAdapter.ViewHolder
-import com.example.hishab.interfaces.INavigationCallback
+import com.example.hishab.interfaces.IRecyclerViewItemClickCallback
 import com.example.hishab.databinding.LayoutBuyingItemBinding
-import com.example.hishab.models.BuyingHistory
+import com.example.hishab.models.ShoppingHistory
 
 class BuyingListAdapter(
-    var buyingHistoryList: List<BuyingHistory>, var navigationCallBack: INavigationCallback
+    var shoppingHistoryList: List<ShoppingHistory>, var recyclerViewItemClickCallBack: IRecyclerViewItemClickCallback
 ) : RecyclerView.Adapter<ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding: LayoutBuyingItemBinding = DataBindingUtil.inflate(
@@ -25,19 +25,19 @@ class BuyingListAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(buyingHistoryList[position])
+        holder.bind(shoppingHistoryList[position])
     }
 
     override fun getItemCount(): Int {
-        return buyingHistoryList.size
+        return shoppingHistoryList.size
     }
 
     inner class ViewHolder(val binding: LayoutBuyingItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(buyingHistory: BuyingHistory) {
-            binding.buyingHistory = buyingHistory
+        fun bind(shoppingHistory: ShoppingHistory) {
+            binding.shoppingHistory = shoppingHistory
             binding.rvBuyingListItem.setOnClickListener(View.OnClickListener {
-                navigationCallBack.navigate(buyingHistoryList[adapterPosition])
+                recyclerViewItemClickCallBack.onItemClick(shoppingHistoryList[adapterPosition])
             })
 
         }
