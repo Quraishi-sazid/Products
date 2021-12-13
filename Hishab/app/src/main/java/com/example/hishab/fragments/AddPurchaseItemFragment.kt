@@ -20,7 +20,6 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class AddPurchaseItemFragment : DialogFragment() {
-
     private lateinit var binding: FragmentAddPurchaseItemBinding
     private val addPurchaseItemViewModel: AddPurchaseItemViewModel by viewModels()
 

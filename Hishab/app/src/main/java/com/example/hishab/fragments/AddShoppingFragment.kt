@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hishab.R
-import com.example.hishab.adapter.BuyingAdapter
+import com.example.hishab.adapter.AddShoppingAdapter
 import com.example.hishab.interfaces.IAddOrUpdateProductCallback
 import com.example.hishab.interfaces.IHandleAlertDialog
 import com.example.hishab.interfaces.ISwipeItemCallback
@@ -44,7 +44,7 @@ class AddShoppingFragment : Fragment() {
     lateinit var inflate: View
     lateinit var recyclerView: RecyclerView
     lateinit var addOrUpdateProductCallBack: IAddOrUpdateProductCallback
-    var adapter = BuyingAdapter()
+    var adapter = AddShoppingAdapter()
     val args: AddShoppingFragmentArgs by navArgs()
     private val viewModel: AddShoppingViewModel by viewModels()
     lateinit var categoryAndProductModelList: List<CategoryAndProductModel>

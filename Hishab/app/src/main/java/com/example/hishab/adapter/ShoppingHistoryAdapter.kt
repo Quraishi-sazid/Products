@@ -6,12 +6,12 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hishab.R
-import com.example.hishab.adapter.BuyingListAdapter.ViewHolder
+import com.example.hishab.adapter.ShoppingHistoryAdapter.ViewHolder
 import com.example.hishab.interfaces.IRecyclerViewItemClickCallback
 import com.example.hishab.databinding.LayoutBuyingItemBinding
 import com.example.hishab.models.ShoppingHistory
 
-class BuyingListAdapter(
+class ShoppingHistoryAdapter(
     var shoppingHistoryList: List<ShoppingHistory>, var recyclerViewItemClickCallBack: IRecyclerViewItemClickCallback
 ) : RecyclerView.Adapter<ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

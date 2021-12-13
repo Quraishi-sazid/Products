@@ -11,7 +11,7 @@ import com.example.hishab.R
 import com.example.hishab.databinding.LayoutPurchaseItemInputBinding
 import com.example.hishab.models.ShoppingItemProxy
 
-class BuyingAdapter : ListAdapter<ShoppingItemProxy, ViewHolder>(diffUtilCallBack) {
+class AddShoppingAdapter : ListAdapter<ShoppingItemProxy, ViewHolder>(diffUtilCallBack) {
 
     var dataSource = ArrayList<ShoppingItemProxy>()
 

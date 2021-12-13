@@ -11,7 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hishab.R
-import com.example.hishab.adapter.BuyingListAdapter
+import com.example.hishab.adapter.ShoppingHistoryAdapter
 import com.example.hishab.databinding.FragmentShoppingHistoryBinding
 import com.example.hishab.interfaces.IRecyclerViewItemClickCallback
 import com.example.hishab.models.ShoppingHistory
@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class ShoppingHistoryFragment : Fragment() {
 
-    private lateinit var buyingListAdapter: BuyingListAdapter
+    private lateinit var buyingListAdapter: ShoppingHistoryAdapter
     private lateinit var recyclerView: RecyclerView
     private lateinit var binding: FragmentShoppingHistoryBinding
     private lateinit var recyclerViewItemClickCallBack:IRecyclerViewItemClickCallback
@@ -76,7 +76,7 @@ class ShoppingHistoryFragment : Fragment() {
     private fun fetchBuyingList() {
         CoroutineScope(Dispatchers.Main).launch {
             viewModel.getBuyingHistoryLiveData().observe(viewLifecycleOwner,{
-                buyingListAdapter= BuyingListAdapter(it,recyclerViewItemClickCallBack)
+                buyingListAdapter= ShoppingHistoryAdapter(it,recyclerViewItemClickCallBack)
                 setRecyclerView()
             })
         }
