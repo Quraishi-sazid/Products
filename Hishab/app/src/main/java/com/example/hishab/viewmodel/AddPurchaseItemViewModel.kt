@@ -25,9 +25,6 @@ class AddPurchaseItemViewModel @Inject constructor (app:Application) :AndroidVie
 
     var isUpdating=false
 
-
-
-
     fun setUpdateField(updatePurchaseHistory: PurchaseHistory?) {
         isUpdating=true;
         if(updatePurchaseHistory!=null)
@@ -39,9 +36,6 @@ class AddPurchaseItemViewModel @Inject constructor (app:Application) :AndroidVie
         }
     }
 
-    /*suspend fun getProductCategoryList(): List<CategoryAndProductModel> {
-        return repository.getProductCategoryList()
-    }*/
     fun handleInformationChange()
     {
         //TODO
@@ -50,14 +44,14 @@ class AddPurchaseItemViewModel @Inject constructor (app:Application) :AndroidVie
         {
             if(backUpCategory.categoryId==category.categoryId)
             {
-                category.categoryId=-1
+                category.categoryId=0L
             }
         }
-        if(!backUpProduct.getProductName().equals(backUpProduct.getProductName()))
+        if(!backUpProduct.getProductName().equals(product.getProductName()))
         {
             if(backUpProduct.productId==product.productId)
             {
-                product.productId=-1
+                product.productId=0L
             }
         }
     }

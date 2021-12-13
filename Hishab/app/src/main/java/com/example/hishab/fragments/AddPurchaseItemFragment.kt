@@ -32,8 +32,8 @@ class AddPurchaseItemFragment : DialogFragment() {
             DataBindingUtil.inflate(inflater, R.layout.fragment_add_purchase_item, container, false)
         if (checkIsUpdating()) {
             addPurchaseItemViewModel.setValuesForUpdating(args.shoppingItemProxy!!)
-            setValuesToView()
         }
+        setValuesToView()
         setAdapterToAutoCompleteTextBoxes()
         handleProductAutoCompleteClick()
         handleCategoryAutoCompleteClick()

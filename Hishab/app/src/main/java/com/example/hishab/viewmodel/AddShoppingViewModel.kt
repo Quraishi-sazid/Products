@@ -56,7 +56,7 @@ class AddShoppingViewModel @Inject constructor(app: Application) : AndroidViewMo
     ) {
         dateId = repository.getDateId(customDate)
         buyingId =
-            repository.insertBuyingItem(Shopping(dateId, time, shoppingItemProxyList.size.toLong()))
+            repository.insertBuyingItem(Shopping(dateId, time))
         shoppingItemProxyList.forEach {
             it.purchaseItem.shoppingId = buyingId
             insertOrUpdatePurchaseItem(it)
