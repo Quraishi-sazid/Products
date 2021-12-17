@@ -2,14 +2,10 @@ package com.example.hishab.repository
 
 import android.app.Application
 import androidx.lifecycle.LiveData
+import com.example.hishab.db.AppDatabase
 import com.example.hishab.db.dao.*
-import com.example.hishab.di.FooEntryPoint
-import com.example.hishab.models.ShoppingHistory
-import com.example.hishab.models.CategoryAndProductModel
-import com.example.hishab.models.CategoryCostModel
-import com.example.hishab.models.PurchaseHistory
+import com.example.hishab.models.*
 import com.example.hishab.models.entities.*
-import dagger.hilt.EntryPoints
 
 
 class Repository(application: Application) {
@@ -19,7 +15,8 @@ class Repository(application: Application) {
     private var purchaseHistoryDao: PurchaseHistoryDao
     private var buyingDao: BuyingDao
     private var customDateDao: DateDao
-    var database = EntryPoints.get(application, FooEntryPoint::class.java).database
+    var database = AppDatabase.getDatabase(application)
+    //var database = EntryPoints.get(application, FooEntryPoint::class.java).database
 
     init {
         categoryDao = database.CategoryDao()
@@ -31,7 +28,7 @@ class Repository(application: Application) {
     }
 
     suspend fun insertCategory(category: Category): Long {
-        return categoryDao.insertAll(category)
+        return categoryDao.insertCategory(category)
     }
 
     suspend fun getCategoryIdFromName(name: String): Category {
@@ -116,5 +113,8 @@ class Repository(application: Application) {
 
     suspend fun updateDateId(dateId: Long, buyingId: Long) {
         buyingDao.updateDateId(dateId, buyingId);
+    }
+    suspend fun getCategoryWithProductTableMap():List<CategoryProxy> {
+       return categoryDao.getCategoryWithTotalProductMapped();
     }
 }

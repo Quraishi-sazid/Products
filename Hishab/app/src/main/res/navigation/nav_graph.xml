@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/shoppingHistoryFragment">
+    app:startDestination="@id/categoryListFragment">
 
     <dialog
         android:id="@+id/addPurchaseItemFragment"
@@ -87,4 +87,8 @@
             android:id="@+id/action_shoppingHistoryFragment_to_addShoppingFragment"
             app:destination="@id/addShoppingFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/categoryListFragment"
+        android:name="com.example.hishab.fragments.CategoryListFragment"
+        android:label="CategoryListFragment" />
 </navigation>
