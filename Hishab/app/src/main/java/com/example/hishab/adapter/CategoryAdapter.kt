@@ -30,6 +30,10 @@ class CategoryAdapter(var dataSource:List<CategoryProxy>) : ListAdapter<Category
         holder.bind(dataSource[position])
     }
 
+    fun getElementAt(adapterPosition: Int): CategoryProxy {
+        return dataSource[adapterPosition]
+    }
+
     companion object {
         var diffUtilCallBack = object : DiffUtil.ItemCallback<CategoryProxy>() {
             override fun areItemsTheSame(oldItem: CategoryProxy, newItem: CategoryProxy): Boolean {

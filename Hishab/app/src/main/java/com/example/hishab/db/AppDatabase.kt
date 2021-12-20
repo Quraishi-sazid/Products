@@ -25,7 +25,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun ShoppingDao(): ProductDao
     abstract fun CategoryDao(): CategoryDao
     abstract fun PurchaseDao(): PurchaseDao
-    abstract fun BuyingDao(): BuyingDao
+    abstract fun BuyingDao(): ShoppingDao
     abstract fun PurchaseShoppingCategoryDao(): PurchaseHistoryDao
     abstract fun customDao(): DateDao
 

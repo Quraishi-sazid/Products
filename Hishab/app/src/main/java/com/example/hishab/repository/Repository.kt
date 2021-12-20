@@ -13,7 +13,7 @@ class Repository(application: Application) {
     private var productDao: ProductDao
     private var purchaseDao: PurchaseDao
     private var purchaseHistoryDao: PurchaseHistoryDao
-    private var buyingDao: BuyingDao
+    private var shoppingDao: ShoppingDao
     private var customDateDao: DateDao
     var database = AppDatabase.getDatabase(application)
     //var database = EntryPoints.get(application, FooEntryPoint::class.java).database
@@ -23,7 +23,7 @@ class Repository(application: Application) {
         productDao = database.ShoppingDao()
         purchaseDao = database.PurchaseDao()
         purchaseHistoryDao = database.PurchaseShoppingCategoryDao()
-        buyingDao = database.BuyingDao()
+        shoppingDao = database.BuyingDao()
         customDateDao = database.customDao()
     }
 
@@ -96,7 +96,7 @@ class Repository(application: Application) {
     }
 
     suspend fun insertBuyingItem(shopping: Shopping): Long {
-        return buyingDao.insert(shopping)
+        return shoppingDao.insert(shopping)
     }
 
     suspend fun getPurchaseHistoryFromBuyingId(buyingId: Long): List<PurchaseHistory> {
@@ -104,7 +104,7 @@ class Repository(application: Application) {
     }
 
     suspend fun getBuingHistory(): LiveData<List<ShoppingHistory>> {
-        return buyingDao.getBuyingHistory()
+        return shoppingDao.getBuyingHistory()
     }
 
     suspend fun updatePurchaseItem(purchaseItem: PurchaseItem) {
@@ -112,9 +112,17 @@ class Repository(application: Application) {
     }
 
     suspend fun updateDateId(dateId: Long, buyingId: Long) {
-        buyingDao.updateDateId(dateId, buyingId);
+        shoppingDao.updateDateId(dateId, buyingId);
     }
-    suspend fun getCategoryWithProductTableMap():List<CategoryProxy> {
+    suspend fun getCategoryWithProductTableMap():LiveData<List<CategoryProxy>> {
        return categoryDao.getCategoryWithTotalProductMapped();
+    }
+
+    suspend fun deleteCategoryById(deleteId: Long) {
+        categoryDao.deleteCategoryById(deleteId)
+    }
+
+    suspend fun updateCategory(updateCategory: Category) {
+        categoryDao.updateCategory(updateCategory)
     }
 }

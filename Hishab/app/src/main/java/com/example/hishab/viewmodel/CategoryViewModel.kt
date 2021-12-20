@@ -2,6 +2,7 @@ package com.example.hishab.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import com.example.hishab.models.CategoryProxy
 import com.example.hishab.models.entities.Category
 import com.example.hishab.repository.Repository
@@ -13,7 +14,19 @@ class CategoryViewModel @Inject constructor(application: Application):AndroidVie
     @Inject
     lateinit var repository:Repository
 
-    suspend fun getCategoryWithTotalProductMapped():List<CategoryProxy>{
+    suspend fun getCategoryWithTotalProductMapped(): LiveData<List<CategoryProxy>> {
         return  repository.getCategoryWithProductTableMap()
+    }
+    suspend fun insertCategory(category:Category)
+    {
+        repository.insertCategory(category)
+    }
+
+    suspend fun deleteCategoryById(deleteId: Long) {
+        repository.deleteCategoryById(deleteId)
+    }
+
+    suspend fun updateCategory(updateCategory: Category) {
+        repository.updateCategory(updateCategory)
     }
 }

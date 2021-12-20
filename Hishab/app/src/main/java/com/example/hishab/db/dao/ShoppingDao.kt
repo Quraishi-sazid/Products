@@ -8,7 +8,7 @@ import com.example.hishab.models.ShoppingHistory
 import com.example.hishab.models.entities.Shopping
 
 @Dao
-interface BuyingDao {
+interface ShoppingDao {
     @Query("select max(shopping_id) from tbl_shopping")
     suspend fun getLatestBuyingId():Long
     @Insert
