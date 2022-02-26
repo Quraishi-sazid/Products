@@ -23,32 +23,6 @@ class AddShoppingViewModel @Inject constructor(app: Application) : AndroidViewMo
         return repository.getProductCategoryList()
     }
 
-    private suspend fun getShoppingItem(
-        category: Category,
-        product: Product
-    ): Product {
-
-        var quariedShoppingItem = repository.getShoppingItemFromNameAndCId(
-            product.getProductName(),
-            category.categoryId
-        )
-        if (quariedShoppingItem == null) {
-            product.categoryId = category.categoryId
-            product.productId = repository.insertShopping(product)
-            return product
-        }
-        return quariedShoppingItem
-    }
-
-    private suspend fun getCategory(category: Category): Category {
-        var queriedCategory = repository.getCategoryIdFromName(category.getCategoryName());
-        if (queriedCategory == null) {
-            category.categoryId = repository.insertCategory(category)
-            return category
-        }
-        return queriedCategory
-    }
-
     suspend fun insertBuying(
         shoppingItemProxyList: ArrayList<ShoppingItemProxy>,
         customDate: CustomDate,
@@ -63,19 +37,13 @@ class AddShoppingViewModel @Inject constructor(app: Application) : AndroidViewMo
         }
     }
 
-
     suspend fun insertOrUpdatePurchaseItem(shoppingItemProxy: ShoppingItemProxy) {
         if (shoppingItemProxy.product.productId == 0L) {
-            if (shoppingItemProxy.category.categoryId != 0L) {
-                var quariedShoppingItem =
-                    getShoppingItem(shoppingItemProxy.category, shoppingItemProxy.product)
-                shoppingItemProxy.purchaseItem.productId = quariedShoppingItem.productId
-            } else {
-                var queriedCategory = getCategory(shoppingItemProxy.category)
-                var quariedShoppingItem =
-                    getShoppingItem(queriedCategory, shoppingItemProxy.product)
-                shoppingItemProxy.purchaseItem.productId = quariedShoppingItem.productId
-            }
+            shoppingItemProxy.purchaseItem.productId = repository.getProductIdByInsertingInDataBase(
+                shoppingItemProxy.getCategoryId(),
+                shoppingItemProxy.getCategoryName(),
+                shoppingItemProxy.getProductName()
+            )
         } else {
             shoppingItemProxy.purchaseItem.productId = shoppingItemProxy.product.productId
         }

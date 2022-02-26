@@ -2,13 +2,15 @@ package com.example.hishab.models
 
 import android.os.Parcel
 import android.os.Parcelable
+import androidx.databinding.BaseObservable
+import androidx.databinding.Bindable
 
 data class CategoryAndProductModel(
     private val productId:Long,
     private val categoryId:Long,
     private val categoryName:String?,
     private val productName:String?
-    ):Parcelable{
+    ):BaseObservable(), Parcelable{
 
     constructor(parcel: Parcel) : this(
         parcel.readLong(),
@@ -21,19 +23,24 @@ data class CategoryAndProductModel(
     override fun toString(): String {
         return productName!!
     }
+    @Bindable
     fun getCategoryName():String?{
         return categoryName
     }
-
+    @Bindable
     fun getProductName():String?{
         return productName
     }
+    @Bindable
     fun getCategoryId():Long?{
         return categoryId
     }
+    @Bindable
     fun getProductId():Long?{
         return productId
     }
+
+
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeLong(productId)

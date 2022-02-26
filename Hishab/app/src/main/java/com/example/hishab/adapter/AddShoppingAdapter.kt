@@ -11,10 +11,8 @@ import com.example.hishab.R
 import com.example.hishab.databinding.LayoutPurchaseItemInputBinding
 import com.example.hishab.models.ShoppingItemProxy
 
-class AddShoppingAdapter : ListAdapter<ShoppingItemProxy, ViewHolder>(diffUtilCallBack) {
-
+class AddShoppingAdapter() : ListAdapter<ShoppingItemProxy, ViewHolder>(diffUtilCallBack) {
     var dataSource = ArrayList<ShoppingItemProxy>()
-
     companion object {
         var diffUtilCallBack = object : DiffUtil.ItemCallback<ShoppingItemProxy>() {
             override fun areItemsTheSame(oldItem: ShoppingItemProxy, newItem: ShoppingItemProxy): Boolean {
@@ -58,6 +56,7 @@ class AddShoppingAdapter : ListAdapter<ShoppingItemProxy, ViewHolder>(diffUtilCa
     class ViewHolder(val binding: LayoutPurchaseItemInputBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(shoppingItemProxy: ShoppingItemProxy) {
+
             binding.product = shoppingItemProxy
         }
     }

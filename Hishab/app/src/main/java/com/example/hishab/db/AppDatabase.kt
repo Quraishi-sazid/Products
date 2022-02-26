@@ -29,12 +29,10 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun PurchaseShoppingCategoryDao(): PurchaseHistoryDao
     abstract fun customDao(): DateDao
 
-    @Inject
-    lateinit var INSTANCE: AppDatabase
 
     companion object {
         @Volatile
-        private var INSTANCE: AppDatabase? = null
+         var INSTANCE: AppDatabase? = null
 
         @Synchronized
         fun getDatabase(context: Context): AppDatabase {

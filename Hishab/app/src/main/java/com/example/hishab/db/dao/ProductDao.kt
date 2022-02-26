@@ -13,6 +13,7 @@ interface ProductDao {
     suspend fun insert(product: Product):Long
     @Query("select * from product_table where product_name=:itemName and category_id=:categoryId")
     suspend fun getShoppingItemFromItemNameAndCategoryId(itemName:String,categoryId:Long):Product
+    //query has error. may need to use right join
     @Query("select s.product_name as productName,s.product_id as productId,c.category_id as categoryId,c.category_name as categoryName from product_table s inner join category c where s.category_id==c.category_id")
     fun getProductCategoryList():LiveData<List<CategoryAndProductModel>>
 }

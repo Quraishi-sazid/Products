@@ -125,4 +125,53 @@ class Repository(application: Application) {
     suspend fun updateCategory(updateCategory: Category) {
         categoryDao.updateCategory(updateCategory)
     }
+
+
+
+
+    suspend fun getProductIdByInsertingInDataBase(
+        categoryId: Long,
+        categoryName: String,
+        productName: String
+    ): Long {
+        if (categoryId == 0L) {
+            var insertedCategoryId=insertCategory(Category(categoryName))
+            return insertShopping(Product(0,productName,insertedCategoryId))
+        } else {
+            var queriedShoppingItem =
+                getProductFromCategoryIdAndProductNameByInsertingOrFetching(
+                    categoryId,
+                    productName
+                )
+            return queriedShoppingItem.productId
+        }
+    }
+
+    private suspend fun getProductFromCategoryIdAndProductNameByInsertingOrFetching(
+        categoryId: Long,
+        productName: String
+    ): Product {
+
+        var quariedProduct = getShoppingItemFromNameAndCId(
+            productName,
+            categoryId
+        )
+        if (quariedProduct == null) {
+            quariedProduct = Product()
+            quariedProduct.categoryId = categoryId
+            quariedProduct.setProductName(productName)
+            quariedProduct.productId = insertShopping(quariedProduct)
+        }
+        return quariedProduct
+    }
+
+/*    public suspend fun getCategoryByInsertingOrFetching(categoryName: String): Category {
+        var queriedCategory = getCategoryIdFromName(categoryName)
+        if (queriedCategory == null) {
+            queriedCategory = Category(categoryName)
+            queriedCategory.categoryId = insertCategory(queriedCategory)
+        }
+        return queriedCategory
+    }*/
+
 }

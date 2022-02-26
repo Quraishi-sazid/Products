@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="category"
+            type="com.example.hishab.models.entities.Category" />
+        <variable
+            name="product"
+            type="com.example.hishab.models.entities.Product" />
+    </data>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:gravity="center_horizontal">
+        <LinearLayout
+            android:id="@+id/ll_cat_pro"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:layout_centerInParent="true">
+            <AutoCompleteTextView
+                android:id="@+id/actv_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:layout_marginRight="16dp"
+                android:hint="category"
+                android:gravity="center"
+                android:text="@={category.categoryName}"
+                />
+            <AutoCompleteTextView
+                android:id="@+id/actv_product"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:hint="product"
+                android:text="@={product.productName}"
+                />
+        </LinearLayout>
+        <Button
+            android:id="@+id/btn_yes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ll_cat_pro"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="8dp"
+            android:text="Submit"
+            />
+    </RelativeLayout>
+
+
+
+</layout>

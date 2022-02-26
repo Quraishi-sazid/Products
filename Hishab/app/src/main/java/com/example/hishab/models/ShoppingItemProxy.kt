@@ -15,4 +15,16 @@ data class ShoppingItemProxy(public var proxyId:Long, public val category: Categ
     fun setBuyingId(buyingId: Long) {
         purchaseItem.shoppingId=buyingId
     }
+    fun getCategoryId():Long{
+        return category.categoryId
+    }
+    fun getProductId():Long{
+        return product.productId
+    }
+    fun getCategoryName():String{
+        return category.getCategoryName()
+    }
+    fun getProductName():String{
+        return product.getProductName()
+    }
 }

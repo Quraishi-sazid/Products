@@ -20,12 +20,6 @@ class Category @Inject constructor () :BaseObservable(),Parcelable {
     @NonNull
     @ColumnInfo(name="category_name") private var categoryName:String=""
     @Bindable
-    @Ignore
-    var totalProductMappedWithThis:Int?=0
-    @Bindable
-    @Ignore
-    var proxyCategoryName:String?=""
-    @Bindable
     fun getCategoryName():String
     {
         return categoryName!!

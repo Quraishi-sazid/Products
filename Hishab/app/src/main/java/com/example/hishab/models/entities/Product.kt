@@ -9,6 +9,13 @@ import javax.inject.Inject
 @Entity(tableName = "product_table")
 class Product @Inject constructor() :
     BaseObservable() {
+    constructor(productId: Long=0, productName: String, categoryId: Long):this()
+    {
+        this.productId=productId
+        this.productName=productName
+        this.categoryId=categoryId
+    }
+
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "product_id")
     private var _productId: Long = 0

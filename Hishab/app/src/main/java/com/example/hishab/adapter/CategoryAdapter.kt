@@ -8,12 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hishab.R
 import com.example.hishab.databinding.LayoutCategroyItemBinding
-import com.example.hishab.databinding.LayoutPurchaseItemInputBinding
 import com.example.hishab.models.CategoryProxy
-import com.example.hishab.models.ShoppingItemProxy
-import com.example.hishab.models.entities.Category
-import java.util.*
-import kotlin.collections.ArrayList
 
 class CategoryAdapter(var dataSource:List<CategoryProxy>) : ListAdapter<CategoryProxy, CategoryAdapter.CategoryViewHolder>(diffUtilCallBack) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
@@ -28,6 +23,7 @@ class CategoryAdapter(var dataSource:List<CategoryProxy>) : ListAdapter<Category
 
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
         holder.bind(dataSource[position])
+        var xx=4
     }
 
     fun getElementAt(adapterPosition: Int): CategoryProxy {

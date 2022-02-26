@@ -22,6 +22,7 @@ import com.example.hishab.databinding.FragmentCategoryListBinding
 import com.example.hishab.interfaces.IHandleAlertDialog
 import com.example.hishab.interfaces.ISwipeItemCallback
 import com.example.hishab.models.CategoryProxy
+import com.example.hishab.models.ShoppingItemProxy
 import com.example.hishab.models.entities.Category
 import com.example.hishab.utils.SwipeToDeleteCallback
 import com.example.hishab.utils.Util
@@ -36,9 +37,9 @@ import kotlinx.coroutines.withContext
 class CategoryListFragment : Fragment() {
     lateinit var binding: FragmentCategoryListBinding
     lateinit var categoryAdapter: CategoryAdapter
-    lateinit var swipeItemCallback: ISwipeItemCallback
     private val categoryListViewModel: CategoryViewModel by viewModels()
     lateinit var handleAlertDialog: IHandleAlertDialog
+    lateinit var swipeToDeleteCallback: SwipeToDeleteCallback<CategoryProxy>
     var proxyId = 1
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,7 +50,6 @@ class CategoryListFragment : Fragment() {
         getCategoryData()
         setFabClick()
         setHandleAlertDialog()
-        setSwipeItemCallback()
         return binding.root
     }
 
@@ -77,32 +77,28 @@ class CategoryListFragment : Fragment() {
         binding.rvCategory.layoutManager = LinearLayoutManager(activity)
         binding.rvCategory.adapter = categoryAdapter
         categoryAdapter.submitList(categoryAdapter.dataSource)
-        ItemTouchHelper(SwipeToDeleteCallback(context, swipeItemCallback)).attachToRecyclerView(
+        swipeToDeleteCallback=SwipeToDeleteCallback<CategoryProxy>(requireContext())
+        ItemTouchHelper(swipeToDeleteCallback).attachToRecyclerView(
             binding.rvCategory
         )
-    }
-
-    private fun setSwipeItemCallback() {
-        swipeItemCallback = object : ISwipeItemCallback {
-            override fun onSwipeItem(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                if (direction == ItemTouchHelper.LEFT) {
-                    CoroutineScope(Dispatchers.IO).launch {
-                        var id = categoryAdapter.getElementAt(viewHolder.adapterPosition).categoryId
-                        activity?.runOnUiThread(Runnable {
-                            Util.showItemSwipeDeleteAlertDialog(
-                                context!!,
-                                "Delete Entry",
-                                "Do you want to delete this entry?",
-                                id,
-                                handleAlertDialog
-                            )
-                        })
-                    }
-                } else {
-                    showDialog(categoryAdapter.dataSource[viewHolder.adapterPosition].getCategory())
+        swipeToDeleteCallback.onSwipeObservable.subscribe({
+            if (it.direction == ItemTouchHelper.LEFT) {
+                CoroutineScope(Dispatchers.IO).launch {
+                    var id = categoryAdapter.getElementAt(it.adapterPosition).categoryId
+                    activity?.runOnUiThread(Runnable {
+                        Util.showItemSwipeDeleteAlertDialog(
+                            requireContext(),
+                            "Delete Entry",
+                            "Do you want to delete this entry?",
+                            id,
+                            handleAlertDialog
+                        )
+                    })
                 }
+            } else {
+                showDialog(categoryAdapter.dataSource[it.adapterPosition].getCategory())
             }
-        }
+        })
     }
     private fun setHandleAlertDialog() {
         handleAlertDialog = object : IHandleAlertDialog {

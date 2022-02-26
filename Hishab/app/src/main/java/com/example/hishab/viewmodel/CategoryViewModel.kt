@@ -10,15 +10,16 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class CategoryViewModel @Inject constructor(application: Application):AndroidViewModel(application) {
+class CategoryViewModel @Inject constructor(application: Application) :
+    AndroidViewModel(application) {
     @Inject
-    lateinit var repository:Repository
+    lateinit var repository: Repository
 
     suspend fun getCategoryWithTotalProductMapped(): LiveData<List<CategoryProxy>> {
-        return  repository.getCategoryWithProductTableMap()
+        return repository.getCategoryWithProductTableMap()
     }
-    suspend fun insertCategory(category:Category)
-    {
+
+    suspend fun insertCategory(category: Category) {
         repository.insertCategory(category)
     }
 

@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
@@ -12,9 +11,11 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.example.hishab.R
 import com.example.hishab.databinding.FragmentAddPurchaseItemBinding
+import com.example.hishab.interfaces.IAutoCompleteClickedCallback
 import com.example.hishab.models.ShoppingItemProxy
 import com.example.hishab.models.entities.Category
 import com.example.hishab.models.CategoryAndProductModel
+import com.example.hishab.utils.AutoCompleteTextViewManager
 import com.example.hishab.viewmodel.AddPurchaseItemViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -22,7 +23,10 @@ import dagger.hilt.android.AndroidEntryPoint
 class AddPurchaseItemFragment : DialogFragment() {
     private lateinit var binding: FragmentAddPurchaseItemBinding
     private val addPurchaseItemViewModel: AddPurchaseItemViewModel by viewModels()
-
+    lateinit var categoryAutoCompleteTextVIewManager: AutoCompleteTextViewManager<Category>
+    lateinit var productAutoCompleteTextVIewManager: AutoCompleteTextViewManager<CategoryAndProductModel>
+    lateinit var categoryClickedCallback: IAutoCompleteClickedCallback<Category>
+    lateinit var productClickedCallback: IAutoCompleteClickedCallback<CategoryAndProductModel>
     val args: AddPurchaseItemFragmentArgs by navArgs()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,9 +38,10 @@ class AddPurchaseItemFragment : DialogFragment() {
             addPurchaseItemViewModel.setValuesForUpdating(args.shoppingItemProxy!!)
         }
         setValuesToView()
-        setAdapterToAutoCompleteTextBoxes()
         handleProductAutoCompleteClick()
         handleCategoryAutoCompleteClick()
+        setAdapterToAutoCompleteTextBoxes()
+
         setSubmitButtonClick()
         return binding.root
     }
@@ -44,27 +49,44 @@ class AddPurchaseItemFragment : DialogFragment() {
     private fun checkIsUpdating() = args.shoppingItemProxy != null
 
     private fun handleCategoryAutoCompleteClick() {
-        binding.etCategory.onItemClickListener =
-            AdapterView.OnItemClickListener() { adapterView: AdapterView<*>, view1: View, position: Int, id: Long ->
-                val item = adapterView.adapter.getItem(position)
-                addPurchaseItemViewModel.category = item as Category;
+        categoryClickedCallback=object : IAutoCompleteClickedCallback<Category>{
+            override fun onAutoCompleteClickedCallback(category: Category?) {
+                if(category!=null)
+                {
+                    addPurchaseItemViewModel.category=category
+                }
             }
+        }
     }
 
     private fun handleProductAutoCompleteClick() {
-        binding.etProductName.onItemClickListener =
-            AdapterView.OnItemClickListener() { adapterView: AdapterView<*>, view1: View, position: Int, id: Long ->
-                val item = adapterView.adapter.getItem(position)
-                val categoryAndProductModel = item as CategoryAndProductModel
-                addPurchaseItemViewModel.category.setCategoryName(categoryAndProductModel.getCategoryName()!!)
-                addPurchaseItemViewModel.product.productId =
-                    categoryAndProductModel.getProductId()!!
+        productClickedCallback=object : IAutoCompleteClickedCallback<CategoryAndProductModel>{
+            override fun onAutoCompleteClickedCallback(categoryAndProductModel: CategoryAndProductModel?) {
+                if(categoryAndProductModel!=null)
+                {
+                    addPurchaseItemViewModel.category.setCategoryName(categoryAndProductModel.getCategoryName()!!)
+                    addPurchaseItemViewModel.product.productId =
+                        categoryAndProductModel.getProductId()!!
+                }
             }
+        }
     }
 
     private fun setAdapterToAutoCompleteTextBoxes() {
-        setAdapterToProductAutoCompleteBox()
-        setAdapterToCategoryAutoCompleteBox()
+        categoryAutoCompleteTextVIewManager = AutoCompleteTextViewManager<Category>(
+            requireContext(),
+            binding.etCategory,
+            args.distinctCategoryArray.toList()
+        )
+        productAutoCompleteTextVIewManager = AutoCompleteTextViewManager<CategoryAndProductModel>(
+            requireContext(),
+            binding.etProductName,
+            args.productCategoryArray.toList()
+        )
+        categoryAutoCompleteTextVIewManager.setAdapter()
+        productAutoCompleteTextVIewManager.setAdapter()
+        categoryAutoCompleteTextVIewManager.setCallBack(categoryClickedCallback)
+        productAutoCompleteTextVIewManager.setCallBack(productClickedCallback)
     }
 
     private fun setAdapterToCategoryAutoCompleteBox() {

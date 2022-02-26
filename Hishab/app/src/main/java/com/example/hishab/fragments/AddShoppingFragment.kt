@@ -49,8 +49,8 @@ class AddShoppingFragment : Fragment() {
     private val viewModel: AddShoppingViewModel by viewModels()
     lateinit var categoryAndProductModelList: List<CategoryAndProductModel>
     lateinit var distinctCategoryList: List<Category?>
-    lateinit var swipeItemCallback: ISwipeItemCallback
     lateinit var handleAlertDialog: IHandleAlertDialog
+    lateinit var swipeToDeleteCallback: SwipeToDeleteCallback<ShoppingItemProxy>
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -70,7 +70,6 @@ class AddShoppingFragment : Fragment() {
         if (viewModel.buyingId != -1L)
             viewModel.isUpdating = true
         getExistingCategoryAndProducts()
-        setSwipeItemCallback()
         setRecyclerView()
         setProductCallback()
         setButtonClickText()
@@ -243,31 +242,27 @@ class AddShoppingFragment : Fragment() {
         recyclerView = binding.root.findViewById<RecyclerView>(R.id.rv_add_buying)!!
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.adapter = adapter
-        ItemTouchHelper(SwipeToDeleteCallback(context, swipeItemCallback)).attachToRecyclerView(
+        swipeToDeleteCallback=SwipeToDeleteCallback<ShoppingItemProxy>(requireContext())
+        ItemTouchHelper(swipeToDeleteCallback).attachToRecyclerView(
             recyclerView
         )
-    }
-
-    private fun setSwipeItemCallback() {
-        swipeItemCallback = object : ISwipeItemCallback {
-            override fun onSwipeItem(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                if (direction == ItemTouchHelper.LEFT) {
-                    CoroutineScope(Dispatchers.IO).launch {
-                        var id = adapter.getElementAt(viewHolder.adapterPosition).proxyId
-                        activity?.runOnUiThread(Runnable {
-                            Util.showItemSwipeDeleteAlertDialog(
-                                context!!,
-                                "Delete Entry",
-                                "Do you want to delete this entry?",
-                                id,
-                                handleAlertDialog
-                            )
-                        })
-                    }
-                } else {
-                    goToAddDialog(adapter.dataSource[viewHolder.adapterPosition])
+        swipeToDeleteCallback.onSwipeObservable.subscribe({
+            if (it.direction == ItemTouchHelper.LEFT) {
+                CoroutineScope(Dispatchers.IO).launch {
+                    var id = adapter.getElementAt(it.adapterPosition).proxyId
+                    activity?.runOnUiThread(Runnable {
+                        Util.showItemSwipeDeleteAlertDialog(
+                            requireContext(),
+                            "Delete Entry",
+                            "Do you want to delete this entry?",
+                            id,
+                            handleAlertDialog
+                        )
+                    })
                 }
+            } else {
+                goToAddDialog(adapter.dataSource[it.adapterPosition])
             }
-        }
+        })
     }
 }

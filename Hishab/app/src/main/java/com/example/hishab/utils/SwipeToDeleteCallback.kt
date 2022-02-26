@@ -11,14 +11,18 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hishab.R
 import com.example.hishab.adapter.PurchaseItemsAdapter
-import com.example.hishab.interfaces.ISwipeItemCallback
+import com.example.hishab.models.RVItemSwipeResponse
+import io.reactivex.rxjava3.subjects.PublishSubject
 
 /*
 * This class is used to draw a delete background when swipe is done.
 *
 * */
-open class SwipeToDeleteCallback(var context: Context?,var swipeItemCallback: ISwipeItemCallback) :
+class SwipeToDeleteCallback<T>(context: Context) :
     ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+
+    lateinit var context:Context
+    public var onSwipeObservable=PublishSubject.create<RVItemSwipeResponse>()
     private val deleteIcon: Drawable?
     private lateinit var editIcon: Drawable
     private val background: ColorDrawable
@@ -32,7 +36,7 @@ open class SwipeToDeleteCallback(var context: Context?,var swipeItemCallback: IS
     }
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-        swipeItemCallback.onSwipeItem(viewHolder,direction)
+        onSwipeObservable.onNext(RVItemSwipeResponse(viewHolder.adapterPosition,direction));
     }
 
     override fun getSwipeDirs(
@@ -96,6 +100,4 @@ open class SwipeToDeleteCallback(var context: Context?,var swipeItemCallback: IS
         editIcon= context?.let { ContextCompat.getDrawable(it,R.drawable.ic_baseline_edit_24) }!!
         background = ColorDrawable(Color.RED)
     }
-
-
 }

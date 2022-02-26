@@ -4,9 +4,16 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/projects/Hishab/app/src/main/res/layout/fragment_add_purchase_item.xml" value="0.151268115942029" />
+        <entry key="..\:/projects/Hishab/app/src/main/res/layout/fragment_category_details.xml" value="0.1" />
         <entry key="..\:/projects/Hishab/app/src/main/res/layout/fragment_category_list.xml" value="0.1" />
+        <entry key="..\:/projects/Hishab/app/src/main/res/layout/fragment_product_category_mapping.xml" value="0.1" />
         <entry key="..\:/projects/Hishab/app/src/main/res/layout/layout.xml" value="0.10625" />
+        <entry key="..\:/projects/Hishab/app/src/main/res/layout/layout_category_input.xml" value="0.21770833333333334" />
         <entry key="..\:/projects/Hishab/app/src/main/res/layout/layout_categroy_item.xml" value="0.1" />
+        <entry key="..\:/projects/Hishab/app/src/main/res/layout/layout_product_category_item.xml" value="0.15172101449275363" />
+        <entry key="..\:/projects/Hishab/app/src/main/res/layout/layout_product_category_mapping_input.xml" value="0.12760416666666666" />
+        <entry key="..\:/projects/Hishab/app/src/main/res/layout/layout_purchase_item_input.xml" value="0.21770833333333334" />
+        <entry key="..\:/projects/Hishab/app/src/main/res/layout/product_category_item.xml" value="0.1" />
       </map>
     </option>
   </component>

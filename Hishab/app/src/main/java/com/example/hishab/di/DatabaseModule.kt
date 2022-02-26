@@ -11,6 +11,7 @@ import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 
+/*
 @EntryPoint
 @InstallIn(SingletonComponent::class)
 interface FooEntryPoint {
@@ -38,3 +39,4 @@ object DatabaseModule {
         }
     }
 }
+*/
