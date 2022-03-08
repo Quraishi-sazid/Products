@@ -10,17 +10,19 @@ import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.rxjava3.subjects.PublishSubject
 import kotlin.reflect.typeOf
 
-class SimpleGenericAdapterWithBinding<T, B : ViewDataBinding>(
+class SimpleGenericAdapterWithBinding<T, B : ViewDataBinding>private constructor(
     val layoutId: Int,
-    private val diffUtilCallback: DiffUtil.ItemCallback<T>
+    private var diffUtilCallback: DiffUtil.ItemCallback<T>
 ) : ListAdapter<T, SimpleGenericAdapterWithBinding<T, B>.ViewHolder>(diffUtilCallback) {
+
     lateinit var binding: B
     var viewInflateObservable = PublishSubject.create<Pair<T, B>>()
     var viewClickObservable = PublishSubject.create<T>()
     lateinit var dataSource: List<T>
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        var viewBinding= DataBindingUtil.inflate<B>(LayoutInflater.from(parent.context), layoutId, parent, false)
+        var viewBinding =
+            DataBindingUtil.inflate<B>(LayoutInflater.from(parent.context), layoutId, parent, false)
         return ViewHolder(viewBinding)
     }
 
@@ -29,17 +31,16 @@ class SimpleGenericAdapterWithBinding<T, B : ViewDataBinding>(
         holder.notify(dataSource[position])
     }
 
-    fun update(updatedDataSource:List<T>) {
-        dataSource=updatedDataSource
+    fun update(updatedDataSource: List<T>) {
+        dataSource = updatedDataSource
         submitList(dataSource)
     }
 
     inner class ViewHolder(val binding: B) : RecyclerView.ViewHolder(binding.root) {
-        init
-        {
-            binding.root.setOnClickListener{view ->
-               viewClickObservable.onNext(dataSource.get(adapterPosition))
-        }
+        init {
+            binding.root.setOnClickListener { view ->
+                viewClickObservable.onNext(dataSource.get(adapterPosition))
+            }
         }
 
         fun notify(data: T) {
@@ -48,5 +49,22 @@ class SimpleGenericAdapterWithBinding<T, B : ViewDataBinding>(
 
     }
 
+    companion object {
+        fun <T, B : ViewDataBinding> Create(layoutId: Int, diffUtil: DiffUtil.ItemCallback<T>?=null)
+                : SimpleGenericAdapterWithBinding<T, B> {
+            var passingDiffUtil = diffUtil
+            if (passingDiffUtil == null) {
+                passingDiffUtil = object : DiffUtil.ItemCallback<T>() {
+                    override fun areItemsTheSame(oldItem: T, newItem: T): Boolean {
+                        return true
+                    }
 
+                    override fun areContentsTheSame(oldItem: T, newItem: T): Boolean {
+                        return true
+                    }
+                }
+            }
+            return SimpleGenericAdapterWithBinding<T, B>(layoutId, passingDiffUtil)
+        }
+    }
 }

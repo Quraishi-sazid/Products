@@ -46,6 +46,6 @@ class PurchaseHistoryViewModel @Inject constructor(app:Application):AndroidViewM
     }
 
     suspend fun getProductCategoryList(): LiveData<List<CategoryAndProductModel>> {
-        return repository.getProductCategoryList()
+        return repository.getProductCategoryListLeftJoin()
     }
 }

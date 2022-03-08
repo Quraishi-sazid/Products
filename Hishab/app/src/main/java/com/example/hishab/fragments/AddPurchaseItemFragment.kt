@@ -56,12 +56,12 @@ class AddPurchaseItemFragment : DialogFragment() {
         )
         categoryAutoCompleteTextVIewManager.setAdapter()
         productAutoCompleteTextVIewManager.setAdapter()
-        compositeDisposable.add(categoryAutoCompleteTextVIewManager.OnAutoCompleteSelectionChanged.subscribe { selectedCategory ->
+        compositeDisposable.add(categoryAutoCompleteTextVIewManager.onAutoCompleteSelectionChanged.subscribe { selectedCategory ->
             if (selectedCategory != null) {
                 addPurchaseItemViewModel.category = selectedCategory
             }
         })
-        compositeDisposable.add(productAutoCompleteTextVIewManager.OnAutoCompleteSelectionChanged.subscribe { selectedProduct ->
+        compositeDisposable.add(productAutoCompleteTextVIewManager.onAutoCompleteSelectionChanged.subscribe { selectedProduct ->
             if (selectedProduct != null) {
                 addPurchaseItemViewModel.category.setCategoryName(selectedProduct.getCategoryName()!!)
                 addPurchaseItemViewModel.product.productId =

@@ -20,7 +20,7 @@ class AddShoppingViewModel @Inject constructor(app: Application) : AndroidViewMo
     var buyingId: Long = -1
     var dateId = -1L;
     suspend fun getProductCategoryList(): LiveData<List<CategoryAndProductModel>> {
-        return repository.getProductCategoryList()
+        return repository.getProductCategoryListLeftJoin()
     }
 
     suspend fun insertBuying(

@@ -1,28 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="300dp"
-    android:gravity="center_horizontal"
-    android:orientation="vertical">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable type="com.example.hishab.models.entities.Category"
+            name="category"/>
+    </data>
 
-
-    <EditText
-        android:id="@+id/et_category"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:gravity="center"
-        android:hint="Enter category name"
-        android:inputType="textMultiLine"
-        android:scrollbars="vertical" />
-    <Button
-        android:id="@+id/btn_yes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/et_category"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="8dp"
-        android:text="Submit"
-        />
+        android:layout_height="300dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+        <EditText
+            android:id="@+id/et_category"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="@={category.categoryName}"
+            android:hint="Enter category name"
+            android:inputType="textMultiLine"
+            android:scrollbars="vertical" />
+        <Button
+            android:id="@+id/btn_yes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/et_category"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="8dp"
+            android:text="Submit"
+            />
 
-</RelativeLayout>
+    </RelativeLayout>
+
+</layout>

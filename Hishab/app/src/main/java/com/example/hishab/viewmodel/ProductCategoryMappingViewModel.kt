@@ -11,16 +11,24 @@ import javax.inject.Inject
 @HiltViewModel
 class ProductCategoryMappingViewModel @Inject constructor(application: Application) :
     AndroidViewModel(application) {
-    fun getProductCategoryMapping(): LiveData<List<CategoryAndProductModel>> {
-        return repository.getProductCategoryList()
+    fun getProductCategoryListInnerJoin(): LiveData<List<CategoryAndProductModel>> {
+        return repository.getProductCategoryListInnerJoin()
     }
 
-    suspend fun  insertProduct(categoryId:Long,categoryName:String,productName:String) {
+    suspend fun  insertCategoryProductMapping(categoryId:Long, categoryName:String, productName:String) {
          repository.getProductIdByInsertingInDataBase(categoryId,categoryName,productName)
     }
 
-    fun deleteProduct(productId: Long?) {
+    fun deleteProduct(productId: Long) {
+        repository.deleteByProductById(productId)
+    }
 
+    fun updateProductName(productId: Long, productName: String) {
+        repository.updateProductName(productId,productName)
+    }
+
+    fun getPurchaseCountOfProductId(productId: Long):Int {
+       return repository.getPurchaseCountOfProductId(productId)
     }
 
     @Inject

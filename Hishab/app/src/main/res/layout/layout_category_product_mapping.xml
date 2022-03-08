@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            type="com.example.hishab.models.CategoryAndProductModel"
+            name="categoryAndProductModel" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:padding="8dp"
+        >
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            >
+            <TextView
+                android:id="@+id/tv_category"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@={categoryAndProductModel.categoryName}"
+                />
+            <EditText
+                android:id="@+id/et_product_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="product name"
+                android:layout_marginTop="16dp"
+                android:layout_below="@+id/tv_category"
+                android:text="@={categoryAndProductModel.productName}"
+                />
+            <Button
+                android:id="@+id/submit_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/et_product_name"
+                android:layout_centerHorizontal="true"
+                android:text="submit"
+
+                />
+
+        </RelativeLayout>
+
+
+
+    </RelativeLayout>
+</layout>

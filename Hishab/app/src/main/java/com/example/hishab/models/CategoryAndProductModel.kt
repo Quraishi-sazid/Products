@@ -6,10 +6,10 @@ import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
 
 data class CategoryAndProductModel(
-    private val productId:Long,
-    private val categoryId:Long,
-    private val categoryName:String?,
-    private val productName:String?
+    private var productId:Long,
+    private var categoryId:Long,
+    private var categoryName:String?,
+    private var productName:String?
     ):BaseObservable(), Parcelable{
 
     constructor(parcel: Parcel) : this(
@@ -38,6 +38,13 @@ data class CategoryAndProductModel(
     @Bindable
     fun getProductId():Long?{
         return productId
+    }
+
+    fun setCategoryName(categoryName: String){
+        this.categoryName=categoryName
+    }
+    fun setProductName(categoryName: String){
+        this.productName=productName
     }
 
 

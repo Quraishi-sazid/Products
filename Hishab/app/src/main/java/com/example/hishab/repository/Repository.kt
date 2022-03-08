@@ -73,8 +73,11 @@ class Repository(application: Application) {
         )
     }
 
-    fun getProductCategoryList(): LiveData<List<CategoryAndProductModel>> {
-        return productDao.getProductCategoryList()
+    fun getProductCategoryListLeftJoin(): LiveData<List<CategoryAndProductModel>> {
+        return productDao.getProductCategoryListLeftJoin()
+    }
+    fun getProductCategoryListInnerJoin(): LiveData<List<CategoryAndProductModel>> {
+        return productDao.getProductCategoryListInnerJoin()
     }
 
     suspend fun getDateId(customDate: CustomDate): Long {
@@ -163,6 +166,18 @@ class Repository(application: Application) {
             quariedProduct.productId = insertShopping(quariedProduct)
         }
         return quariedProduct
+    }
+
+    fun updateProductName(productId: Long, productName: String) {
+        productDao.updateProductName(productName,productId)
+    }
+
+    fun getPurchaseCountOfProductId(productId: Long):Int {
+       return productDao.getPurchaseCountOfProductId(productId)
+    }
+
+    fun deleteByProductById(productId: Long) {
+        productDao.deleteByProductById(productId)
     }
 
 /*    public suspend fun getCategoryByInsertingOrFetching(categoryName: String): Category {

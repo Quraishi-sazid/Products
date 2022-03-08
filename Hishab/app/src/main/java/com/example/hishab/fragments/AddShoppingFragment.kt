@@ -246,10 +246,10 @@ class AddShoppingFragment : Fragment() {
         ItemTouchHelper(swipeToDeleteCallback).attachToRecyclerView(
             recyclerView
         )
-        swipeToDeleteCallback.onSwipeObservable.subscribe({
-            if (it.direction == ItemTouchHelper.LEFT) {
+        swipeToDeleteCallback.onSwipeObservable.subscribe{ rvItemSwipeResponse->
+            if (rvItemSwipeResponse.direction == ItemTouchHelper.LEFT) {
                 CoroutineScope(Dispatchers.IO).launch {
-                    var id = adapter.getElementAt(it.adapterPosition).proxyId
+                    var id = adapter.getElementAt(rvItemSwipeResponse.adapterPosition).proxyId
                     activity?.runOnUiThread(Runnable {
                         Util.showItemSwipeDeleteAlertDialog(
                             requireContext(),
@@ -261,8 +261,8 @@ class AddShoppingFragment : Fragment() {
                     })
                 }
             } else {
-                goToAddDialog(adapter.dataSource[it.adapterPosition])
+                goToAddDialog(adapter.dataSource[rvItemSwipeResponse.adapterPosition])
             }
-        })
+        }
     }
 }
