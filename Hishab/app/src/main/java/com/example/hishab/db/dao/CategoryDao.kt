@@ -26,4 +26,6 @@ interface CategoryDao {
     suspend fun deleteCategoryById(deleteId: Long)
     @Update
     suspend fun updateCategory(updateCategory: Category)
+    @Query("Select category_name from category where category_id=:categoryId")
+    fun getCategoryNameFromCategoryId(categoryId: Long):String?
 }

@@ -23,4 +23,6 @@ interface ProductDao {
     fun getPurchaseCountOfProductId(productId: Long):Int
     @Query("delete from product_table where product_id =:productId")
     fun deleteByProductById(productId: Long)
+    @Insert
+    fun insertProducts(vararg products:Product)
 }

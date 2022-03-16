@@ -59,5 +59,11 @@ class PurchaseItem @Inject constructor() : BaseObservable() {
         description = value
         notifyPropertyChanged(BR.description)
     }
+
+    constructor(shoppingId:Long,productId:Long,cost:Int) : this() {
+        this.shoppingId=shoppingId
+        this.productId=productId
+        this.cost=cost
+    }
 }
 

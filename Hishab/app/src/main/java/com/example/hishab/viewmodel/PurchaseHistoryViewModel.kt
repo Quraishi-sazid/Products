@@ -21,10 +21,12 @@ class PurchaseHistoryViewModel @Inject constructor(app:Application):AndroidViewM
         return repository.getPurchaseHistory();
     }
 
-    suspend fun getdetailsOfCategoryfromDate(categoryId:Int,dateModel: CustomDate):LiveData<List<PurchaseHistory>>
+    suspend fun getdetailsOfCategoryfromDate(categoryId:Int,dateModel: CustomDate) :LiveData<List<PurchaseHistory>>
     {
-        return repository.getDetailsOfCategoryfromDate(categoryId,dateModel);
+        return repository.getDetailsOfCategoryfromDate(categoryId,dateModel)
     }
+
+
     fun getDateSeparatedPurchaseHistoryList(list: List<PurchaseHistory>):List<Any> {
         var objectList=ArrayList<Any>()
         var pMonth="";

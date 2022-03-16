@@ -12,4 +12,6 @@ interface DateDao {
     suspend fun insert(date:CustomDate):Long
     @Query("Select * from custom_date where day=:pDay and month=:pMonth and year=:pYear ")
     suspend fun getDateId(pDay:Int,pMonth:Int,pYear:Int):CustomDate
+    @Insert
+    abstract fun insertCustomDate(vararg customDate: CustomDate)
 }

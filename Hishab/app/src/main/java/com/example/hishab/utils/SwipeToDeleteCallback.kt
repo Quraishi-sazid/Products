@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.hishab.R
 import com.example.hishab.adapter.PurchaseItemsAdapter
 import com.example.hishab.models.RVItemSwipeResponse
-import io.reactivex.rxjava3.subjects.PublishSubject
+import io.reactivex.subjects.PublishSubject
 
 /*
 * This class is used to draw a delete background when swipe is done.
@@ -22,7 +22,7 @@ class SwipeToDeleteCallback<T>(context: Context) :
     ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
 
     lateinit var context:Context
-    public var onSwipeObservable=PublishSubject.create<RVItemSwipeResponse>()
+    public var onSwipeObservable= PublishSubject.create<RVItemSwipeResponse>()
     private val deleteIcon: Drawable?
     private lateinit var editIcon: Drawable
     private val background: ColorDrawable

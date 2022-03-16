@@ -9,7 +9,7 @@ import android.widget.Button
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
-import io.reactivex.rxjava3.core.Observable
+import io.reactivex.Observable
 
 
 class CustomAlertDialog<B:ViewDataBinding>(val context: Context, val layoutId:Int, val submitButtonId: Int= -1) {

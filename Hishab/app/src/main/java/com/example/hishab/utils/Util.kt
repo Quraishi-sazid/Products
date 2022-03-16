@@ -10,6 +10,7 @@ import com.example.hishab.models.PurchaseHistory
 import com.example.hishab.models.entities.PurchaseItem
 import com.example.hishab.models.entities.Product
 import java.text.DateFormatSymbols
+import java.util.*
 
 
 class Util {
@@ -65,6 +66,18 @@ class Util {
             return ShoppingItemProxy(proxyId,category,shoppingItem,purchaseItem)
         }
 
+        fun getCurrentMonth():Int{
+            return Calendar.getInstance().get(Calendar.MONTH)+1
+        }
+        fun getCurrentYear():Int{
+            return Calendar.getInstance().get(Calendar.YEAR)
+        }
+        fun getCurrentDay():Int{
+            return Calendar.getInstance().get(Calendar.DAY_OF_YEAR)
+        }
+        fun getCurrentMili():Long{
+            return System.currentTimeMillis()
+        }
 
 
     }

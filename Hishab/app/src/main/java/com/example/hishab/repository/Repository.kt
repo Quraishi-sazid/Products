@@ -6,6 +6,7 @@ import com.example.hishab.db.AppDatabase
 import com.example.hishab.db.dao.*
 import com.example.hishab.models.*
 import com.example.hishab.models.entities.*
+import io.reactivex.Flowable
 
 
 class Repository(application: Application) {
@@ -15,16 +16,18 @@ class Repository(application: Application) {
     private var purchaseHistoryDao: PurchaseHistoryDao
     private var shoppingDao: ShoppingDao
     private var customDateDao: DateDao
+    public var budgetDao: BudgetDao
     var database = AppDatabase.getDatabase(application)
     //var database = EntryPoints.get(application, FooEntryPoint::class.java).database
 
     init {
         categoryDao = database.CategoryDao()
-        productDao = database.ShoppingDao()
+        productDao = database.ProductDao()
         purchaseDao = database.PurchaseDao()
         purchaseHistoryDao = database.PurchaseShoppingCategoryDao()
-        shoppingDao = database.BuyingDao()
+        shoppingDao = database.shoppingDao()
         customDateDao = database.customDao()
+        budgetDao = database.BudgetDao()
     }
 
     suspend fun insertCategory(category: Category): Long {
@@ -139,7 +142,7 @@ class Repository(application: Application) {
     ): Long {
         if (categoryId == 0L) {
             var insertedCategoryId=insertCategory(Category(categoryName))
-            return insertShopping(Product(0,productName,insertedCategoryId))
+            return insertShopping(Product(productName,insertedCategoryId))
         } else {
             var queriedShoppingItem =
                 getProductFromCategoryIdAndProductNameByInsertingOrFetching(
@@ -178,6 +181,25 @@ class Repository(application: Application) {
 
     fun deleteByProductById(productId: Long) {
         productDao.deleteByProductById(productId)
+    }
+
+    fun getBudgetList(month: Int, year: Int): Flowable<List<Budget>> {
+        return budgetDao.getBudgetFlowable(month, year)
+/*       return Observable.create<Budget>{
+            it.onNext(Budget())
+        }.toFlowable(BackpressureStrategy.DROP)*/
+    }
+
+    fun getCategoryNameFromCategoryId(categoryId: Long): String? {
+       return categoryDao.getCategoryNameFromCategoryId(categoryId)
+    }
+
+    fun getCategorySpentsOfMonth(categoryIdList: List<Long>, month:Int, year:Int):List<CategoryCostModel>{
+        return budgetDao.getCategorySpents(categoryIdList,month,year)
+    }
+
+    fun updateBudgetList(budgetList:List<Budget>) {
+        budgetDao.updateBudgetList(budgetList)
     }
 
 /*    public suspend fun getCategoryByInsertingOrFetching(categoryName: String): Category {

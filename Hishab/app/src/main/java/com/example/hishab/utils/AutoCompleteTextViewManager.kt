@@ -5,14 +5,14 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
-import io.reactivex.rxjava3.core.Observable
+import io.reactivex.Observable
 
 
 class AutoCompleteTextViewManager<T>(val context: Context, val autoCompleteTextView: AutoCompleteTextView, private val dataList:List<T>) {
     var selectedItem:T? =null
 
     var type=android.R.layout.simple_dropdown_item_1line
-    lateinit var onAutoCompleteSelectionChanged:Observable<T>
+    lateinit var onAutoCompleteSelectionChanged: Observable<T>
 
     fun setAdapter()
     {
@@ -20,7 +20,7 @@ class AutoCompleteTextViewManager<T>(val context: Context, val autoCompleteTextV
         onAutoCompleteSelectionChanged=Observable.create<T>{ emitter->
             autoCompleteTextView.onItemClickListener=AdapterView.OnItemClickListener() { adapterView: AdapterView<*>, view1: View, position: Int, id: Long ->
                 selectedItem = adapterView.adapter.getItem(position) as T
-                emitter.onNext(selectedItem)
+                emitter.onNext(selectedItem!!)
             }
         }
 

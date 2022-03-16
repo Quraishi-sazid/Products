@@ -7,7 +7,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import io.reactivex.rxjava3.subjects.PublishSubject
+import io.reactivex.subjects.PublishSubject
 import kotlin.reflect.typeOf
 
 class SimpleGenericAdapterWithBinding<T, B : ViewDataBinding>private constructor(
@@ -56,11 +56,10 @@ class SimpleGenericAdapterWithBinding<T, B : ViewDataBinding>private constructor
             if (passingDiffUtil == null) {
                 passingDiffUtil = object : DiffUtil.ItemCallback<T>() {
                     override fun areItemsTheSame(oldItem: T, newItem: T): Boolean {
-                        return true
+                        return false
                     }
-
                     override fun areContentsTheSame(oldItem: T, newItem: T): Boolean {
-                        return true
+                        return false
                     }
                 }
             }

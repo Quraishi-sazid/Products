@@ -142,9 +142,9 @@ class AddShoppingFragment : Fragment() {
     private fun handleSubmitButtonClick() {
         binding.btnSubmit.setOnClickListener(View.OnClickListener {
             var buyingDate = CustomDate(
-                myCalendar.get(Calendar.YEAR),
-                myCalendar.get(Calendar.MONTH),
-                myCalendar.get(Calendar.DAY_OF_MONTH)
+                Util.getCurrentYear(),
+                Util.getCurrentMonth(),
+                Util.getCurrentDay()
             )
             CoroutineScope(Dispatchers.Main).launch {
                 if (!viewModel.isUpdating) {
@@ -213,18 +213,18 @@ class AddShoppingFragment : Fragment() {
         isFocusable = false
         val datePickerOnDataSetListener =
             DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
-                myCalendar.set(Calendar.YEAR, year)
-                myCalendar.set(Calendar.MONTH, monthOfYear)
-                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                Util.getCurrentYear()
+                Util.getCurrentMonth()
+                Util.getCurrentDay()
                 setDateText()
             }
 
         setOnClickListener {
             var datePickerDialog: DatePickerDialog
             datePickerDialog = DatePickerDialog(
-                context, datePickerOnDataSetListener, myCalendar
-                    .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                myCalendar.get(Calendar.DAY_OF_MONTH)
+                context, datePickerOnDataSetListener, Util.getCurrentYear(),
+                Util.getCurrentMonth(),
+                Util.getCurrentDay()
             )
             datePickerDialog.run {
                 maxDate?.time?.also { datePicker.maxDate = it }
@@ -242,11 +242,11 @@ class AddShoppingFragment : Fragment() {
         recyclerView = binding.root.findViewById<RecyclerView>(R.id.rv_add_buying)!!
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.adapter = adapter
-        swipeToDeleteCallback=SwipeToDeleteCallback<ShoppingItemProxy>(requireContext())
+        swipeToDeleteCallback = SwipeToDeleteCallback<ShoppingItemProxy>(requireContext())
         ItemTouchHelper(swipeToDeleteCallback).attachToRecyclerView(
             recyclerView
         )
-        swipeToDeleteCallback.onSwipeObservable.subscribe{ rvItemSwipeResponse->
+        swipeToDeleteCallback.onSwipeObservable.subscribe { rvItemSwipeResponse ->
             if (rvItemSwipeResponse.direction == ItemTouchHelper.LEFT) {
                 CoroutineScope(Dispatchers.IO).launch {
                     var id = adapter.getElementAt(rvItemSwipeResponse.adapterPosition).proxyId

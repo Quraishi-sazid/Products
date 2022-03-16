@@ -16,7 +16,8 @@ import com.example.hishab.models.CategoryAndProductModel
 import com.example.hishab.utils.AutoCompleteTextViewManager
 import com.example.hishab.viewmodel.AddPurchaseItemViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.disposables.CompositeDisposable
+
 
 @AndroidEntryPoint
 class AddPurchaseItemFragment : DialogFragment() {

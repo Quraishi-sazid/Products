@@ -5,7 +5,7 @@ import androidx.databinding.Bindable
 import java.io.Serializable
 
 data class CategoryCostModel(private val Cost:Int,
-                             private val CategoryId:Int,
+                             private val CategoryId:Long,
                              private val CategoryName:String): BaseObservable(),Serializable
 {
 @Bindable
@@ -14,7 +14,7 @@ fun getCategoryName():String
     return  CategoryName
 }
     @Bindable
-    fun getCategoryId():Int
+    fun getCategoryId():Long
     {
         return  CategoryId
     }

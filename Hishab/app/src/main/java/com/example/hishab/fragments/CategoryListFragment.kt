@@ -30,7 +30,7 @@ import com.example.hishab.utils.SwipeToDeleteCallback
 import com.example.hishab.utils.Util
 import com.example.hishab.viewmodel.CategoryViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

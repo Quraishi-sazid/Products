@@ -25,9 +25,11 @@ import com.example.hishab.utils.CustomAlertDialog
 import com.example.hishab.utils.SwipeToDeleteCallback
 import com.example.hishab.viewmodel.ProductCategoryMappingViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.disposables.CompositeDisposable
-import io.reactivex.rxjava3.schedulers.Schedulers
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
+
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -37,8 +39,8 @@ class ProductCategoryMappingFragment : Fragment() {
     private lateinit var binding: FragmentProductCategoryMappingBinding
     private val productCategoryMappingViewModel: ProductCategoryMappingViewModel by viewModels()
     lateinit var categoryAndProductModelList: List<CategoryAndProductModel>
-    lateinit var simpleGenericAdapterWithBinding : SimpleGenericAdapterWithBinding<CategoryAndProductModel,LayoutProductCategoryItemBinding>
-    var compositeDisposable:CompositeDisposable= CompositeDisposable()
+    lateinit var simpleGenericAdapterWithBinding: SimpleGenericAdapterWithBinding<CategoryAndProductModel, LayoutProductCategoryItemBinding>
+    var compositeDisposable: CompositeDisposable = CompositeDisposable()
     lateinit var swipeToDeleteCallback: SwipeToDeleteCallback<CategoryAndProductModel>
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,67 +59,83 @@ class ProductCategoryMappingFragment : Fragment() {
     }
 
     private fun setRecyclerView() {
-        var diffUtilCallback=object : DiffUtil.ItemCallback<CategoryAndProductModel>() {
+        var diffUtilCallback = object : DiffUtil.ItemCallback<CategoryAndProductModel>() {
             override fun areItemsTheSame(
                 oldItem: CategoryAndProductModel,
                 newItem: CategoryAndProductModel
             ): Boolean {
-                return oldItem.getProductId()==newItem.getProductId()
-                        && oldItem.getCategoryId()==newItem.getCategoryId()
+                return oldItem.getProductId() == newItem.getProductId()
+                        && oldItem.getCategoryId() == newItem.getCategoryId()
             }
+
             override fun areContentsTheSame(
                 oldItem: CategoryAndProductModel,
                 newItem: CategoryAndProductModel
             ): Boolean {
-                return oldItem.getCategoryName().equals(newItem.getCategoryName())&&
+                return oldItem.getCategoryName().equals(newItem.getCategoryName()) &&
                         oldItem.getProductName().equals(newItem.getProductName())
             }
         }
-        binding.rvProductCategory.layoutManager=LinearLayoutManager(activity)
-        simpleGenericAdapterWithBinding=
+        binding.rvProductCategory.layoutManager = LinearLayoutManager(activity)
+        simpleGenericAdapterWithBinding =
             SimpleGenericAdapterWithBinding.Create(R.layout.layout_product_category_item)
         compositeDisposable.add(simpleGenericAdapterWithBinding.viewInflateObservable.subscribe({
-            it.second.productCategoryMapping=it.first
+            it.second.productCategoryMapping = it.first
         }))
-        simpleGenericAdapterWithBinding.viewClickObservable.subscribe{clickedCategoryAndProductModel->
+        simpleGenericAdapterWithBinding.viewClickObservable.subscribe { clickedCategoryAndProductModel ->
 
         }
-        binding.rvProductCategory.adapter=simpleGenericAdapterWithBinding
-        swipeToDeleteCallback= SwipeToDeleteCallback<CategoryAndProductModel>(requireContext())
+        binding.rvProductCategory.adapter = simpleGenericAdapterWithBinding
+        swipeToDeleteCallback = SwipeToDeleteCallback<CategoryAndProductModel>(requireContext())
         ItemTouchHelper(swipeToDeleteCallback).attachToRecyclerView(binding.rvProductCategory)
-        swipeToDeleteCallback.onSwipeObservable.subscribe{swipedItemResponse->
-            if(swipedItemResponse.direction==ItemTouchHelper.LEFT)
-            {
-                compositeDisposable.add(Observable.create<Int>{emitter->
-                   var count =productCategoryMappingViewModel.getPurchaseCountOfProductId(simpleGenericAdapterWithBinding.dataSource[swipedItemResponse.adapterPosition].getProductId()!!)
-                    emitter.onNext(count)
-                }.subscribeOn(Schedulers.io())
-                    .subscribe { count ->
-                        (Handler(Looper.getMainLooper())).post(Runnable {
-                            if(count==0)
-                                productCategoryMappingViewModel.deleteProduct(simpleGenericAdapterWithBinding.dataSource[swipedItemResponse.adapterPosition].getProductId()!!)
+        swipeToDeleteCallback.onSwipeObservable.subscribe { swipedItemResponse ->
+            if (swipedItemResponse.direction == ItemTouchHelper.LEFT) {
+                compositeDisposable.add(
+                    Observable.create<Int> { emitter ->
+                        var count = productCategoryMappingViewModel.getPurchaseCountOfProductId(
+                            simpleGenericAdapterWithBinding.dataSource[swipedItemResponse.adapterPosition].getProductId()!!
+                        )
+                        emitter.onNext(count)
+                    }.subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe { count ->
+                            if (count == 0)
+                                productCategoryMappingViewModel.deleteProduct(
+                                    simpleGenericAdapterWithBinding.dataSource[swipedItemResponse.adapterPosition].getProductId()!!
+                                )
                             else
-                                Toast.makeText(context,count.toString()+" items found in purchased history of this product.can't be deleted",Toast.LENGTH_LONG).show()
+                                Toast.makeText(
+                                    context,
+                                    count.toString() + " items found in purchased history of this product.can't be deleted",
+                                    Toast.LENGTH_LONG
+                                ).show()
                         })
-                    })
-            }
-            else
-            {
-                var swippedCategoryAndProductModel= simpleGenericAdapterWithBinding.dataSource[swipedItemResponse.adapterPosition];
-                var customAlertDialog=CustomAlertDialog<LayoutProductCategoryMappingInputBinding>(requireContext(),R.layout.layout_product_category_mapping_input,R.id.btn_yes)
-                compositeDisposable.add(customAlertDialog.onViewCreated.subscribe{binding->
-                    binding.product= Product(swippedCategoryAndProductModel.getProductId()!!,swippedCategoryAndProductModel.getProductName()!!,swippedCategoryAndProductModel.getCategoryId()!!)
-                    binding.category= Category(swippedCategoryAndProductModel.getCategoryName()!!)
-                    binding.actvCategory.isEnabled=false
+            } else {
+                var swippedCategoryAndProductModel =
+                    simpleGenericAdapterWithBinding.dataSource[swipedItemResponse.adapterPosition];
+                var customAlertDialog = CustomAlertDialog<LayoutProductCategoryMappingInputBinding>(
+                    requireContext(),
+                    R.layout.layout_product_category_mapping_input,
+                    R.id.btn_yes
+                )
+                compositeDisposable.add(customAlertDialog.onViewCreated.subscribe { binding ->
+                    binding.product = Product(
+                        swippedCategoryAndProductModel.getProductName()!!,
+                        swippedCategoryAndProductModel.getCategoryId()!!,
+                        swippedCategoryAndProductModel.getProductId()!!,
+
+                    )
+                    binding.category = Category(swippedCategoryAndProductModel.getCategoryName()!!)
+                    binding.actvCategory.isEnabled = false
                 })
-                compositeDisposable.add(customAlertDialog.onSubmitButtonPressed.filter{
-                    it.product!!.getProductName()!=null
-                }.observeOn(Schedulers.io()).
-                    map{
-                        binding->
-                        productCategoryMappingViewModel.updateProductName(swippedCategoryAndProductModel.getProductId()!!,binding.product!!.getProductName()!!)
-                    }.
-                subscribe{_->
+                compositeDisposable.add(customAlertDialog.onSubmitButtonPressed.filter {
+                    it.product!!.getProductName() != null
+                }.observeOn(Schedulers.io()).map { binding ->
+                    productCategoryMappingViewModel.updateProductName(
+                        swippedCategoryAndProductModel.getProductId()!!,
+                        binding.product!!.getProductName()!!
+                    )
+                }.subscribe { _ ->
                     customAlertDialog.dismiss()
                 })
             }
@@ -126,27 +144,38 @@ class ProductCategoryMappingFragment : Fragment() {
 
     private fun fetchProductCategoryMapping() {
         CoroutineScope(Dispatchers.Main).launch {
-            productCategoryMappingViewModel.getProductCategoryListInnerJoin().observe(viewLifecycleOwner,{
-                simpleGenericAdapterWithBinding.update(it);
-        })
+            productCategoryMappingViewModel.getProductCategoryListInnerJoin()
+                .observe(viewLifecycleOwner, {
+                    simpleGenericAdapterWithBinding.update(it);
+                })
         }
     }
+
     private fun setFabClick() {
         binding.fabProductCategory.setOnClickListener(View.OnClickListener {
-            var customAlertDialog=CustomAlertDialog<LayoutProductCategoryMappingInputBinding>(requireContext(),R.layout.layout_product_category_mapping_input,R.id.btn_yes)
-            compositeDisposable.add(customAlertDialog.onViewCreated.subscribe{binding->
-                binding.category= Category()
-                binding.product= Product()
+            var customAlertDialog = CustomAlertDialog<LayoutProductCategoryMappingInputBinding>(
+                requireContext(),
+                R.layout.layout_product_category_mapping_input,
+                R.id.btn_yes
+            )
+            compositeDisposable.add(customAlertDialog.onViewCreated.subscribe { binding ->
+                binding.category = Category()
+                binding.product = Product()
             })
-            compositeDisposable.add(customAlertDialog.onSubmitButtonPressed.filter { binding->
-                binding.category!=null && binding.product!=null
-            }.subscribe{binding->
+            compositeDisposable.add(customAlertDialog.onSubmitButtonPressed.filter { binding ->
+                binding.category != null && binding.product != null
+            }.subscribe { binding ->
                 CoroutineScope(Dispatchers.IO).launch {
-                    productCategoryMappingViewModel.insertCategoryProductMapping(binding.category!!.categoryId,binding.category!!.getCategoryName(),binding.product!!.getProductName());
+                    productCategoryMappingViewModel.insertCategoryProductMapping(
+                        binding.category!!.categoryId,
+                        binding.category!!.getCategoryName(),
+                        binding.product!!.getProductName()
+                    );
                 }
             })
         })
     }
+
     override fun onDestroy() {
         super.onDestroy()
         compositeDisposable?.clear()

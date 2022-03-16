@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/productCategoryMappingFragment">
+    app:startDestination="@id/budgetAndSpentFragment">
 
     <dialog
         android:id="@+id/addPurchaseItemFragment"
@@ -105,5 +105,24 @@
         <action
             android:id="@+id/action_productCategoryMappingFragment_to_categoryListFragment"
             app:destination="@id/categoryListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/budgetAndSpentFragment"
+        android:name="com.example.hishab.fragments.BudgetAndSpentFragment"
+        android:label="BudgetAndSpentFragment" >
+        <action
+            android:id="@+id/action_budgetAndSpentFragment_to_addBudgetFragment"
+            app:destination="@id/addBudgetFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addBudgetFragment"
+        android:name="com.example.hishab.fragments.AddBudgetFragment"
+        android:label="fragment_add_budget"
+        tools:layout="@layout/fragment_add_budget" >
+        <argument
+            android:name="budgetList"
+            app:argType="com.example.hishab.models.entities.Budget[]"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
 </navigation>

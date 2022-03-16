@@ -17,4 +17,6 @@ interface ShoppingDao {
     fun getBuyingHistory():LiveData<List<ShoppingHistory>>
     @Query("update tbl_shopping set date_id=:dateId where shopping_id=:buyingId")
     suspend fun updateDateId(dateId:Long,buyingId:Long)
+    @Insert
+    suspend fun insertShoppingList(vararg shoppingList: Shopping)
 }

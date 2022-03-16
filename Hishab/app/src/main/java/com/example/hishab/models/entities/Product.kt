@@ -9,7 +9,7 @@ import javax.inject.Inject
 @Entity(tableName = "product_table")
 class Product @Inject constructor() :
     BaseObservable() {
-    constructor(productId: Long=0, productName: String, categoryId: Long):this()
+    constructor(productName: String, categoryId: Long,productId: Long=0):this()
     {
         this.productId=productId
         this.productName=productName
