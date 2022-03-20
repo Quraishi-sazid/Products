@@ -2,4 +2,7 @@
     <string name="app_name">Hishab</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="history">History</string>
+    <string name="budget">Budget</string>
+    <string name="category_products">Category and Products</string>
 </resources>

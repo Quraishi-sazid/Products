@@ -3,11 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/projects/Hishab/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/projects/Hishab/app/src/main/res/layout/fragment_add_budget.xml" value="0.1" />
         <entry key="..\:/projects/Hishab/app/src/main/res/layout/fragment_add_purchase_item.xml" value="0.12409420289855072" />
         <entry key="..\:/projects/Hishab/app/src/main/res/layout/fragment_add_shopping.xml" value="0.103125" />
         <entry key="..\:/projects/Hishab/app/src/main/res/layout/fragment_budget_and_spent.xml" value="0.11822916666666666" />
         <entry key="..\:/projects/Hishab/app/src/main/res/layout/fragment_category_list.xml" value="0.1" />
+        <entry key="..\:/projects/Hishab/app/src/main/res/layout/fragment_view_pager_tab.xml" value="0.1765625" />
         <entry key="..\:/projects/Hishab/app/src/main/res/layout/layout_budget_add_item.xml" value="0.178125" />
         <entry key="..\:/projects/Hishab/app/src/main/res/layout/layout_budget_spent_item.xml" value="0.1" />
         <entry key="..\:/projects/Hishab/app/src/main/res/layout/layout_buying_item.xml" value="0.16077898550724637" />
@@ -15,6 +17,7 @@
         <entry key="..\:/projects/Hishab/app/src/main/res/layout/layout_category_product_mapping.xml" value="0.16077898550724637" />
         <entry key="..\:/projects/Hishab/app/src/main/res/layout/layout_product_category_item.xml" value="0.1" />
         <entry key="..\:/projects/Hishab/app/src/main/res/layout/layout_product_category_mapping_input.xml" value="0.12409420289855072" />
+        <entry key="..\:/projects/Hishab/app/src/main/res/menu/navigation_menu.xml" value="0.22" />
       </map>
     </option>
   </component>

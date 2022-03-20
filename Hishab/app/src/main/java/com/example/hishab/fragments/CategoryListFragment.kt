@@ -43,7 +43,7 @@ class CategoryListFragment : Fragment() {
     private val categoryListViewModel: CategoryViewModel by viewModels()
     lateinit var handleAlertDialog: IHandleAlertDialog
     lateinit var swipeToDeleteCallback: SwipeToDeleteCallback<CategoryProxy>
-    lateinit var compositeDisposable: CompositeDisposable
+    var compositeDisposable= CompositeDisposable()
     var proxyId = 1
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

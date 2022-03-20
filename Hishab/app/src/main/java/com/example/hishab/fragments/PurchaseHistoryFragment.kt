@@ -33,28 +33,44 @@ class PurchaseHistoryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val inflate = inflater.inflate(R.layout.fragment_purchase_history, container, false)
-        if (args.categoryId == -1) {
-            CoroutineScope(Dispatchers.Main).launch {//Main thread query needs to be changed
-                purchaseHistoryViewModel.getPurchaseItems().observe(viewLifecycleOwner, Observer
-                {
-                    adapter.submitList(purchaseHistoryViewModel.getDateSeparatedPurchaseHistoryList(it))
-                })
-            }
-        } else {
-            inflate.findViewById<FloatingActionButton>(R.id.fab).visibility = View.GONE
-            CoroutineScope(Dispatchers.Main).launch {//Main thread query needs to be changed
-                purchaseHistoryViewModel.getdetailsOfCategoryfromDate(
-                    args.categoryId,
-                    args.customDateModel!!
-                ).observe(viewLifecycleOwner, Observer
-                {
-                    adapter.submitList(purchaseHistoryViewModel.getDateSeparatedPurchaseHistoryList(it))
-                })
+        try
+        {
+            if (args.categoryId == -1) {
+                getAllData()
+            } else {
+                inflate.findViewById<FloatingActionButton>(R.id.fab).visibility = View.GONE
+                CoroutineScope(Dispatchers.Main).launch {//Main thread query needs to be changed
+                    purchaseHistoryViewModel.getdetailsOfCategoryfromDate(
+                        args.categoryId,
+                        args.customDateModel!!
+                    ).observe(viewLifecycleOwner, Observer
+                    {
+                        adapter.submitList(purchaseHistoryViewModel.getDateSeparatedPurchaseHistoryList(it))
+                    })
+                }
             }
         }
+        catch(e:Exception)
+        {
+            getAllData()
+        }
+
         recyclerView = inflate.findViewById<RecyclerView>(R.id.recycler_view)!!
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.adapter = adapter;
         return inflate
+    }
+
+    private fun getAllData() {
+        CoroutineScope(Dispatchers.Main).launch {//Main thread query needs to be changed
+            purchaseHistoryViewModel.getPurchaseItems().observe(viewLifecycleOwner, Observer
+            {
+                adapter.submitList(
+                    purchaseHistoryViewModel.getDateSeparatedPurchaseHistoryList(
+                        it
+                    )
+                )
+            })
+        }
     }
 }

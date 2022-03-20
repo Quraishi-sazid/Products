@@ -60,8 +60,9 @@ class ShoppingHistoryFragment : Fragment() {
     }
 
     private fun goToAddBuyingFragment(shoppingHistory: ShoppingHistory? =null) {
-        var direction=
-            ShoppingHistoryFragmentDirections.actionShoppingHistoryFragmentToAddShoppingFragment()
+        /*var direction=
+            ShoppingHistoryFragmentDirections.actionShoppingHistoryFragmentToAddShoppingFragment()*/
+        var direction=ViewPagerTabFragmentDirections.actionViewPagerTabFragmentToAddShoppingFragment()
         direction.shoppingHistory=shoppingHistory
         findNavController().navigate(direction)
 

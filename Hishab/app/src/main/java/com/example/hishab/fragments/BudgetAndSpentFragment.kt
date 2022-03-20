@@ -46,7 +46,8 @@ class BudgetAndSpentFragment : Fragment() {
 
     private fun setFabClick() {
         binding.fabEditBudget.setOnClickListener{
-            var directions=BudgetAndSpentFragmentDirections.actionBudgetAndSpentFragmentToAddBudgetFragment()
+            var directions=ViewPagerTabFragmentDirections.actionViewPagerTabFragmentToAddBudgetFragment()
+            //var directions=BudgetAndSpentFragmentDirections.actionBudgetAndSpentFragmentToAddBudgetFragment()
             directions.budgetList=simpleGenericAdapterWithBinding.dataSource.toTypedArray()
             findNavController().navigate(directions)
         }
