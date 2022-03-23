@@ -79,10 +79,10 @@ class ProductCategoryMappingFragment : Fragment() {
         binding.rvProductCategory.layoutManager = LinearLayoutManager(activity)
         simpleGenericAdapterWithBinding =
             SimpleGenericAdapterWithBinding.Create(R.layout.layout_product_category_item)
-        compositeDisposable.add(simpleGenericAdapterWithBinding.viewInflateObservable.subscribe({
+        simpleGenericAdapterWithBinding.viewInlateLiveData.observe(viewLifecycleOwner){
             it.second.productCategoryMapping = it.first
-        }))
-        simpleGenericAdapterWithBinding.viewClickObservable.subscribe { clickedCategoryAndProductModel ->
+        }
+        simpleGenericAdapterWithBinding.viewClickLiveData.observe(viewLifecycleOwner) { clickedCategoryAndProductModel ->
 
         }
         binding.rvProductCategory.adapter = simpleGenericAdapterWithBinding

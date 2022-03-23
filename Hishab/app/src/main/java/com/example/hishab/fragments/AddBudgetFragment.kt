@@ -78,9 +78,9 @@ class AddBudgetFragment : Fragment() {
         }
 
         categoryBudgetMappingAdapter= SimpleGenericAdapterWithBinding.Create<Budget,LayoutBudgetAddItemBinding>(R.layout.layout_budget_add_item,diffUtilCallback)
-        compositeDisposable.add(categoryBudgetMappingAdapter.viewInflateObservable.subscribe{
-            it.second.budget=it.first
-        })
+        categoryBudgetMappingAdapter.viewInlateLiveData.observe(viewLifecycleOwner) {
+            it.second.budget = it.first
+        }
         binding.rvBudgetInput.layoutManager=LinearLayoutManager(activity)
         binding.rvBudgetInput.adapter=categoryBudgetMappingAdapter
         if(budgetList!=null)

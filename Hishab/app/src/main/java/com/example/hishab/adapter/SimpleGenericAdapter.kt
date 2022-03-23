@@ -20,8 +20,8 @@ class SimpleGenericAdapterWithBinding<T, B : ViewDataBinding>private constructor
     var viewInflateObservable = PublishSubject.create<Pair<T, B>>()
     var viewClickObservable = PublishSubject.create<T>()
 
-    /*var viewInlateLiveData=MutableLiveData<Pair<T, B>>()
-    var viewInlateLiveData=MutableLiveData<Pair<T, B>>()*/
+    var viewInlateLiveData=MutableLiveData<Pair<T, B>>()
+    var viewClickLiveData=MutableLiveData<T>()
     lateinit var dataSource: List<T>
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -43,12 +43,14 @@ class SimpleGenericAdapterWithBinding<T, B : ViewDataBinding>private constructor
     inner class ViewHolder(val binding: B) : RecyclerView.ViewHolder(binding.root) {
         init {
             binding.root.setOnClickListener { view ->
-                viewClickObservable.onNext(dataSource.get(adapterPosition))
+                //viewClickObservable.onNext(dataSource.get(adapterPosition))
+                viewClickLiveData.postValue(dataSource.get(adapterPosition))
             }
         }
 
         fun notify(data: T) {
-            viewInflateObservable.onNext(Pair(data, binding))
+            //viewInflateObservable.onNext(Pair(data, binding))
+            viewInlateLiveData.postValue(Pair(data, binding))
         }
 
     }

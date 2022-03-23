@@ -55,10 +55,10 @@ class BudgetAndSpentFragment : Fragment() {
 
     private fun setRecyclerView() {
         simpleGenericAdapterWithBinding=SimpleGenericAdapterWithBinding.Create<Budget,LayoutBudgetSpentItemBinding>(R.layout.layout_budget_spent_item)
-        simpleGenericAdapterWithBinding.viewInflateObservable.subscribe{
+        simpleGenericAdapterWithBinding.viewInlateLiveData.observe(viewLifecycleOwner){
             it.second.budget=it.first
         }
-        simpleGenericAdapterWithBinding.viewClickObservable.subscribe{
+        simpleGenericAdapterWithBinding.viewClickLiveData.observe(viewLifecycleOwner){
 
         }
         binding.rvCategoryBudget.layoutManager=LinearLayoutManager(activity)
