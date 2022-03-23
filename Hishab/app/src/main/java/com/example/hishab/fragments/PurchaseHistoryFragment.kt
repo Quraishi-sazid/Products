@@ -17,6 +17,10 @@ import com.example.hishab.repository.Repository
 import com.example.hishab.viewmodel.PurchaseHistoryViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.hilt.android.AndroidEntryPoint
+import io.reactivex.Scheduler
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.annotations.SchedulerSupport.IO
+import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.*
 import javax.inject.Inject
 
@@ -26,6 +30,7 @@ class PurchaseHistoryFragment : Fragment() {
     lateinit var recyclerView: RecyclerView
     var adapter = PurchaseItemsAdapter()
     val args: PurchaseHistoryFragmentArgs by navArgs()
+
     @Inject
     lateinit var repository: Repository
     override fun onCreateView(
@@ -33,25 +38,22 @@ class PurchaseHistoryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val inflate = inflater.inflate(R.layout.fragment_purchase_history, container, false)
-        try
-        {
+        try {
             if (args.categoryId == -1) {
                 getAllData()
             } else {
-                inflate.findViewById<FloatingActionButton>(R.id.fab).visibility = View.GONE
-                CoroutineScope(Dispatchers.Main).launch {//Main thread query needs to be changed
                     purchaseHistoryViewModel.getdetailsOfCategoryfromDate(
                         args.categoryId,
                         args.customDateModel!!
-                    ).observe(viewLifecycleOwner, Observer
-                    {
-                        adapter.submitList(purchaseHistoryViewModel.getDateSeparatedPurchaseHistoryList(it))
-                    })
-                }
+                    ).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe{
+                        adapter.submitList(
+                            purchaseHistoryViewModel.getDateSeparatedPurchaseHistoryList(
+                                it
+                            )
+                        )
+                    }
             }
-        }
-        catch(e:Exception)
-        {
+        } catch (e: Exception) {
             getAllData()
         }
 
@@ -62,15 +64,12 @@ class PurchaseHistoryFragment : Fragment() {
     }
 
     private fun getAllData() {
-        CoroutineScope(Dispatchers.Main).launch {//Main thread query needs to be changed
-            purchaseHistoryViewModel.getPurchaseItems().observe(viewLifecycleOwner, Observer
-            {
-                adapter.submitList(
-                    purchaseHistoryViewModel.getDateSeparatedPurchaseHistoryList(
-                        it
-                    )
+        purchaseHistoryViewModel.getPurchaseItems().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe() {
+            adapter.submitList(
+                purchaseHistoryViewModel.getDateSeparatedPurchaseHistoryList(
+                    it
                 )
-            })
+            )
         }
     }
 }

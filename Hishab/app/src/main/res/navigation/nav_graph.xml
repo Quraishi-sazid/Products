@@ -135,5 +135,8 @@
         <action
             android:id="@+id/action_viewPagerTabFragment_to_addShoppingFragment"
             app:destination="@id/addShoppingFragment" />
+        <action
+            android:id="@+id/action_viewPagerTabFragment_to_purchaseHistoryFragment"
+            app:destination="@id/purchaseHistoryFragment" />
     </fragment>
 </navigation>

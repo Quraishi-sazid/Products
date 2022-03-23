@@ -9,6 +9,7 @@ import com.example.hishab.models.PurchaseHistory
 import com.example.hishab.repository.Repository
 import com.example.hishab.utils.Util
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.reactivex.Observable
 import javax.inject.Inject
 @HiltViewModel
 class PurchaseHistoryViewModel @Inject constructor(app:Application):AndroidViewModel(app) {
@@ -16,12 +17,12 @@ class PurchaseHistoryViewModel @Inject constructor(app:Application):AndroidViewM
     @Inject
     lateinit var repository:Repository
 
-    suspend fun getPurchaseItems(): LiveData<List<PurchaseHistory>>
+    fun getPurchaseItems(): Observable<List<PurchaseHistory>>
     {
         return repository.getPurchaseHistory();
     }
 
-    suspend fun getdetailsOfCategoryfromDate(categoryId:Int,dateModel: CustomDate) :LiveData<List<PurchaseHistory>>
+    fun getdetailsOfCategoryfromDate(categoryId:Int,dateModel: CustomDate) :Observable<List<PurchaseHistory>>
     {
         return repository.getDetailsOfCategoryfromDate(categoryId,dateModel)
     }

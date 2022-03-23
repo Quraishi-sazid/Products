@@ -26,6 +26,8 @@ interface BudgetDao {
     abstract fun insertAll(vararg budgetList:Budget)
     @Update
     fun updateBudgetList(budgetList: List<Budget>)
+    @Query("delete from tbl_category_budget where category_id=:deleteId")
+    fun deleteByCategoryId(deleteId: Long)
 
 
 }

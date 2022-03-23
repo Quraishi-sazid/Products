@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -18,6 +19,9 @@ class SimpleGenericAdapterWithBinding<T, B : ViewDataBinding>private constructor
     lateinit var binding: B
     var viewInflateObservable = PublishSubject.create<Pair<T, B>>()
     var viewClickObservable = PublishSubject.create<T>()
+
+    /*var viewInlateLiveData=MutableLiveData<Pair<T, B>>()
+    var viewInlateLiveData=MutableLiveData<Pair<T, B>>()*/
     lateinit var dataSource: List<T>
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

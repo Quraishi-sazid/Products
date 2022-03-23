@@ -127,7 +127,9 @@ class CategoryListFragment : Fragment() {
             R.id.btn_yes
         )
         compositeDisposable.add(customAlertDialog.onViewCreated.subscribe { binding ->
-            binding.category = updateCategory
+            if(updateCategory==null)
+                binding.category = updateCategory
+            binding.category=Category()
         })
         compositeDisposable.add(customAlertDialog.onSubmitButtonPressed.subscribe { binding ->
             CoroutineScope(Dispatchers.IO).launch {

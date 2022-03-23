@@ -49,9 +49,9 @@ class CategoryCostFragment : Fragment() {
     private fun setNavCallBack() {
         navCallback = object : IRecyclerViewItemClickCallback {
             override fun onItemClick(categoryId: Any) {
-                val directions =
-                    CategoryCostFragmentDirections.actionCategoryDetailsFragmentToPurchaseHistoryFragment()
-                directions.categoryId = categoryId as Int
+
+                val directions = ViewPagerTabFragmentDirections.actionViewPagerTabFragmentToPurchaseHistoryFragment()
+                directions.categoryId = (categoryId as Long).toInt()
                 directions.customDateModel = CustomDate(day, month, year)
                 findNavController().navigate(directions)
             }

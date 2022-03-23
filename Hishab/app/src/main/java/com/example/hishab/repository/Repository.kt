@@ -7,6 +7,7 @@ import com.example.hishab.db.dao.*
 import com.example.hishab.models.*
 import com.example.hishab.models.entities.*
 import io.reactivex.Flowable
+import io.reactivex.Observable
 
 
 class Repository(application: Application) {
@@ -35,7 +36,7 @@ class Repository(application: Application) {
     }
 
     suspend fun getCategoryIdFromName(name: String): Category {
-        return categoryDao.getCategoryIdFromName(name);
+        return categoryDao.getCategoryFromName(name);
     }
 
     suspend fun insertShopping(product: Product): Long {
@@ -50,7 +51,7 @@ class Repository(application: Application) {
         return purchaseDao.insertAll(purchaseItem)
     }
 
-    suspend fun getPurchaseHistory(): LiveData<List<PurchaseHistory>>//live data needed
+    fun getPurchaseHistory(): Observable<List<PurchaseHistory>>//live data needed
     {
         return purchaseHistoryDao.getPurchaseHistory()
     }
@@ -64,15 +65,15 @@ class Repository(application: Application) {
         purchaseDao.deleteByPurchaseId(position)
     }
 
-    suspend fun getDetailsOfCategoryfromDate(
+    fun getDetailsOfCategoryfromDate(
         categoryId: Int,
         dateModel: CustomDate
-    ): LiveData<List<PurchaseHistory>> {
+    ): Observable<List<PurchaseHistory>> {
         return purchaseHistoryDao.getCategoryDetailsFromDate(
-            categoryId,
+            categoryId/*,
             dateModel.getDay(),
             dateModel.getMonth(),
-            dateModel.getYear()
+            dateModel.getYear()*/
         )
     }
 
@@ -126,6 +127,7 @@ class Repository(application: Application) {
 
     suspend fun deleteCategoryById(deleteId: Long) {
         categoryDao.deleteCategoryById(deleteId)
+        budgetDao.deleteByCategoryId(deleteId)
     }
 
     suspend fun updateCategory(updateCategory: Category) {
@@ -141,7 +143,14 @@ class Repository(application: Application) {
         productName: String
     ): Long {
         if (categoryId == 0L) {
-            var insertedCategoryId=insertCategory(Category(categoryName))
+            var quariedCategory=categoryDao.getCategoryFromName(categoryName)
+            var insertedCategoryId=-1L
+            if(quariedCategory==null)
+            {
+                insertedCategoryId=insertCategory(Category(categoryName))
+            }
+            else
+                insertedCategoryId=quariedCategory.categoryId
             return insertShopping(Product(productName,insertedCategoryId))
         } else {
             var queriedShoppingItem =
