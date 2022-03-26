@@ -10,7 +10,6 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hishab.R
-import com.example.hishab.adapter.PurchaseItemsAdapter
 import com.example.hishab.models.RVItemSwipeResponse
 import io.reactivex.subjects.PublishSubject
 
@@ -43,7 +42,7 @@ class SwipeToDeleteCallback<T>(context: Context) :
         recyclerView: RecyclerView,
         viewHolder: RecyclerView.ViewHolder
     ): Int {
-        if(viewHolder is PurchaseItemsAdapter.MonthViewHolder) return  0
+        //if(viewHolder is PurchaseItemsAdapter.MonthViewHolder) return  0
         return super.getSwipeDirs(recyclerView, viewHolder)
     }
 
@@ -57,8 +56,6 @@ class SwipeToDeleteCallback<T>(context: Context) :
         isCurrentlyActive: Boolean
     ) {
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
-        if(viewHolder is PurchaseItemsAdapter.MonthViewHolder)
-            return;
         canvas=c
         val itemView = viewHolder.itemView
         val backgroundCornerOffset = 20 //so background is behind the rounded corners of itemView

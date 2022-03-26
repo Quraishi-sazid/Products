@@ -17,8 +17,6 @@ class SimpleGenericAdapterWithBinding<T, B : ViewDataBinding>private constructor
 ) : ListAdapter<T, SimpleGenericAdapterWithBinding<T, B>.ViewHolder>(diffUtilCallback) {
 
     lateinit var binding: B
-    var viewInflateObservable = PublishSubject.create<Pair<T, B>>()
-    var viewClickObservable = PublishSubject.create<T>()
 
     var viewInlateLiveData=MutableLiveData<Pair<T, B>>()
     var viewClickLiveData=MutableLiveData<T>()
@@ -44,13 +42,13 @@ class SimpleGenericAdapterWithBinding<T, B : ViewDataBinding>private constructor
         init {
             binding.root.setOnClickListener { view ->
                 //viewClickObservable.onNext(dataSource.get(adapterPosition))
-                viewClickLiveData.postValue(dataSource.get(adapterPosition))
+                viewClickLiveData.value=dataSource.get(adapterPosition)
             }
         }
 
         fun notify(data: T) {
             //viewInflateObservable.onNext(Pair(data, binding))
-            viewInlateLiveData.postValue(Pair(data, binding))
+            viewInlateLiveData.value=Pair(data, binding)
         }
 
     }

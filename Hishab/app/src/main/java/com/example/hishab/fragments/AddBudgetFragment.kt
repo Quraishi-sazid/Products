@@ -1,6 +1,5 @@
 package com.example.hishab.fragments
 
-import android.nfc.Tag
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -9,8 +8,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.widget.addTextChangedListener
-import androidx.core.widget.doAfterTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -21,18 +18,11 @@ import com.example.hishab.R
 import com.example.hishab.adapter.SimpleGenericAdapterWithBinding
 import com.example.hishab.databinding.FragmentAddBudgetBinding
 import com.example.hishab.databinding.LayoutBudgetAddItemBinding
-import com.example.hishab.databinding.LayoutBudgetSpentItemBinding
 import com.example.hishab.models.entities.Budget
-import com.example.hishab.utils.Util
 import com.example.hishab.viewmodel.AddBudgetViewModel
-import com.example.hishab.viewmodel.AddShoppingViewModel
-import com.example.hishab.viewmodel.BudgetAndSpentViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import io.reactivex.BackpressureStrategy
 import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
@@ -50,10 +40,17 @@ class AddBudgetFragment : Fragment() {
     ): View? {
         binding=DataBindingUtil.inflate(inflater,R.layout.fragment_add_budget,container,false)
         budgetList=args.budgetList?.toList()
+        var isUpdatingBudget=budgetList==null
+        if(isUpdatingBudget)
+            fetchBudgetNotSettedCategoryData()
         setRecyclerView()
         setSearchBox()
         setSubmitButton()
         return binding.root
+    }
+
+    private fun fetchBudgetNotSettedCategoryData() {
+        viewModel.getCategoryListWhoseBudgetisNotSet()
     }
 
     private fun setSubmitButton() {
