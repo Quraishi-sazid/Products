@@ -42,15 +42,15 @@ class AddBudgetFragment : Fragment() {
         budgetList=args.budgetList?.toList()
         var isUpdatingBudget=budgetList==null
         if(isUpdatingBudget)
-            fetchBudgetNotSettedCategoryData()
+            fetchBudgetNotSettledCategoryData()
         setRecyclerView()
         setSearchBox()
         setSubmitButton()
         return binding.root
     }
 
-    private fun fetchBudgetNotSettedCategoryData() {
-        viewModel.getCategoryListWhoseBudgetisNotSet()
+    private fun fetchBudgetNotSettledCategoryData() {
+        viewModel.getCategoryListWhoseBudgetIsNotSet()
     }
 
     private fun setSubmitButton() {

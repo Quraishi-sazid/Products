@@ -22,6 +22,7 @@ import com.example.hishab.databinding.FragmentCategoryListBinding
 import com.example.hishab.databinding.LayoutCategoryInputBinding
 import com.example.hishab.interfaces.IHandleAlertDialog
 import com.example.hishab.interfaces.ISwipeItemCallback
+import com.example.hishab.interfaces.IViewPagerSwipeListener
 import com.example.hishab.models.CategoryProxy
 import com.example.hishab.models.ShoppingItemProxy
 import com.example.hishab.models.entities.Category
@@ -30,6 +31,7 @@ import com.example.hishab.utils.SwipeToDeleteCallback
 import com.example.hishab.utils.Util
 import com.example.hishab.viewmodel.CategoryViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -37,7 +39,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
-class CategoryListFragment : Fragment() {
+class CategoryListFragment : Fragment()/*,IViewPagerSwipeListener*/ {
     lateinit var binding: FragmentCategoryListBinding
     lateinit var categoryAdapter: CategoryAdapter
     private val categoryListViewModel: CategoryViewModel by viewModels()
@@ -104,6 +106,7 @@ class CategoryListFragment : Fragment() {
                 showDialog(categoryAdapter.dataSource[rvSwipeItemResponse.adapterPosition].getCategory())
             }
         }
+      //  onSwipedRightOrLeft=Util.getViewSwipeObservable(binding.rvCategory)
     }
 
     private fun setHandleAlertDialog() {
@@ -149,4 +152,6 @@ class CategoryListFragment : Fragment() {
         super.onDestroyView()
         compositeDisposable.clear()
     }
+
+    /*override*/ lateinit var onSwipedRightOrLeft: Observable<Pair<Float, Float>>
 }

@@ -17,7 +17,8 @@ class AddBudgetViewModel @Inject constructor (app: Application) : AndroidViewMod
         repository.updateBudgetList(budgetList);
     }
 
-    fun getCategoryListWhoseBudgetisNotSet():List<Budget> {
-        return ArrayList<Budget>()
+    fun getCategoryListWhoseBudgetIsNotSet():List<Budget>? {
+        return null
+        //return repository.getBudgetListOfNotSetted
     }
 }

@@ -8,7 +8,7 @@ import java.text.DateFormatSymbols
 data class PurchaseHistory(
     private val purchaseId: Long?,
     private val categoryName: String?,
-    private val ItemName: String,
+    private var ItemName: String,
     private val cost: Int,
     private val descrip: String,
     private val day: Int,
@@ -75,6 +75,11 @@ data class PurchaseHistory(
 
     fun getBuyingId(): Long? {
         return buyingId;
+    }
+
+    fun set(it:String)
+    {
+        ItemName=it
     }
 
 

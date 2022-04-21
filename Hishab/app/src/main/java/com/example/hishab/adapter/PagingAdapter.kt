@@ -5,19 +5,17 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.MutableLiveData
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import java.lang.ClassCastException
 import java.util.function.Predicate
 
-class GenericAdapterForTwoViewTypes<T1, T2, B1 : ViewDataBinding, B2 : ViewDataBinding> private constructor(
+class PagingAdapter<T1, T2, B1 : ViewDataBinding, B2 : ViewDataBinding> private constructor(
     val layoutId1: Int,
     val layoutId2: Int,
     val checkIfFirstViewTypePredicate: Predicate<Int>,
     private var diffUtilCallback: DiffUtil.ItemCallback<Any>
-) : ListAdapter<Any, RecyclerView.ViewHolder>(diffUtilCallback) {
-
+) : PagingDataAdapter<Any, RecyclerView.ViewHolder>(diffUtilCallback) {
     var firstViewInlateLiveData = MutableLiveData<Pair<T1, B1>>()
     var secondViewInlateLiveData = MutableLiveData<Pair<T2, B2>>()
     var firstviewClickLiveData = MutableLiveData<T1>()
@@ -47,10 +45,10 @@ class GenericAdapterForTwoViewTypes<T1, T2, B1 : ViewDataBinding, B2 : ViewDataB
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is GenericAdapterForTwoViewTypes<*, *, *, *>.FirstViewHolder) {
+        if (holder is PagingAdapter<*, *, *, *>.FirstViewHolder) {
             firstViewInlateLiveData.value=Pair((getItem(position) as T1),holder.binding as B1)
         }
-        else if(holder is GenericAdapterForTwoViewTypes<*, *, *, *>.SecondViewHolder)
+        else if(holder is PagingAdapter<*, *, *, *>.SecondViewHolder)
             secondViewInlateLiveData.value= Pair((getItem(position) as T2),holder.binding as B2)
     }
     override fun getItemViewType(position: Int): Int {
@@ -79,7 +77,7 @@ class GenericAdapterForTwoViewTypes<T1, T2, B1 : ViewDataBinding, B2 : ViewDataB
             }
         }
     }
-    fun getItemAt(position: Int):Any
+    fun getItemAt(position: Int): Any?
     {
         return getItem(position)
     }
@@ -87,7 +85,7 @@ class GenericAdapterForTwoViewTypes<T1, T2, B1 : ViewDataBinding, B2 : ViewDataB
 
     companion object {
         fun <T1,T2, B1 : ViewDataBinding,B2 : ViewDataBinding> Create(layoutId1: Int,layoutId2: Int,predicate: Predicate<Int>, diffUtil: DiffUtil.ItemCallback<Any>?=null)
-                : GenericAdapterForTwoViewTypes<T1,T2, B1,B2> {
+                : PagingAdapter<T1,T2, B1,B2> {
             var passingDiffUtil = diffUtil
             if (passingDiffUtil == null) {
                 passingDiffUtil = object : DiffUtil.ItemCallback<Any>() {
@@ -99,7 +97,7 @@ class GenericAdapterForTwoViewTypes<T1, T2, B1 : ViewDataBinding, B2 : ViewDataB
                     }
                 }
             }
-            return GenericAdapterForTwoViewTypes<T1,T2, B1,B2>(layoutId1,layoutId2,predicate, passingDiffUtil)
+            return PagingAdapter<T1,T2, B1,B2>(layoutId1,layoutId2,predicate, passingDiffUtil)
         }
     }
 }

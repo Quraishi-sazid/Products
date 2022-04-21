@@ -12,8 +12,12 @@ class CategoryCostViewModel @Inject constructor(app: Application) : AndroidViewM
     @Inject
     lateinit var repository:Repository
 
-    suspend fun getCategoryCostModels():List<CategoryCostModel>
+    suspend fun getAllTimeTotalCostByCategory():List<CategoryCostModel>
     {
-        return repository.getTotalCostByCategoryFromDate()
+        return repository.getAllTimeTotalCostByCategory()
+    }
+
+    suspend fun getCategoryCostFromMonthAndYear(month: Int, year: Int): List<CategoryCostModel> {
+        return repository.getCategoryCostFromMonthAndYear(month,year)
     }
 }

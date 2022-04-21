@@ -16,7 +16,7 @@ class BottomNavigationTitleTabLayoutFragmentsMapping () {
 
         var budgetFragmentList=ArrayList<ViewPagerFragmentProxy>()
         budgetFragmentList.add(ViewPagerFragmentProxy(BudgetAndSpentFragment(),"Category and Budget"))
-        budgetFragmentList.add(ViewPagerFragmentProxy(BudgetAndSpentFragment(),"Edit Budget"))
+        budgetFragmentList.add(ViewPagerFragmentProxy(BudgetAndSpentHistoryFragment(),"Budget History"))
         //budgetFragmentList.add(ViewPagerFragmentProxy(BudgetAndSpentFragment(),"Last month's budget history"))
         titleTabLayoutFragmentsMapping.put(1,budgetFragmentList)
 

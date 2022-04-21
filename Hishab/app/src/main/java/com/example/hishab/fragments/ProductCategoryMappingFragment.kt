@@ -18,11 +18,14 @@ import com.example.hishab.adapter.SimpleGenericAdapterWithBinding
 import com.example.hishab.databinding.FragmentProductCategoryMappingBinding
 import com.example.hishab.databinding.LayoutProductCategoryItemBinding
 import com.example.hishab.databinding.LayoutProductCategoryMappingInputBinding
+import com.example.hishab.interfaces.ISwipeItemCallback
+import com.example.hishab.interfaces.IViewPagerSwipeListener
 import com.example.hishab.models.CategoryAndProductModel
 import com.example.hishab.models.entities.Category
 import com.example.hishab.models.entities.Product
 import com.example.hishab.utils.CustomAlertDialog
 import com.example.hishab.utils.SwipeToDeleteCallback
+import com.example.hishab.utils.Util
 import com.example.hishab.viewmodel.ProductCategoryMappingViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.Observable
@@ -35,7 +38,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class ProductCategoryMappingFragment : Fragment() {
+class ProductCategoryMappingFragment : Fragment(),IViewPagerSwipeListener {
     private lateinit var binding: FragmentProductCategoryMappingBinding
     private val productCategoryMappingViewModel: ProductCategoryMappingViewModel by viewModels()
     lateinit var categoryAndProductModelList: List<CategoryAndProductModel>
@@ -82,10 +85,11 @@ class ProductCategoryMappingFragment : Fragment() {
         simpleGenericAdapterWithBinding.viewInlateLiveData.observe(viewLifecycleOwner){
             it.second.productCategoryMapping = it.first
         }
-        simpleGenericAdapterWithBinding.viewClickLiveData.observe(viewLifecycleOwner) { clickedCategoryAndProductModel ->
+        simpleGenericAdapterWithBinding.viewClickLiveData.observe(viewLifecycleOwner) {
 
         }
         binding.rvProductCategory.adapter = simpleGenericAdapterWithBinding
+        onSwipedRightOrLeft=Util.getViewSwipeObservable(binding.rvProductCategory)
         swipeToDeleteCallback = SwipeToDeleteCallback<CategoryAndProductModel>(requireContext())
         ItemTouchHelper(swipeToDeleteCallback).attachToRecyclerView(binding.rvProductCategory)
         swipeToDeleteCallback.onSwipeObservable.subscribe { swipedItemResponse ->
@@ -180,4 +184,6 @@ class ProductCategoryMappingFragment : Fragment() {
         super.onDestroy()
         compositeDisposable?.clear()
     }
+
+    override lateinit var onSwipedRightOrLeft: Observable<Pair<Float, Float>>
 }

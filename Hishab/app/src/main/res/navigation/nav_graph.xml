@@ -60,6 +60,14 @@
         <action
             android:id="@+id/action_categoryDetailsFragment_to_purchaseHistoryFragment"
             app:destination="@id/purchaseHistoryFragment" />
+        <argument
+            android:name="month"
+            app:argType="integer"
+            android:defaultValue="-1" />
+        <argument
+            android:name="year"
+            app:argType="integer"
+            android:defaultValue="-1" />
     </fragment>
     <fragment
         android:id="@+id/addShoppingFragment"
@@ -113,6 +121,16 @@
         <action
             android:id="@+id/action_budgetAndSpentFragment_to_addBudgetFragment"
             app:destination="@id/addBudgetFragment" />
+        <argument
+            android:name="year"
+            app:argType="integer"
+            android:defaultValue="-1" />
+        <argument
+            android:name="month"
+            android:defaultValue="-1" />
+        <action
+            android:id="@+id/action_budgetAndSpentFragment_to_purchaseHistoryFragment"
+            app:destination="@id/purchaseHistoryFragment" />
     </fragment>
     <fragment
         android:id="@+id/addBudgetFragment"
@@ -138,5 +156,13 @@
         <action
             android:id="@+id/action_viewPagerTabFragment_to_purchaseHistoryFragment"
             app:destination="@id/purchaseHistoryFragment" />
+        <action
+            android:id="@+id/action_viewPagerTabFragment_to_budgetAndSpentFragment"
+            app:destination="@id/budgetAndSpentFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/budgetAndSpentHistoryFragment"
+        android:name="com.example.hishab.fragments.BudgetAndSpentHistoryFragment"
+        android:label="BudgetAndSpentHistoryFragment" >
     </fragment>
 </navigation>

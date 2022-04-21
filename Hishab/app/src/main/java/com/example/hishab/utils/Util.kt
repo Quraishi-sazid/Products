@@ -3,14 +3,19 @@ package com.example.hishab.utils
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
+import android.util.Log
+import android.view.MotionEvent
+import android.view.View
 import com.example.hishab.interfaces.IHandleAlertDialog
 import com.example.hishab.models.ShoppingItemProxy
 import com.example.hishab.models.entities.Category
 import com.example.hishab.models.PurchaseHistory
 import com.example.hishab.models.entities.PurchaseItem
 import com.example.hishab.models.entities.Product
+import io.reactivex.Observable
 import java.text.DateFormatSymbols
 import java.util.*
+import kotlin.math.abs
 
 
 class Util {
@@ -21,7 +26,7 @@ class Util {
             val dfs = DateFormatSymbols()
             val months: Array<String> = dfs.getMonths()
             if (num >= 0 && num <= 11) {
-                month = months[num]
+                month = months[num-1]
             }
             return month
         }
@@ -79,6 +84,48 @@ class Util {
             return System.currentTimeMillis()
         }
 
+        fun getViewSwipeObservable(view: View): Observable<Pair<Float,Float>>
+        {
+            return Observable.create<Pair<Float,Float>> {
+                view.setOnTouchListener(object : View.OnTouchListener {
+                    var downCordinateX = 0.0f
+                    var downCordinateY = 0.0f
+                    override fun onTouch(p0: View?, event: MotionEvent?): Boolean {
+                        when (event?.getAction()) {
+                            MotionEvent.ACTION_DOWN -> {
+                                downCordinateY = event.y
+                                downCordinateX = event.x
+                                Log.v("GTAG", "saved downCordinate: $downCordinateX")
+                            }
+                            MotionEvent.ACTION_MOVE -> {
+                                Log.v("GTAG", "moving: (" + event.x + ", " + event.y + ")")
+                                if(downCordinateX<0.0001)
+                                {
+                                    downCordinateX=event.x
+                                    downCordinateY=event.y
+                                }
+                            }
+                            MotionEvent.ACTION_UP -> {
+                                Log.v("GTAG", "up Cordinate: " + event.y)
+                                if(abs(downCordinateX-event.x) >10 && abs(downCordinateY - event.y) <300)
+                                {
+                                    it.onNext(Pair(downCordinateX-event.x,downCordinateY - event.y))
+                                    downCordinateX=0.0f
+                                    downCordinateY=0.0f
+                                    return true
+                                }
+                                downCordinateX=0.0f
+                                downCordinateY=0.0f
+                            }
+                        }
+                        return false
+                    }
+                })
+            }
+        }
+
 
     }
+
+
 }

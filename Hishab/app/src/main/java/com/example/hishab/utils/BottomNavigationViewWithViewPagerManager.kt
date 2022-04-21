@@ -6,7 +6,7 @@ import com.example.hishab.R
 import com.example.hishab.fragments.ViewPagerTabFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class BottomNavigationViewWithViewPagerManager private constructor(val navHostFragment: NavHostFragment, private val bottomNavigationView: BottomNavigationView) {
+class BottomNavigationViewWithViewPagerManager private constructor(private val navHostFragment: NavHostFragment, private val bottomNavigationView: BottomNavigationView) {
     init {
         setSelectionItemChangeClickListener()
 

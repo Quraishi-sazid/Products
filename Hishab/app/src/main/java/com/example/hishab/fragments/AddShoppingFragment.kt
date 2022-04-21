@@ -37,6 +37,8 @@ import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.*
 
+
+//This class refactoration remains
 @AndroidEntryPoint
 class AddShoppingFragment : Fragment() {
     private lateinit var binding: FragmentAddShoppingBinding
@@ -62,7 +64,7 @@ class AddShoppingFragment : Fragment() {
             viewModel.buyingId = args.shoppingHistory!!.getBuyingId()
             myCalendar.set(
                 args.shoppingHistory!!.getYear(),
-                args.shoppingHistory!!.getMonth(),
+                args.shoppingHistory!!.getMonth() - 1,
                 args.shoppingHistory!!.getDay()
             )
             binding.etDateTime.setDateText()
@@ -142,16 +144,17 @@ class AddShoppingFragment : Fragment() {
     private fun handleSubmitButtonClick() {
         binding.btnSubmit.setOnClickListener(View.OnClickListener {
             var buyingDate = CustomDate(
-                Util.getCurrentYear(),
-                Util.getCurrentMonth(),
-                Util.getCurrentDay()
+                myCalendar.get(Calendar.YEAR),
+                myCalendar.get(Calendar.MONTH) + 1,
+                myCalendar.get(Calendar.DATE)
             )
-            CoroutineScope(Dispatchers.Main).launch {
+            CoroutineScope(Dispatchers.IO).launch {
                 if (!viewModel.isUpdating) {
                     viewModel.insertBuying(adapter.dataSource, buyingDate, myCalendar.timeInMillis)
                 } else {
                     viewModel.updateBuying(adapter.dataSource, buyingDate)
                 }
+                activity?.onBackPressed()
             }
         })
     }
@@ -180,7 +183,7 @@ class AddShoppingFragment : Fragment() {
             AddShoppingFragmentDirections.actionAddShoppingFragmentToAddPurchaseItemFragment(
                 categoryAndProductModelList.toTypedArray(),
                 distinctCategoryList.toTypedArray(),
-                if (shoppingItemProxy == null) adapter.currentList.size + 1 else shoppingItemProxy.proxyId.toInt()
+                shoppingItemProxy?.proxyId?.toInt() ?: adapter.currentList.size + 1
             )
         shoppingToPurchaseItemFragmentAction.shoppingItemProxy = shoppingItemProxy
         shoppingToPurchaseItemFragmentAction.callback = addOrUpdateProductCallBack
@@ -213,18 +216,18 @@ class AddShoppingFragment : Fragment() {
         isFocusable = false
         val datePickerOnDataSetListener =
             DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
-                Util.getCurrentYear()
-                Util.getCurrentMonth()
-                Util.getCurrentDay()
+                myCalendar.set(Calendar.YEAR,year)
+                myCalendar.set(Calendar.MONTH,monthOfYear)
+                myCalendar.set(Calendar.DAY_OF_MONTH,dayOfMonth)
                 setDateText()
             }
 
         setOnClickListener {
             var datePickerDialog: DatePickerDialog
             datePickerDialog = DatePickerDialog(
-                context, datePickerOnDataSetListener, Util.getCurrentYear(),
-                Util.getCurrentMonth(),
-                Util.getCurrentDay()
+                context, datePickerOnDataSetListener, myCalendar.get(Calendar.YEAR),
+                myCalendar.get(Calendar.MONTH),
+                myCalendar.get(Calendar.DATE)
             )
             datePickerDialog.run {
                 maxDate?.time?.also { datePicker.maxDate = it }

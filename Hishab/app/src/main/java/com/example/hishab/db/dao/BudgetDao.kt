@@ -2,6 +2,7 @@ package com.example.hishab.db.dao
 
 import androidx.room.*
 import com.example.hishab.models.CategoryCostModel
+import com.example.hishab.models.MonthlySpentModel
 import com.example.hishab.models.entities.Budget
 import io.reactivex.Flowable
 
@@ -28,6 +29,10 @@ interface BudgetDao {
     fun updateBudgetList(budgetList: List<Budget>)
     @Query("delete from tbl_category_budget where category_id=:deleteId")
     fun deleteByCategoryId(deleteId: Long)
+    @Query("Select v.year as year,v.month as month,sum(v.cost) as totalCost,-1 as budget from vw_category_spent v where year<:currentYear or (year=:currentYear and month<:currentMonth) group by year,month order by year,month")
+    fun getPreviousBudgetSpentList(currentMonth:Int,currentYear:Int):Flowable<List<MonthlySpentModel>>
+    @Query("Select sum(budget) from tbl_category_budget where month=:month and year=:year")
+    fun getBudgetFromMonthAndYear(year: Int, month: Int):Int
 
 
 }

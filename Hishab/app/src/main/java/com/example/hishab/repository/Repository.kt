@@ -17,7 +17,7 @@ class Repository(application: Application) {
     private var purchaseHistoryDao: PurchaseHistoryDao
     private var shoppingDao: ShoppingDao
     private var customDateDao: DateDao
-    public var budgetDao: BudgetDao
+    private var budgetDao: BudgetDao
     var database = AppDatabase.getDatabase(application)
     //var database = EntryPoints.get(application, FooEntryPoint::class.java).database
 
@@ -51,35 +51,50 @@ class Repository(application: Application) {
         return purchaseDao.insertAll(purchaseItem)
     }
 
-    fun getPurchaseHistory(): Observable<List<PurchaseHistory>>//live data needed
+    fun getPurchaseHistory(
+        lastPurchaseId: Long,
+        loadSize: Int
+    ): List<PurchaseHistory>//live data needed
     {
-        return purchaseHistoryDao.getPurchaseHistory()
+        return purchaseHistoryDao.getPurchaseHistory(lastPurchaseId, loadSize)
     }
 
-    suspend fun getTotalCostByCategoryFromDate(): List<CategoryCostModel>//live data needed
+    suspend fun getAllTimeTotalCostByCategory(): List<CategoryCostModel>//live data needed
     {
-        return purchaseDao.getTotalCostByCategoryFromDate(0, 0, 0)
+        return purchaseDao.getAllTimeTotalCostByCategory()
     }
 
     suspend fun deletePurchaseHistory(position: Long) {
         purchaseDao.deleteByPurchaseId(position)
     }
 
-    fun getDetailsOfCategoryfromDate(
+    fun getDetailsOfCategory(
         categoryId: Int,
-        dateModel: CustomDate
-    ): Observable<List<PurchaseHistory>> {
-        return purchaseHistoryDao.getCategoryDetailsFromDate(
-            categoryId/*,
-            dateModel.getDay(),
-            dateModel.getMonth(),
-            dateModel.getYear()*/
+        lastPurchaseId: Long,
+        loadSize: Int
+    ): List<PurchaseHistory> {
+        return purchaseHistoryDao.getCategoryDetails(categoryId, lastPurchaseId, loadSize)
+    }
+
+    fun getDetailsOfCategoryOfMonthAndYear(
+        lastPurchaseId: Long, limit: Int,
+        categoryId: Int,
+        month: Int,
+        year: Int
+    ): List<PurchaseHistory> {
+        return purchaseHistoryDao.getCategoryDetailsOfMonth(
+            lastPurchaseId,
+            limit,
+            categoryId,
+            month,
+            year
         )
     }
 
     fun getProductCategoryListLeftJoin(): LiveData<List<CategoryAndProductModel>> {
         return productDao.getProductCategoryListLeftJoin()
     }
+
     fun getProductCategoryListInnerJoin(): LiveData<List<CategoryAndProductModel>> {
         return productDao.getProductCategoryListInnerJoin()
     }
@@ -121,8 +136,9 @@ class Repository(application: Application) {
     suspend fun updateDateId(dateId: Long, buyingId: Long) {
         shoppingDao.updateDateId(dateId, buyingId);
     }
-    suspend fun getCategoryWithProductTableMap():LiveData<List<CategoryProxy>> {
-       return categoryDao.getCategoryWithTotalProductMapped();
+
+    suspend fun getCategoryWithProductTableMap(): LiveData<List<CategoryProxy>> {
+        return categoryDao.getCategoryWithTotalProductMapped();
     }
 
     suspend fun deleteCategoryById(deleteId: Long) {
@@ -135,23 +151,19 @@ class Repository(application: Application) {
     }
 
 
-
-
     suspend fun getProductIdByInsertingInDataBase(
         categoryId: Long,
         categoryName: String,
         productName: String
     ): Long {
         if (categoryId == 0L) {
-            var quariedCategory=categoryDao.getCategoryFromName(categoryName)
-            var insertedCategoryId=-1L
-            if(quariedCategory==null)
-            {
-                insertedCategoryId=insertCategory(Category(categoryName))
-            }
-            else
-                insertedCategoryId=quariedCategory.categoryId
-            return insertShopping(Product(productName,insertedCategoryId))
+            var quariedCategory = categoryDao.getCategoryFromName(categoryName)
+            var insertedCategoryId = -1L
+            if (quariedCategory == null) {
+                insertedCategoryId = insertCategory(Category(categoryName))
+            } else
+                insertedCategoryId = quariedCategory.categoryId
+            return insertShopping(Product(productName, insertedCategoryId))
         } else {
             var queriedShoppingItem =
                 getProductFromCategoryIdAndProductNameByInsertingOrFetching(
@@ -181,11 +193,11 @@ class Repository(application: Application) {
     }
 
     fun updateProductName(productId: Long, productName: String) {
-        productDao.updateProductName(productName,productId)
+        productDao.updateProductName(productName, productId)
     }
 
-    fun getPurchaseCountOfProductId(productId: Long):Int {
-       return productDao.getPurchaseCountOfProductId(productId)
+    fun getPurchaseCountOfProductId(productId: Long): Int {
+        return productDao.getPurchaseCountOfProductId(productId)
     }
 
     fun deleteByProductById(productId: Long) {
@@ -200,15 +212,34 @@ class Repository(application: Application) {
     }
 
     fun getCategoryNameFromCategoryId(categoryId: Long): String? {
-       return categoryDao.getCategoryNameFromCategoryId(categoryId)
+        return categoryDao.getCategoryNameFromCategoryId(categoryId)
     }
 
-    fun getCategorySpentsOfMonth(categoryIdList: List<Long>, month:Int, year:Int):List<CategoryCostModel>{
-        return budgetDao.getCategorySpents(categoryIdList,month,year)
+    fun getCategorySpentsOfMonth(
+        categoryIdList: List<Long>,
+        month: Int,
+        year: Int
+    ): List<CategoryCostModel> {
+        return budgetDao.getCategorySpents(categoryIdList, month, year)
     }
 
-    fun updateBudgetList(budgetList:List<Budget>) {
+    fun updateBudgetList(budgetList: List<Budget>) {
         budgetDao.updateBudgetList(budgetList)
+    }
+
+    fun getPreviousMonthsBudgetAndSpentHistory(
+        year: Int,
+        month: Int
+    ): Flowable<List<MonthlySpentModel>> {
+        return budgetDao.getPreviousBudgetSpentList(month, year)
+    }
+
+    fun getBudgetFromMonthAndYear(year: Int, month: Int): Int {
+        return budgetDao.getBudgetFromMonthAndYear(year, month)
+    }
+
+    suspend fun getCategoryCostFromMonthAndYear(month: Int, year: Int): List<CategoryCostModel> {
+        return purchaseDao.getCategoryCostFromMonthAndYear(month, year)
     }
 
 /*    public suspend fun getCategoryByInsertingOrFetching(categoryName: String): Category {

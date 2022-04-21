@@ -4,6 +4,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.hishab.MainActivity
+import com.example.hishab.interfaces.IViewPagerSwipeListener
 import com.example.hishab.utils.BottomNavigationTitleTabLayoutFragmentsMapping
 
 class ViewPagerAdapter(
@@ -18,6 +19,7 @@ class ViewPagerAdapter(
 
     override fun createFragment(position: Int): Fragment {
         return bottomNavigationTitleTabLayoutFragmentsMapping.getViewPagerFragmentAtPosition(selectedBottomNavigationId,position).fragment
+
     }
 
 }
