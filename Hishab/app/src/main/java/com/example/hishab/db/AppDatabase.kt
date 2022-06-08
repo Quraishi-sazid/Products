@@ -92,7 +92,7 @@ abstract class AppDatabase : RoomDatabase() {
             var purchaseList=ArrayList<PurchaseItem>()
             purchaseList.add(PurchaseItem(1,1,12))
             purchaseList.add(PurchaseItem(1,2,20))
-            addBulkAmount(purchaseList)
+           // addBulkAmount(purchaseList)
             purchaseList.add(PurchaseItem(2,3,200))
             purchaseList.add(PurchaseItem(2,4,10))
 

@@ -30,4 +30,8 @@ class CategoryViewModel @Inject constructor(application: Application) :
     suspend fun updateCategory(updateCategory: Category) {
         repository.updateCategory(updateCategory)
     }
+
+    suspend fun getProductCountMappedWithCategoryId(id: Long):Int {
+        return repository.getProductCountMappedWithCategoryId(id)
+    }
 }

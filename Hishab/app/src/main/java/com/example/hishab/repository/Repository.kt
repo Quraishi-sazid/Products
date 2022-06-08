@@ -242,6 +242,10 @@ class Repository(application: Application) {
         return purchaseDao.getCategoryCostFromMonthAndYear(month, year)
     }
 
+    suspend fun getProductCountMappedWithCategoryId(id: Long): Int {
+        return productDao.getProductCountMappedWithCategoryId(id)
+    }
+
 /*    public suspend fun getCategoryByInsertingOrFetching(categoryName: String): Category {
         var queriedCategory = getCategoryIdFromName(categoryName)
         if (queriedCategory == null) {

@@ -29,7 +29,6 @@ class ViewPagerTabFragment : Fragment() {
     lateinit var binding: FragmentViewPagerTabBinding
     val bottomNavigationTitleTabLayoutFragmentsMapping =
         BottomNavigationTitleTabLayoutFragmentsMapping()
-    var viewPagerFragmentList: List<ViewPagerFragmentProxy>? = null
     lateinit var navController: NavController
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,7 +42,7 @@ class ViewPagerTabFragment : Fragment() {
     }
 
     private fun setUpTabLayoutAndViewPager() {
-        binding.viewPager.isUserInputEnabled = false
+       // binding.viewPager.isUserInputEnabled = false
         binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 var fragment =
@@ -51,7 +50,7 @@ class ViewPagerTabFragment : Fragment() {
                         getSelectedItemId(),
                         position
                     ).fragment
-                if (fragment is IViewPagerSwipeListener) {
+                if (/*fragment is IViewPagerSwipeListener*/ false) {
 
                     io.reactivex.Observable.just(1).delay(1000, TimeUnit.MILLISECONDS).subscribe {
                         var listener = fragment as IViewPagerSwipeListener

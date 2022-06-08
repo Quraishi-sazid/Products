@@ -25,4 +25,6 @@ interface ProductDao {
     fun deleteByProductById(productId: Long)
     @Insert
     fun insertProducts(vararg products:Product)
+    @Query("Select count(product_id) from product_table where category_id=:id")
+    suspend fun getProductCountMappedWithCategoryId(id: Long):Int
 }

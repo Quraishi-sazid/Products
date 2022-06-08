@@ -44,7 +44,7 @@ class ProductCategoryMappingFragment : Fragment(),IViewPagerSwipeListener {
     lateinit var categoryAndProductModelList: List<CategoryAndProductModel>
     lateinit var simpleGenericAdapterWithBinding: SimpleGenericAdapterWithBinding<CategoryAndProductModel, LayoutProductCategoryItemBinding>
     var compositeDisposable: CompositeDisposable = CompositeDisposable()
-    lateinit var swipeToDeleteCallback: SwipeToDeleteCallback<CategoryAndProductModel>
+    private lateinit var swipeToDeleteCallback: SwipeToDeleteCallback<CategoryAndProductModel>
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -81,7 +81,7 @@ class ProductCategoryMappingFragment : Fragment(),IViewPagerSwipeListener {
         }
         binding.rvProductCategory.layoutManager = LinearLayoutManager(activity)
         simpleGenericAdapterWithBinding =
-            SimpleGenericAdapterWithBinding.Create(R.layout.layout_product_category_item)
+            SimpleGenericAdapterWithBinding.Create(R.layout.layout_product_category_item,diffUtilCallback)
         simpleGenericAdapterWithBinding.viewInlateLiveData.observe(viewLifecycleOwner){
             it.second.productCategoryMapping = it.first
         }

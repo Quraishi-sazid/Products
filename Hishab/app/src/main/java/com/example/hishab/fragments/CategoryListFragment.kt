@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -90,16 +91,23 @@ class CategoryListFragment : Fragment()/*,IViewPagerSwipeListener*/ {
         swipeToDeleteCallback.onSwipeObservable.subscribe { rvSwipeItemResponse ->
             if (rvSwipeItemResponse.direction == ItemTouchHelper.LEFT) {
                 CoroutineScope(Dispatchers.IO).launch {
-                    var id =
-                        categoryAdapter.getElementAt(rvSwipeItemResponse.adapterPosition).categoryId
+                    var id = categoryAdapter.getElementAt(rvSwipeItemResponse.adapterPosition).categoryId
+                    var categoryName = categoryAdapter.getElementAt(rvSwipeItemResponse.adapterPosition).categoryName
+                    var totalProductMappedWithCategroy = categoryListViewModel.getProductCountMappedWithCategoryId(id)
                     activity?.runOnUiThread(Runnable {
-                        Util.showItemSwipeDeleteAlertDialog(
-                            requireContext(),
-                            "Delete Entry",
-                            "Do you want to delete this entry?",
-                            id,
-                            handleAlertDialog
-                        )
+                        if(totalProductMappedWithCategroy==0)
+                        {
+                            Util.showItemSwipeDeleteAlertDialog(
+                                requireContext(),
+                                "Delete Entry",
+                                "Do you want to delete this entry?",
+                                id,
+                                handleAlertDialog
+                            )
+                        }
+                        else
+                            Toast.makeText(context,"$totalProductMappedWithCategroy products mapped with $categoryName category. can't be deleted",Toast.LENGTH_LONG).show()
+
                     })
                 }
             } else {

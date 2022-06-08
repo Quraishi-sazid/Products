@@ -81,7 +81,7 @@ class PurchaseHistoryFragment : Fragment(), IViewPagerSwipeListener {
         recyclerView = inflate.findViewById<RecyclerView>(R.id.recycler_view)!!
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.isNestedScrollingEnabled = false
-        recyclerView.adapter = adapter;
+        recyclerView.adapter = adapter
         onSwipedRightOrLeft = Util.getViewSwipeObservable(recyclerView)
     }
 

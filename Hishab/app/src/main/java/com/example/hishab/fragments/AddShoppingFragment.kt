@@ -154,7 +154,10 @@ class AddShoppingFragment : Fragment() {
                 } else {
                     viewModel.updateBuying(adapter.dataSource, buyingDate)
                 }
-                activity?.onBackPressed()
+                withContext(Dispatchers.Main){
+                    activity?.onBackPressed()
+                }
+
             }
         })
     }
