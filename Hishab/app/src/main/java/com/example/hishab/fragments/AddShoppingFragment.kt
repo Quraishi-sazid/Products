@@ -62,21 +62,24 @@ class AddShoppingFragment : Fragment() {
             DataBindingUtil.inflate(inflater, R.layout.fragment_add_shopping, container, false)
         if (args.shoppingHistory != null) {
             viewModel.buyingId = args.shoppingHistory!!.getBuyingId()
+            viewModel.updatingShoppingHistory = args.shoppingHistory
             myCalendar.set(
                 args.shoppingHistory!!.getYear(),
                 args.shoppingHistory!!.getMonth() - 1,
                 args.shoppingHistory!!.getDay()
             )
-            binding.etDateTime.setDateText()
         }
+
         if (viewModel.buyingId != -1L)
             viewModel.isUpdating = true
+        binding.etDateTime.setDateText()
         getExistingCategoryAndProducts()
         setRecyclerView()
         setProductCallback()
         setButtonClickText()
         handleSubmitButtonClick()
         setHandleAlertDialog()
+        setTimePicker()
         if (viewModel.isUpdating)
             handleUpdateProduct()
         binding.etDateTime.transformIntoDatePicker(
@@ -84,6 +87,11 @@ class AddShoppingFragment : Fragment() {
             Date()
         );
         return binding.root;
+    }
+
+    private fun setTimePicker() {
+        binding.tpShoppingTime.hour = viewModel.getTimePickerHour()
+        binding.tpShoppingTime.minute = viewModel.getTimePickerMin()
     }
 
     private fun setButtonClickText() {
@@ -150,9 +158,9 @@ class AddShoppingFragment : Fragment() {
             )
             CoroutineScope(Dispatchers.IO).launch {
                 if (!viewModel.isUpdating) {
-                    viewModel.insertBuying(adapter.dataSource, buyingDate, myCalendar.timeInMillis)
+                    viewModel.insertBuying(adapter.dataSource, buyingDate, Util.getMilisecFromTimePicker(myCalendar,binding.tpShoppingTime))
                 } else {
-                    viewModel.updateBuying(adapter.dataSource, buyingDate)
+                    viewModel.updateBuying(adapter.dataSource, buyingDate, Util.getMilisecFromTimePicker(myCalendar,binding.tpShoppingTime))
                 }
                 withContext(Dispatchers.Main){
                     activity?.onBackPressed()
@@ -226,8 +234,7 @@ class AddShoppingFragment : Fragment() {
             }
 
         setOnClickListener {
-            var datePickerDialog: DatePickerDialog
-            datePickerDialog = DatePickerDialog(
+            var datePickerDialog: DatePickerDialog = DatePickerDialog(
                 context, datePickerOnDataSetListener, myCalendar.get(Calendar.YEAR),
                 myCalendar.get(Calendar.MONTH),
                 myCalendar.get(Calendar.DATE)

@@ -4,7 +4,8 @@ import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
 import java.io.Serializable
 import java.text.DateFormatSymbols
-import java.util.concurrent.TimeUnit
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 data class ShoppingHistory(
@@ -57,8 +58,7 @@ data class ShoppingHistory(
         return monthString.substring(0, 3)+" "+day
     }
     fun getTimeFormatted():String{
-        val minute: Long = TimeUnit.MILLISECONDS.toMinutes(time)
-        val hour: Long = TimeUnit.MILLISECONDS.toHours(time)
-        return hour.toString()+":"+minute.toString()
+        var df = SimpleDateFormat("HH:mm aa");
+        return  df.format(Date(time))
     }
 }

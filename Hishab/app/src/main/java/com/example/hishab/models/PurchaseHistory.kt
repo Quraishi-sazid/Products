@@ -16,7 +16,8 @@ data class PurchaseHistory(
     private val year: Int,
     private val categoryId: Long?,
     private val productId: Long?,
-    private val buyingId: Long?
+    private val buyingId: Long?,
+    private val time: Long?
 ) : BaseObservable(), Serializable {
     @Bindable
     fun getCategoryName(): String? {
@@ -77,10 +78,14 @@ data class PurchaseHistory(
         return buyingId;
     }
 
-    fun set(it:String)
-    {
-        ItemName=it
+    fun set(it: String) {
+        ItemName = it
     }
+
+    fun getTime(): Long {
+        return time!!
+    }
+
 
 
 }

@@ -246,6 +246,10 @@ class Repository(application: Application) {
         return productDao.getProductCountMappedWithCategoryId(id)
     }
 
+    suspend fun updateTimeForShopping(milisec: Long,shoppingId:Long) {
+        shoppingDao.updateShoppingTime(milisec,shoppingId)
+    }
+
 /*    public suspend fun getCategoryByInsertingOrFetching(categoryName: String): Category {
         var queriedCategory = getCategoryIdFromName(categoryName)
         if (queriedCategory == null) {

@@ -64,7 +64,7 @@ abstract class AppDatabase : RoomDatabase() {
             INSTANCE?.ProductDao()
                 ?.insertProducts(*getDefaultProductList().map { it }
                     .toTypedArray())
-            INSTANCE?.customDao()
+/*            INSTANCE?.customDao()
                 ?.insertCustomDate(*getDefaultCustomDate().map { it }
                     .toTypedArray())
             INSTANCE?.shoppingDao()
@@ -75,7 +75,7 @@ abstract class AppDatabase : RoomDatabase() {
                     .toTypedArray())
             INSTANCE?.BudgetDao()
                 ?.insertAll(*getBudgetList().map { it }
-                    .toTypedArray())
+                    .toTypedArray())*/
         }
 
         private fun getBudgetList(): List<Budget> {

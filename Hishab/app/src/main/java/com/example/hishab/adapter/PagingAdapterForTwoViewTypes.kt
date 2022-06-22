@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import java.util.function.Predicate
 
-class PagingAdapter<T1, T2, B1 : ViewDataBinding, B2 : ViewDataBinding> private constructor(
+class PagingAdapterForTwoViewTypes<T1, T2, B1 : ViewDataBinding, B2 : ViewDataBinding> private constructor(
     val layoutId1: Int,
     val layoutId2: Int,
     val checkIfFirstViewTypePredicate: Predicate<Int>,
@@ -45,10 +45,10 @@ class PagingAdapter<T1, T2, B1 : ViewDataBinding, B2 : ViewDataBinding> private 
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is PagingAdapter<*, *, *, *>.FirstViewHolder) {
+        if (holder is PagingAdapterForTwoViewTypes<*, *, *, *>.FirstViewHolder) {
             firstViewInlateLiveData.value=Pair((getItem(position) as T1),holder.binding as B1)
         }
-        else if(holder is PagingAdapter<*, *, *, *>.SecondViewHolder)
+        else if(holder is PagingAdapterForTwoViewTypes<*, *, *, *>.SecondViewHolder)
             secondViewInlateLiveData.value= Pair((getItem(position) as T2),holder.binding as B2)
     }
     override fun getItemViewType(position: Int): Int {
@@ -85,7 +85,7 @@ class PagingAdapter<T1, T2, B1 : ViewDataBinding, B2 : ViewDataBinding> private 
 
     companion object {
         fun <T1,T2, B1 : ViewDataBinding,B2 : ViewDataBinding> Create(layoutId1: Int,layoutId2: Int,predicate: Predicate<Int>, diffUtil: DiffUtil.ItemCallback<Any>?=null)
-                : PagingAdapter<T1,T2, B1,B2> {
+                : PagingAdapterForTwoViewTypes<T1,T2, B1,B2> {
             var passingDiffUtil = diffUtil
             if (passingDiffUtil == null) {
                 passingDiffUtil = object : DiffUtil.ItemCallback<Any>() {
@@ -97,7 +97,7 @@ class PagingAdapter<T1, T2, B1 : ViewDataBinding, B2 : ViewDataBinding> private 
                     }
                 }
             }
-            return PagingAdapter<T1,T2, B1,B2>(layoutId1,layoutId2,predicate, passingDiffUtil)
+            return PagingAdapterForTwoViewTypes<T1,T2, B1,B2>(layoutId1,layoutId2,predicate, passingDiffUtil)
         }
     }
 }

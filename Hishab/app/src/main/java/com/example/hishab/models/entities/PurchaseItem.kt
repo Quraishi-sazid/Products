@@ -48,8 +48,6 @@ class PurchaseItem @Inject constructor() : BaseObservable() {
         cost = value
         notifyPropertyChanged(BR.cost)
     }
-
-
     @Bindable
     fun getDescription(): String {
         return description

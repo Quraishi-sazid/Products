@@ -6,13 +6,18 @@ import androidx.lifecycle.LiveData
 import com.example.hishab.models.ShoppingItemProxy
 import com.example.hishab.models.CategoryAndProductModel
 import com.example.hishab.models.PurchaseHistory
+import com.example.hishab.models.ShoppingHistory
 import com.example.hishab.models.entities.*
 import com.example.hishab.repository.Repository
+import com.example.hishab.utils.Util
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 @HiltViewModel
 class AddShoppingViewModel @Inject constructor(app: Application) : AndroidViewModel(app) {
+    var updatingShoppingHistory: ShoppingHistory? = null
     var isUpdating: Boolean = false
 
     @Inject
@@ -57,14 +62,31 @@ class AddShoppingViewModel @Inject constructor(app: Application) : AndroidViewMo
         return repository.getPurchaseHistoryFromBuyingId(buyingId)
     }
 
-    suspend fun updateBuying(dataSource: ArrayList<ShoppingItemProxy>, buyingDate: CustomDate) {
+    suspend fun updateBuying(dataSource: ArrayList<ShoppingItemProxy>, buyingDate: CustomDate, milisec: Long) {
         dateId = repository.getDateId(buyingDate)
-        repository.updateDateId(dateId, buyingId);
+        repository.updateDateId(dateId, buyingId)
+        repository.updateTimeForShopping(milisec,buyingId)
         dataSource.forEach { insertOrUpdatePurchaseItem(it) }
     }
 
     suspend fun deletePurchaseItem(purchaseItem: PurchaseItem) {
         repository.deletePurchaseHistory(purchaseItem.getPurchaseId())
     }
+
+    fun getTimePickerHour(): Int {
+        if(isUpdating){
+            return Util.getTimePickerHour(updatingShoppingHistory!!.getTime())
+        }
+        return Util.getTimePickerHour(System.currentTimeMillis())
+    }
+
+    fun getTimePickerMin(): Int {
+        if(isUpdating){
+            return Util.getTimePickerMin(updatingShoppingHistory!!.getTime())
+        }
+        return Util.getTimePickerMin(System.currentTimeMillis())
+    }
+
+
 
 }

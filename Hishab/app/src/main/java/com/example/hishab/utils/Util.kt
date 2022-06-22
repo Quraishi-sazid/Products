@@ -6,6 +6,7 @@ import android.content.DialogInterface
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.widget.TimePicker
 import com.example.hishab.interfaces.IHandleAlertDialog
 import com.example.hishab.models.ShoppingItemProxy
 import com.example.hishab.models.entities.Category
@@ -83,6 +84,30 @@ class Util {
         fun getCurrentMili():Long{
             return System.currentTimeMillis()
         }
+
+        fun getTimePickerHour(milisecond : Long): Int {
+            var calendar = Calendar.getInstance();
+            calendar.timeInMillis = milisecond
+            return calendar.get(Calendar.HOUR_OF_DAY)
+        }
+
+        fun getTimePickerMin(milisecond : Long): Int {
+            var calendar = Calendar.getInstance();
+            calendar.timeInMillis = milisecond
+            return calendar.get(Calendar.MINUTE)
+        }
+
+        fun getMilisecFromTimePicker(calendar: Calendar,timePicker : TimePicker): Long {
+            var y = calendar.get(Calendar.YEAR)
+            var m = calendar.get(Calendar.MONTH)
+            var d = calendar.get(Calendar.DAY_OF_MONTH)
+            calendar.set(Calendar.HOUR_OF_DAY, timePicker.hour);
+            calendar.set(Calendar.MINUTE, timePicker.minute);
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
+            return calendar.time.time
+        }
+
 
         fun getViewSwipeObservable(view: View): Observable<Pair<Float,Float>>
         {

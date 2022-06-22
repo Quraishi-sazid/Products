@@ -25,4 +25,6 @@ class MainActivity : AppCompatActivity() {
     fun getBottomNavigationViewSelectedItem():MenuItem{
        return bottomNavigationView.menu.findItem(bottomNavigationView.selectedItemId)
     }
+
+
 }

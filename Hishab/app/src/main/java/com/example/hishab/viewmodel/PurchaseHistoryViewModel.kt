@@ -29,7 +29,6 @@ import javax.inject.Inject
 @HiltViewModel
 class PurchaseHistoryViewModel @Inject constructor(app: Application) : AndroidViewModel(app) {
     private lateinit var purchaseHistoryListLiveData: LiveData<List<PurchaseHistory>>
-    var access = 3
 
     @Inject
     lateinit var repository: Repository
@@ -64,17 +63,22 @@ class PurchaseHistoryViewModel @Inject constructor(app: Application) : AndroidVi
 
 
     fun getDateSeparatedPurchaseHistoryList(list: List<PurchaseHistory>): List<Any> {
-        var objectList = ArrayList<Any>()
-        var pMonth = "";
-        for (it in list) {
-            val month_name = Util.getMonthForInt(it.getMonth())
-            if (!pMonth.equals(month_name)) {
-                objectList.add(month_name);
-                pMonth = month_name
+        var prevYear = -1
+        var prevMonth = -1
+        var returnList = ArrayList<Any>()
+        list.forEach {
+            if (it.getYear() != prevYear) {
+                returnList.add(it.getYear())
+                returnList.add(Util.getMonthForInt(it.getMonth()))
+                prevYear = it.getYear()
+                prevMonth = it.getMonth()
+            } else if (it.getMonth() != prevMonth) {
+                returnList.add(Util.getMonthForInt(it.getMonth()))
+                prevMonth = it.getMonth()
             }
-            objectList.add(it)
+            returnList.add(it)
         }
-        return objectList
+        return returnList
     }
 
     suspend fun delete(position: Long) {
@@ -91,9 +95,9 @@ class PurchaseHistoryViewModel @Inject constructor(app: Application) : AndroidVi
     ): IPagingQuery<Any> {
         return object : IPagingQuery<Any> {
             override fun getPagingData(lastObject: Any?, loadSize: Int): PagingQueryModel<Any> {
-                var lastPurchaseId: Long = 9999999999999L
+                var lastPurchaseId: Long = Long.MAX_VALUE
                 if (lastObject is PurchaseHistory) {
-                    lastPurchaseId = lastObject.getPurchaseId()!!
+                    lastPurchaseId = lastObject.getTime()!!
                 }
                 var isShowAllPurchaseHistory = customDate == null && categoryId == -1;
                 var purchaseHistoryList = if (isShowAllPurchaseHistory) {
@@ -128,7 +132,4 @@ class PurchaseHistoryViewModel @Inject constructor(app: Application) : AndroidVi
             CustomPagingSource<Any>(generatePagingQuery(categoryId, customDate))
         }.flow.cachedIn(viewModelScope)
     }
-
-
-    //fun getPagingQuery
 }

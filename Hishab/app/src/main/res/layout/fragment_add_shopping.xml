@@ -8,20 +8,36 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <LinearLayout
+            android:id="@+id/ll_date_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+            <EditText
+                android:id="@+id/et_date_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_weight="1"
+                android:hint="purchase date"
+                android:gravity="center"
+                />
+            <TimePicker
+                android:id="@+id/tp_shopping_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:timePickerMode="spinner"/>
+        </LinearLayout>
 
-    <!-- TODO: Update blank fragment layout -->
-    <EditText
-        android:id="@+id/et_date_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:hint="purchase date"/>
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_add_buying"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/et_date_time" />
+            android:layout_below="@+id/ll_date_time" />
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab"
             android:layout_width="wrap_content"

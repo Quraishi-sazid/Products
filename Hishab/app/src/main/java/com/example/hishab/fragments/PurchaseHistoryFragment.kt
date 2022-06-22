@@ -3,9 +3,7 @@ package com.example.hishab.fragments
 //import com.example.hishab.databinding.FragmentPurchaseHistoryBinding
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
@@ -16,11 +14,15 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hishab.R
-import com.example.hishab.adapter.PagingAdapter
+import com.example.hishab.adapter.PagingAdapterForThreeViewTypes
+import com.example.hishab.adapter.PagingAdapterForTwoViewTypes
+import com.example.hishab.databinding.LayoutItemYearBinding
 import com.example.hishab.databinding.LayoutMonthItemBinding
 import com.example.hishab.databinding.LayoutPurchaseItemBinding
 import com.example.hishab.interfaces.IViewPagerSwipeListener
 import com.example.hishab.models.PurchaseHistory
+import com.example.hishab.models.ThreeLayout
+import com.example.hishab.models.TwoPredicate
 import com.example.hishab.repository.Repository
 import com.example.hishab.utils.Util
 import com.example.hishab.viewmodel.PurchaseHistoryViewModel
@@ -39,8 +41,7 @@ class PurchaseHistoryFragment : Fragment(), IViewPagerSwipeListener {
     lateinit var recyclerView: RecyclerView
     lateinit var pagingFlow: Flow<PagingData<Any>>
 
-    //  var adapter = PurchaseItemsAdapter()
-    lateinit var adapter: PagingAdapter<PurchaseHistory, String, LayoutPurchaseItemBinding, LayoutMonthItemBinding>
+    lateinit var adapter: PagingAdapterForThreeViewTypes<Int, String, PurchaseHistory, LayoutItemYearBinding, LayoutMonthItemBinding, LayoutPurchaseItemBinding>
     val args: PurchaseHistoryFragmentArgs by navArgs()
     var count = 1
 
@@ -66,17 +67,22 @@ class PurchaseHistoryFragment : Fragment(), IViewPagerSwipeListener {
     }
 
     private fun setUpRecyclerView(inflate: View) {
-        adapter = PagingAdapter.Create(
-            R.layout.layout_purchase_item,
+        var layouts = ThreeLayout(
+            R.layout.layout_item_year,
             R.layout.layout_month_item,
-            Predicate { adapter.getItemAt(it) is PurchaseHistory })
-        purchaseHistoryViewModel.access
+            R.layout.layout_purchase_item
+        )
+        var twoPredicate = TwoPredicate(Predicate<Int> { adapter.getItemAt(it) is Int },
+            Predicate<Int> { adapter.getItemAt(it) is String })
+        adapter = PagingAdapterForThreeViewTypes.Create(layouts,twoPredicate)
         adapter.firstViewInlateLiveData.observe(viewLifecycleOwner) {
-            //it.first.set(count++.toString() + " " + it.first.getItemName()!!)
-            it.second.purchaseHistory = it.first;
+            it.second.year = it.first;
         }
         adapter.secondViewInlateLiveData.observe(viewLifecycleOwner) {
-            it.second.month1 = it.first
+            it.second.month1 = it.first;
+        }
+        adapter.thirdViewInlateLiveData.observe(viewLifecycleOwner) {
+            it.second.purchaseHistory = it.first
         }
         recyclerView = inflate.findViewById<RecyclerView>(R.id.recycler_view)!!
         recyclerView.layoutManager = LinearLayoutManager(activity)
@@ -115,6 +121,6 @@ class PurchaseHistoryFragment : Fragment(), IViewPagerSwipeListener {
         return diffUtilCallBack
     }
 
-    override lateinit var onSwipedRightOrLeft: Observable<Pair<Float,Float>>
+    override lateinit var onSwipedRightOrLeft: Observable<Pair<Float, Float>>
 
 }

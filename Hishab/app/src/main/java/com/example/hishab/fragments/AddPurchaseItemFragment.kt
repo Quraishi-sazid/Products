@@ -42,6 +42,17 @@ class AddPurchaseItemFragment : DialogFragment() {
         return binding.root
     }
 
+    @Override
+    override fun onStart()
+    {
+        super.onStart()
+        if (getDialog() == null)
+            return;
+        var dialogWidth = 700
+        var dialogHeight = 900
+        getDialog()?.getWindow()?.setLayout(dialogWidth, dialogHeight);
+    }
+
     private fun checkIsUpdating() = args.shoppingItemProxy != null
 
     private fun setAdapterToAutoCompleteTextBoxes() {
