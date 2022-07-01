@@ -30,10 +30,8 @@ import com.example.hishab.utils.Util
 import com.example.hishab.viewmodel.AddShoppingViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
+import java.lang.Runnable
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -171,7 +169,6 @@ class AddShoppingFragment : Fragment() {
     }
 
     private fun getExistingCategoryAndProducts() {
-        CoroutineScope(Dispatchers.Main).launch {//Main thread query needs to be changed
             viewModel.getProductCategoryList().observe(viewLifecycleOwner, {
                 categoryAndProductModelList = it
                 distinctCategoryList =
@@ -181,12 +178,12 @@ class AddShoppingFragment : Fragment() {
                         }
                     }
             });
-        }
 
         binding.root.findViewById<FloatingActionButton>(R.id.fab)
             .setOnClickListener(View.OnClickListener {
                 goToAddDialog()
             })
+
     }
 
     private fun goToAddDialog(shoppingItemProxy: ShoppingItemProxy? = null) {

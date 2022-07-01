@@ -7,7 +7,6 @@ import com.example.hishab.db.dao.*
 import com.example.hishab.models.*
 import com.example.hishab.models.entities.*
 import io.reactivex.Flowable
-import io.reactivex.Observable
 
 
 class Repository(application: Application) {
@@ -125,7 +124,7 @@ class Repository(application: Application) {
         return purchaseHistoryDao.getPurchaseHistoryByBuyingId(buyingId)
     }
 
-    suspend fun getBuingHistory(): LiveData<List<ShoppingHistory>> {
+    fun getBuingHistory(): LiveData<List<ShoppingHistory>> {
         return shoppingDao.getBuyingHistory()
     }
 
@@ -137,7 +136,7 @@ class Repository(application: Application) {
         shoppingDao.updateDateId(dateId, buyingId);
     }
 
-    suspend fun getCategoryWithProductTableMap(): LiveData<List<CategoryProxy>> {
+    fun getCategoryWithProductTableMap(): LiveData<List<CategoryProxy>> {
         return categoryDao.getCategoryWithTotalProductMapped();
     }
 
@@ -206,9 +205,6 @@ class Repository(application: Application) {
 
     fun getBudgetList(month: Int, year: Int): Flowable<List<Budget>> {
         return budgetDao.getBudgetFlowable(month, year)
-/*       return Observable.create<Budget>{
-            it.onNext(Budget())
-        }.toFlowable(BackpressureStrategy.DROP)*/
     }
 
     fun getCategoryNameFromCategoryId(categoryId: Long): String? {
@@ -248,6 +244,22 @@ class Repository(application: Application) {
 
     suspend fun updateTimeForShopping(milisec: Long,shoppingId:Long) {
         shoppingDao.updateShoppingTime(milisec,shoppingId)
+    }
+
+    fun getCategoryBudgetList(month:Int,year:Int): List<BudgetCategoryQuery> {
+        var list = budgetDao.getCategoryAndBudgetList(year,month)
+        return list
+    }
+
+    suspend fun updateBudgetById(categoryId: Long, budget: Int, month: Int, year: Int){
+         budgetDao.updateBudgetById(categoryId,budget,month,year)
+    }
+
+    fun insertBudget(budget: Budget) {
+        budgetDao.insert(budget)
+    }
+    fun getAllCategories():List<Category>{
+        return categoryDao.getAllCategory()
     }
 
 /*    public suspend fun getCategoryByInsertingOrFetching(categoryName: String): Category {

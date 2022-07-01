@@ -67,7 +67,6 @@ class CategoryListFragment : Fragment()/*,IViewPagerSwipeListener*/ {
     }
 
     private fun getCategoryData() {
-        CoroutineScope(Dispatchers.Main).launch {
             categoryListViewModel.getCategoryWithTotalProductMapped().observe(viewLifecycleOwner,
                 Observer {
                     var categoryList = it
@@ -76,7 +75,6 @@ class CategoryListFragment : Fragment()/*,IViewPagerSwipeListener*/ {
                     })
                     setUpRecyclerView(categoryList)
                 })
-        }
     }
 
     private fun setUpRecyclerView(categoryList: List<CategoryProxy>) {
@@ -131,16 +129,19 @@ class CategoryListFragment : Fragment()/*,IViewPagerSwipeListener*/ {
     }
 
     private fun showDialog(updateCategory: Category? = null) {
-        var isUpdating = updateCategory == null
+        var isUpdating = updateCategory != null
         var customAlertDialog = CustomAlertDialog<LayoutCategoryInputBinding>(
             requireContext(),
             R.layout.layout_category_input,
             R.id.btn_yes
         )
         compositeDisposable.add(customAlertDialog.onViewCreated.subscribe { binding ->
-            if(updateCategory==null)
+            if(updateCategory!=null)
+            {
                 binding.category = updateCategory
-            binding.category=Category()
+            }
+            else
+                binding.category=Category()
         })
         compositeDisposable.add(customAlertDialog.onSubmitButtonPressed.subscribe { binding ->
             CoroutineScope(Dispatchers.IO).launch {
@@ -148,10 +149,11 @@ class CategoryListFragment : Fragment()/*,IViewPagerSwipeListener*/ {
                         .equals("")
                 )
                     if (isUpdating)
-                        categoryListViewModel.insertCategory(binding.category!!)
-                    else {
                         categoryListViewModel.updateCategory(binding.category!!)
+                    else {
+                        categoryListViewModel.insertCategory(binding.category!!)
                     }
+                customAlertDialog.dismiss()
             }
         })
     }

@@ -19,11 +19,9 @@ import com.example.hishab.utils.Util
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.Flowable
 import io.reactivex.Observable
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -89,41 +87,49 @@ class PurchaseHistoryViewModel @Inject constructor(app: Application) : AndroidVi
         return repository.getProductCategoryListLeftJoin()
     }
 
+    //coroutineScope(smaller C) is structured Concurrency. it is used when we want to return value from a function
     private fun generatePagingQuery(
         categoryId: Int = -1,
         customDate: CustomDate? = null
     ): IPagingQuery<Any> {
         return object : IPagingQuery<Any> {
-            override fun getPagingData(lastObject: Any?, loadSize: Int): PagingQueryModel<Any> {
-                var lastPurchaseId: Long = Long.MAX_VALUE
-                if (lastObject is PurchaseHistory) {
-                    lastPurchaseId = lastObject.getTime()!!
-                }
-                var isShowAllPurchaseHistory = customDate == null && categoryId == -1;
-                var purchaseHistoryList = if (isShowAllPurchaseHistory) {
-                    getPurchaseItems(lastPurchaseId, loadSize)
-                } else {
-                    if (customDate == null) {
-                        getDetailsOfCategory(
-                            categoryId,
-                            lastPurchaseId,
-                            loadSize
-                        )
-                    } else {
-                        getDetailsOfCategoryOfMonthAndYear(
-                            lastPurchaseId!!,
-                            loadSize,
-                            categoryId,
-                            customDate!!.getMonth(), customDate!!.getYear()
-                        )
+            override suspend fun getPagingData(
+                lastObject: Any?,
+                loadSize: Int
+            ): PagingQueryModel<Any> = coroutineScope {
+                withContext(Dispatchers.IO)
+                {
+                    var lastPurchaseId: kotlin.Long = Long.MAX_VALUE
+                    if (lastObject is PurchaseHistory) {
+                        lastPurchaseId = lastObject.getTime()
                     }
+                    var isShowAllPurchaseHistory = customDate == null && categoryId == -1;
+                    var purchaseHistoryList = if (isShowAllPurchaseHistory) {
+                        getPurchaseItems(lastPurchaseId, loadSize)
+                    } else {
+                        if (customDate == null) {
+                            getDetailsOfCategory(
+                                categoryId,
+                                lastPurchaseId,
+                                loadSize
+                            )
+                        } else {
+                            getDetailsOfCategoryOfMonthAndYear(
+                                lastPurchaseId,
+                                loadSize,
+                                categoryId,
+                                customDate.getMonth(), customDate.getYear()
+                            )
+                        }
+                    }
+                    var commonList = getDateSeparatedPurchaseHistoryList(purchaseHistoryList);
+                    com.example.hishab.models.PagingQueryModel<kotlin.Any>(
+                        commonList,
+                        if (commonList.isNullOrEmpty()) null else commonList[commonList.size - 1]
+                    )
                 }
-                var commonList = getDateSeparatedPurchaseHistoryList(purchaseHistoryList);
-                return PagingQueryModel<Any>(
-                    commonList,
-                    if (commonList.isNullOrEmpty()) null else commonList[commonList.size - 1]
-                )
             }
+
         }
     }
 

@@ -15,7 +15,7 @@ class CategoryViewModel @Inject constructor(application: Application) :
     @Inject
     lateinit var repository: Repository
 
-    suspend fun getCategoryWithTotalProductMapped(): LiveData<List<CategoryProxy>> {
+    fun getCategoryWithTotalProductMapped(): LiveData<List<CategoryProxy>> {
         return repository.getCategoryWithProductTableMap()
     }
 

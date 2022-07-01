@@ -50,7 +50,7 @@ abstract class AppDatabase : RoomDatabase() {
                             insertPredefinedData()
                         }
                     }
-                }).allowMainThreadQueries().fallbackToDestructiveMigration()
+                })/*.allowMainThreadQueries()*/.fallbackToDestructiveMigration()
                     .build()
                 INSTANCE = instance
                 instance

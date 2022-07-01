@@ -13,7 +13,7 @@ interface CategoryDao {
     @Insert
     suspend fun insertCategory(category: Category):Long
     @Query("SELECT * FROM category")
-    suspend fun getAll():  List<Category>
+    fun getAllCategory():  List<Category>
     @Query("SELECT * FROM category where category_name like :name")
     suspend fun getCategoryFromName(name:String): Category
     @Query("Select * FROM category where category_id=:id")

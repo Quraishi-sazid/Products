@@ -32,6 +32,11 @@
         </LinearLayout>
 
 
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/ll_date_time"
+            >
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_add_buying"
@@ -42,8 +47,8 @@
             android:id="@+id/fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
+            app:layout_behavior=".behaviors.FabBehavior"
+            android:layout_gravity="end|bottom"
             android:background="@drawable/ic_baseline_edit_24"
             android:contentDescription=""
             android:layout_margin="16dp" />
@@ -52,10 +57,10 @@
             android:id="@+id/btn_submit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
+            android:layout_gravity="bottom|center_horizontal"
             android:layout_marginBottom="16dp"
             android:text="submit"/>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
     </RelativeLayout>
 
 

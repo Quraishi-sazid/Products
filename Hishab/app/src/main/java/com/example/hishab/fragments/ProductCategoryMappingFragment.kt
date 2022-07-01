@@ -38,7 +38,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class ProductCategoryMappingFragment : Fragment(),IViewPagerSwipeListener {
+class ProductCategoryMappingFragment : Fragment(), IViewPagerSwipeListener {
     private lateinit var binding: FragmentProductCategoryMappingBinding
     private val productCategoryMappingViewModel: ProductCategoryMappingViewModel by viewModels()
     lateinit var categoryAndProductModelList: List<CategoryAndProductModel>
@@ -81,15 +81,18 @@ class ProductCategoryMappingFragment : Fragment(),IViewPagerSwipeListener {
         }
         binding.rvProductCategory.layoutManager = LinearLayoutManager(activity)
         simpleGenericAdapterWithBinding =
-            SimpleGenericAdapterWithBinding.Create(R.layout.layout_product_category_item,diffUtilCallback)
-        simpleGenericAdapterWithBinding.viewInlateLiveData.observe(viewLifecycleOwner){
+            SimpleGenericAdapterWithBinding.Create(
+                R.layout.layout_product_category_item,
+                diffUtilCallback
+            )
+        simpleGenericAdapterWithBinding.viewInlateLiveData.observe(viewLifecycleOwner) {
             it.second.productCategoryMapping = it.first
         }
         simpleGenericAdapterWithBinding.viewClickLiveData.observe(viewLifecycleOwner) {
 
         }
         binding.rvProductCategory.adapter = simpleGenericAdapterWithBinding
-        onSwipedRightOrLeft=Util.getViewSwipeObservable(binding.rvProductCategory)
+        onSwipedRightOrLeft = Util.getViewSwipeObservable(binding.rvProductCategory)
         swipeToDeleteCallback = SwipeToDeleteCallback<CategoryAndProductModel>(requireContext())
         ItemTouchHelper(swipeToDeleteCallback).attachToRecyclerView(binding.rvProductCategory)
         swipeToDeleteCallback.onSwipeObservable.subscribe { swipedItemResponse ->
@@ -101,18 +104,21 @@ class ProductCategoryMappingFragment : Fragment(),IViewPagerSwipeListener {
                         )
                         emitter.onNext(count)
                     }.subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe { count ->
+                        .map { count ->
                             if (count == 0)
                                 productCategoryMappingViewModel.deleteProduct(
                                     simpleGenericAdapterWithBinding.dataSource[swipedItemResponse.adapterPosition].getProductId()!!
                                 )
-                            else
-                                Toast.makeText(
-                                    context,
-                                    count.toString() + " items found in purchased history of this product.can't be deleted",
-                                    Toast.LENGTH_LONG
-                                ).show()
+                            return@map count
+                        }
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .filter { count -> count > 0 }
+                        .subscribe { count ->
+                            Toast.makeText(
+                                context,
+                                count.toString() + " items found in purchased history of this product.can't be deleted",
+                                Toast.LENGTH_LONG
+                            ).show()
                         })
             } else {
                 var swippedCategoryAndProductModel =
@@ -128,7 +134,7 @@ class ProductCategoryMappingFragment : Fragment(),IViewPagerSwipeListener {
                         swippedCategoryAndProductModel.getCategoryId()!!,
                         swippedCategoryAndProductModel.getProductId()!!,
 
-                    )
+                        )
                     binding.category = Category(swippedCategoryAndProductModel.getCategoryName()!!)
                     binding.actvCategory.isEnabled = false
                 })
@@ -147,12 +153,10 @@ class ProductCategoryMappingFragment : Fragment(),IViewPagerSwipeListener {
     }
 
     private fun fetchProductCategoryMapping() {
-        CoroutineScope(Dispatchers.Main).launch {
-            productCategoryMappingViewModel.getProductCategoryListInnerJoin()
-                .observe(viewLifecycleOwner, {
-                    simpleGenericAdapterWithBinding.update(it);
-                })
-        }
+        productCategoryMappingViewModel.getProductCategoryListInnerJoin()
+            .observe(viewLifecycleOwner, {
+                simpleGenericAdapterWithBinding.update(it);
+            })
     }
 
     private fun setFabClick() {

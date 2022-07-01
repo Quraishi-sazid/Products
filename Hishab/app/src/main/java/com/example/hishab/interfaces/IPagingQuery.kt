@@ -5,5 +5,5 @@ import com.example.hishab.models.PagingQueryModel
 import com.example.hishab.models.PurchaseHistory
 
 interface IPagingQuery<T : Any> {
-    fun getPagingData(lastId:T?,loadSize:Int): PagingQueryModel<T>
+    suspend fun getPagingData(lastId:T?,loadSize:Int): PagingQueryModel<T>
 }

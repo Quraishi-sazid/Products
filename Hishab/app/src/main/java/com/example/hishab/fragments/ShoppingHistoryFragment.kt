@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.hishab.R
 import com.example.hishab.adapter.GenericAdapterForThreeViewTypes
 import com.example.hishab.adapter.ShoppingHistoryAdapter
+import com.example.hishab.behaviors.FabBehavior
 import com.example.hishab.databinding.*
 import com.example.hishab.interfaces.IRecyclerViewItemClickCallback
 import com.example.hishab.interfaces.IViewPagerSwipeListener
@@ -42,6 +44,7 @@ class ShoppingHistoryFragment : Fragment(), IViewPagerSwipeListener {
     ): View? {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_shopping_history, container, false)
+        viewModel
         setRecyclerView()
         fetchBuyingList()
         setButtonClick()
@@ -105,12 +108,12 @@ class ShoppingHistoryFragment : Fragment(), IViewPagerSwipeListener {
     }
 
     private fun fetchBuyingList() {
-        CoroutineScope(Dispatchers.Main).launch {
+       // CoroutineScope(Dispatchers.IO).launch {
             viewModel.getBuyingHistoryLiveData().observe(viewLifecycleOwner, {
                 var processedList = viewModel.processData(it)
                 buyingListAdapter.submitList(processedList)
             })
-        }
+       // }
     }
 
     override lateinit var onSwipedRightOrLeft: Observable<Pair<Float, Float>>

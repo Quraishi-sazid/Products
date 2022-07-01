@@ -16,9 +16,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ShoppingHistoryViewModel @Inject constructor(app: Application) : AndroidViewModel(app) {
+    var xx = 4
     @Inject
     lateinit var repository: Repository
-    suspend fun getBuyingHistoryLiveData(): LiveData<List<ShoppingHistory>> {
+    fun getBuyingHistoryLiveData(): LiveData<List<ShoppingHistory>> {
         return repository.getBuingHistory()
     }
 

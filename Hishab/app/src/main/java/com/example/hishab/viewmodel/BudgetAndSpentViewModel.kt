@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import com.example.hishab.models.CategoryCostModel
 import com.example.hishab.models.entities.Budget
+import com.example.hishab.models.entities.Category
 import com.example.hishab.repository.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.Flowable
@@ -25,6 +26,11 @@ class BudgetAndSpentViewModel @Inject constructor(app:Application):AndroidViewMo
     }
     fun getCategorySpentsOfMonth(categoryIds: List<Long>, month:Int, year:Int): List<CategoryCostModel> {
         return repository.getCategorySpentsOfMonth(categoryIds,month,year)
+    }
+    fun getCategoryIdAndNameMapping():HashMap<Long,String>{
+        var tempMap = HashMap<Long,String>()
+        repository.getAllCategories().forEach{tempMap[it.categoryId] = it.getCategoryName()}
+        return tempMap
     }
 
 }
