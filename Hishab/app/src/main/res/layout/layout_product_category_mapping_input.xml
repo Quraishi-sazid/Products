@@ -27,6 +27,7 @@
                 android:layout_gravity="center"
                 android:layout_marginRight="16dp"
                 android:hint="category"
+                android:completionThreshold="1"
                 android:gravity="center"
                 android:text="@={category.categoryName}"
                 />

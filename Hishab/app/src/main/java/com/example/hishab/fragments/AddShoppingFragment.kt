@@ -61,11 +61,14 @@ class AddShoppingFragment : Fragment() {
         if (args.shoppingHistory != null) {
             viewModel.buyingId = args.shoppingHistory!!.getBuyingId()
             viewModel.updatingShoppingHistory = args.shoppingHistory
-            myCalendar.set(
-                args.shoppingHistory!!.getYear(),
-                args.shoppingHistory!!.getMonth() - 1,
-                args.shoppingHistory!!.getDay()
-            )
+            myCalendar.timeInMillis = args.shoppingHistory!!.getTime()
+            viewModel.time = args.shoppingHistory!!.getTime()
+        }
+        else if(args.buyingId != -1){
+            viewModel.buyingId = args.buyingId.toLong()
+            viewModel.time = args.time
+            viewModel.productId = args.productId
+            adapter.selectedProductId = viewModel.productId
         }
 
         if (viewModel.buyingId != -1L)

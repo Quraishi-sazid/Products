@@ -86,6 +86,14 @@
             app:argType="com.example.hishab.models.ShoppingHistory"
             app:nullable="true"
             android:defaultValue="@null" />
+        <argument
+            android:name="time"
+            app:argType="long"
+            android:defaultValue="-1L" />
+        <argument
+            android:name="productId"
+            app:argType="long"
+            android:defaultValue="-1L" />
     </fragment>
     <fragment
         android:id="@+id/shoppingHistoryFragment"
@@ -105,14 +113,25 @@
             app:argType="com.example.hishab.models.entities.Category"
             app:nullable="true"
             android:defaultValue="@null" />
+        <action
+            android:id="@+id/action_categoryListFragment_to_productDetailsFragment"
+            app:destination="@id/productDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/productCategoryMappingFragment"
         android:name="com.example.hishab.fragments.ProductCategoryMappingFragment"
         android:label="ProductCategoryMappingFragment" >
+
         <action
-            android:id="@+id/action_productCategoryMappingFragment_to_categoryListFragment"
-            app:destination="@id/categoryListFragment" />
+            android:id="@+id/action_productCategoryMappingFragment_to_addShoppingFragment"
+            app:destination="@id/addShoppingFragment" />
+        <argument
+            android:name="categoryId"
+            app:argType="integer"
+            android:defaultValue="-1" />
+        <action
+            android:id="@+id/action_productCategoryMappingFragment_to_productDetailsFragment"
+            app:destination="@id/productDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/budgetAndSpentFragment"
@@ -159,10 +178,35 @@
         <action
             android:id="@+id/action_viewPagerTabFragment_to_budgetAndSpentFragment"
             app:destination="@id/budgetAndSpentFragment" />
+        <action
+            android:id="@+id/action_viewPagerTabFragment_to_productDetailsFragment"
+            app:destination="@id/productDetailsFragment" />
+        <action
+            android:id="@+id/action_viewPagerTabFragment_to_productCategoryMappingFragment"
+            app:destination="@id/productCategoryMappingFragment" />
     </fragment>
     <fragment
         android:id="@+id/budgetAndSpentHistoryFragment"
         android:name="com.example.hishab.fragments.BudgetAndSpentHistoryFragment"
         android:label="BudgetAndSpentHistoryFragment" >
+    </fragment>
+    <fragment
+        android:id="@+id/productDetailsFragment"
+        android:name="com.example.hishab.fragments.ProductDetailsFragment"
+        android:label="fragment_product_details"
+        tools:layout="@layout/fragment_product_details" >
+        <argument
+            android:name="productId"
+            app:argType="long"
+            android:defaultValue="-1L" />
+        <action
+            android:id="@+id/action_productDetailsFragment_to_addShoppingFragment"
+            app:destination="@id/addShoppingFragment" />
+        <action
+            android:id="@+id/action_productDetailsFragment_self"
+            app:destination="@id/productDetailsFragment" />
+        <action
+            android:id="@+id/action_productDetailsFragment_to_addShoppingFragment2"
+            app:destination="@id/addShoppingFragment" />
     </fragment>
 </navigation>

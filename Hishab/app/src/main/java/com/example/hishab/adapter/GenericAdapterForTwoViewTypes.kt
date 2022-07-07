@@ -18,10 +18,17 @@ class GenericAdapterForTwoViewTypes<T1, T2, B1 : ViewDataBinding, B2 : ViewDataB
     private var diffUtilCallback: DiffUtil.ItemCallback<Any>
 ) : ListAdapter<Any, RecyclerView.ViewHolder>(diffUtilCallback) {
 
+    public lateinit var dataSource: List<Any>
     var firstViewInlateLiveData = MutableLiveData<Pair<T1, B1>>()
     var secondViewInlateLiveData = MutableLiveData<Pair<T2, B2>>()
     var firstviewClickLiveData = MutableLiveData<T1>()
     var secondviewClickLiveData = MutableLiveData<T2>()
+
+
+    fun update(updatedDataSource: List<Any>) {
+        dataSource = updatedDataSource
+        submitList(dataSource)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         when (viewType) {

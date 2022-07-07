@@ -6,11 +6,11 @@ import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
 
 data class CategoryAndProductModel(
-    private var productId:Long,
-    private var categoryId:Long,
-    private var categoryName:String?,
-    private var productName:String?
-    ):BaseObservable(), Parcelable{
+    private var productId: Long,
+    private var categoryId: Long,
+    private var categoryName: String?,
+    private var productName: String?
+) : BaseObservable(), Parcelable {
 
     constructor(parcel: Parcel) : this(
         parcel.readLong(),
@@ -21,32 +21,38 @@ data class CategoryAndProductModel(
     }
 
     override fun toString(): String {
+        if (isCategoryStringNeeded)
+            return categoryName!!
         return productName!!
     }
+
     @Bindable
-    fun getCategoryName():String?{
+    fun getCategoryName(): String? {
         return categoryName
     }
+
     @Bindable
-    fun getProductName():String?{
+    fun getProductName(): String? {
         return productName
     }
+
     @Bindable
-    fun getCategoryId():Long?{
+    fun getCategoryId(): Long? {
         return categoryId
     }
+
     @Bindable
-    fun getProductId():Long?{
+    fun getProductId(): Long? {
         return productId
     }
 
-    fun setCategoryName(categoryName: String){
-        this.categoryName=categoryName
-    }
-    fun setProductName(categoryName: String){
-        this.productName=productName
+    fun setCategoryName(categoryName: String) {
+        this.categoryName = categoryName
     }
 
+    fun setProductName(categoryName: String) {
+        this.productName = productName
+    }
 
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -61,6 +67,7 @@ data class CategoryAndProductModel(
     }
 
     companion object CREATOR : Parcelable.Creator<CategoryAndProductModel> {
+        var isCategoryStringNeeded = false
         override fun createFromParcel(parcel: Parcel): CategoryAndProductModel {
             return CategoryAndProductModel(parcel)
         }

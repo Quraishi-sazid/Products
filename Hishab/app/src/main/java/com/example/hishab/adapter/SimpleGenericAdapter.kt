@@ -28,6 +28,9 @@ class SimpleGenericAdapterWithBinding<T, B : ViewDataBinding>private constructor
         return ViewHolder(viewBinding)
     }
 
+    public fun getElementAt(position: Int):T{
+        return dataSource[position]
+    }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.notify(dataSource[position])

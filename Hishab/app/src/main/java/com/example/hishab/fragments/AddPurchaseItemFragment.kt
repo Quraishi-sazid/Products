@@ -64,10 +64,8 @@ class AddPurchaseItemFragment : DialogFragment() {
         productAutoCompleteTextVIewManager = AutoCompleteTextViewManager<CategoryAndProductModel>(
             requireContext(),
             binding.etProductName,
-            args.productCategoryArray.toList()
+            args.productCategoryArray.filter { it.getProductName() != null }.toList()
         )
-        categoryAutoCompleteTextVIewManager.setAdapter()
-        productAutoCompleteTextVIewManager.setAdapter()
         compositeDisposable.add(categoryAutoCompleteTextVIewManager.onAutoCompleteSelectionChanged.subscribe { selectedCategory ->
             if (selectedCategory != null) {
                 addPurchaseItemViewModel.category = selectedCategory

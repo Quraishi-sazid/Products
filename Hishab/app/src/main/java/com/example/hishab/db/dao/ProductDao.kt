@@ -5,6 +5,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import com.example.hishab.models.CategoryAndProductModel
+import com.example.hishab.models.ProductDetailsModel
 import com.example.hishab.models.entities.Product
 
 @Dao
@@ -15,7 +16,7 @@ interface ProductDao {
     suspend fun getShoppingItemFromItemNameAndCategoryId(itemName:String,categoryId:Long):Product
     @Query("select s.product_name as productName,s.product_id as productId,c.category_id as categoryId,c.category_name as categoryName from  category c left join product_table s on c.category_id=s.category_id")
     fun getProductCategoryListLeftJoin():LiveData<List<CategoryAndProductModel>>
-    @Query("select s.product_name as productName,s.product_id as productId,c.category_id as categoryId,c.category_name as categoryName from  category c inner join product_table s on c.category_id=s.category_id")
+    @Query("select s.product_name as productName,s.product_id as productId,c.category_id as categoryId,c.category_name as categoryName from  category c inner join product_table s on c.category_id=s.category_id order by c.category_id")
     fun getProductCategoryListInnerJoin():LiveData<List<CategoryAndProductModel>>
     @Query("update product_table set product_name=:pName where product_id=:pId")
     fun updateProductName(pName:String,pId:Long )
@@ -27,4 +28,8 @@ interface ProductDao {
     fun insertProducts(vararg products:Product)
     @Query("Select count(product_id) from product_table where category_id=:id")
     suspend fun getProductCountMappedWithCategoryId(id: Long):Int
+    @Query("select pr.product_id as productId, s.shopping_id as shoppingId,pr.product_name as productName,si.cost as cost,s.time as time,cd.day as day,cd.month as month,cd.year as year from product_table pr inner join tbl_shopping_item si on pr.product_id = si.product_id inner join tbl_shopping s on si.shopping_id = s.shopping_id inner join custom_date cd  on cd.date_id = s.date_id where pr.product_id =:id")
+    fun getProductDetails(id: Long):LiveData<List<ProductDetailsModel>>
+    @Query("select s.product_name as productName,s.product_id as productId,c.category_id as categoryId,c.category_name as categoryName from  category c inner join product_table s on c.category_id=s.category_id where c.category_id =:categoryID")
+    fun getProductListFromCategoryIdInnerJoin(categoryID: Long) : LiveData<List<CategoryAndProductModel>>
 }

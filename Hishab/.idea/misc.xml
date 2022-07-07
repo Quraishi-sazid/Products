@@ -11,6 +11,8 @@
         <entry key="..\:/projects/Hishab/app/src/main/res/layout/fragment_budget_and_spent_history.xml" value="0.10520833333333333" />
         <entry key="..\:/projects/Hishab/app/src/main/res/layout/fragment_category_list.xml" value="0.1" />
         <entry key="..\:/projects/Hishab/app/src/main/res/layout/fragment_product_category_mapping.xml" value="0.1334569045412419" />
+        <entry key="..\:/projects/Hishab/app/src/main/res/layout/fragment_product_details.xml" value="0.13949275362318841" />
+        <entry key="..\:/projects/Hishab/app/src/main/res/layout/fragment_purchase_history.xml" value="0.1" />
         <entry key="..\:/projects/Hishab/app/src/main/res/layout/fragment_shopping_history.xml" value="0.1" />
         <entry key="..\:/projects/Hishab/app/src/main/res/layout/fragment_view_pager_tab.xml" value="0.1" />
         <entry key="..\:/projects/Hishab/app/src/main/res/layout/layout_budget_add_item.xml" value="0.178125" />
@@ -22,6 +24,8 @@
         <entry key="..\:/projects/Hishab/app/src/main/res/layout/layout_product_category_item.xml" value="0.1" />
         <entry key="..\:/projects/Hishab/app/src/main/res/layout/layout_product_category_mapping_input.xml" value="0.12409420289855072" />
         <entry key="..\:/projects/Hishab/app/src/main/res/layout/layout_purchase_item.xml" value="0.1" />
+        <entry key="..\:/projects/Hishab/app/src/main/res/layout/layout_purchase_item_input.xml" value="0.13903985507246377" />
+        <entry key="..\:/projects/Hishab/app/src/main/res/layout/product_details_item.xml" value="0.21851851851851853" />
         <entry key="..\:/projects/Hishab/app/src/main/res/menu/navigation_menu.xml" value="0.22" />
       </map>
     </option>

@@ -1,5 +1,7 @@
 package com.example.hishab.adapter
 
+import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -13,6 +15,7 @@ import com.example.hishab.models.ShoppingItemProxy
 
 class AddShoppingAdapter() : ListAdapter<ShoppingItemProxy, ViewHolder>(diffUtilCallBack) {
     var dataSource = ArrayList<ShoppingItemProxy>()
+    var selectedProductId = -1L
     companion object {
         var diffUtilCallBack = object : DiffUtil.ItemCallback<ShoppingItemProxy>() {
             override fun areItemsTheSame(oldItem: ShoppingItemProxy, newItem: ShoppingItemProxy): Boolean {
@@ -53,10 +56,12 @@ class AddShoppingAdapter() : ListAdapter<ShoppingItemProxy, ViewHolder>(diffUtil
     }
 
 
-    class ViewHolder(val binding: LayoutPurchaseItemInputBinding) :
+    inner class ViewHolder(val binding: LayoutPurchaseItemInputBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(shoppingItemProxy: ShoppingItemProxy) {
-
+            if(shoppingItemProxy.product.productId == selectedProductId){
+                binding.clParent.setBackgroundColor(Color.GREEN)
+            }
             binding.product = shoppingItemProxy
         }
     }

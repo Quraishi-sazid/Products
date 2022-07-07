@@ -23,6 +23,8 @@ class AddShoppingViewModel @Inject constructor(app: Application) : AndroidViewMo
     @Inject
     lateinit var repository: Repository
     var buyingId: Long = -1
+    var time: Long = -1
+    var productId: Long = -1
     var dateId = -1L;
     fun getProductCategoryList(): LiveData<List<CategoryAndProductModel>> {
         return repository.getProductCategoryListLeftJoin()
@@ -75,14 +77,14 @@ class AddShoppingViewModel @Inject constructor(app: Application) : AndroidViewMo
 
     fun getTimePickerHour(): Int {
         if(isUpdating){
-            return Util.getTimePickerHour(updatingShoppingHistory!!.getTime())
+            return Util.getTimePickerHour(time)
         }
         return Util.getTimePickerHour(System.currentTimeMillis())
     }
 
     fun getTimePickerMin(): Int {
         if(isUpdating){
-            return Util.getTimePickerMin(updatingShoppingHistory!!.getTime())
+            return Util.getTimePickerMin(time)
         }
         return Util.getTimePickerMin(System.currentTimeMillis())
     }

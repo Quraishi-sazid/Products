@@ -12,10 +12,9 @@ class AutoCompleteTextViewManager<T>(val context: Context, val autoCompleteTextV
     var selectedItem:T? =null
 
     var type=android.R.layout.simple_dropdown_item_1line
-    lateinit var onAutoCompleteSelectionChanged: Observable<T>
+    var onAutoCompleteSelectionChanged: Observable<T>
 
-    fun setAdapter()
-    {
+    init {
         autoCompleteTextView.setAdapter(ArrayAdapter<T>(context,android.R.layout.simple_dropdown_item_1line,dataList))
         onAutoCompleteSelectionChanged=Observable.create<T>{ emitter->
             autoCompleteTextView.onItemClickListener=AdapterView.OnItemClickListener() { adapterView: AdapterView<*>, view1: View, position: Int, id: Long ->
@@ -23,9 +22,6 @@ class AutoCompleteTextViewManager<T>(val context: Context, val autoCompleteTextV
                 emitter.onNext(selectedItem!!)
             }
         }
-
-
-
     }
 
 }

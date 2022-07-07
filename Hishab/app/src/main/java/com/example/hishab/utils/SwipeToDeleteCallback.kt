@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hishab.R
+import com.example.hishab.interfaces.ISwipeEnableChecker
 import com.example.hishab.models.RVItemSwipeResponse
 import io.reactivex.subjects.PublishSubject
 
@@ -29,6 +30,7 @@ class SwipeToDeleteCallback<T>(context: Context) :
     private val background: GradientDrawable
     private lateinit var canvas:Canvas;
     private var recyclerView: RecyclerView? = null
+    public var swipeEnableChecker : ISwipeEnableChecker? = null
     override fun onMove(
         recyclerView: RecyclerView,
         viewHolder: RecyclerView.ViewHolder,
@@ -48,7 +50,9 @@ class SwipeToDeleteCallback<T>(context: Context) :
     ): Int {
         Log.v("SwipeToDeleteCallback","getSwipeDirs")
         this.recyclerView = recyclerView
-        return super.getSwipeDirs(recyclerView, viewHolder)
+        if (swipeEnableChecker == null || swipeEnableChecker!!.isSwipeEnabled(viewHolder.adapterPosition))
+            return super.getSwipeDirs(recyclerView, viewHolder)
+        return 0
     }
 
     override fun onChildDraw(

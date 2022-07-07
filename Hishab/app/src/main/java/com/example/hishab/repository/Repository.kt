@@ -262,6 +262,18 @@ class Repository(application: Application) {
         return categoryDao.getAllCategory()
     }
 
+    suspend fun getAllCategoriesSuspended():List<Category>{
+        return categoryDao.getAllCategory()
+    }
+
+    fun getProductDetailsLiveData(id:Long):LiveData<List<ProductDetailsModel>>{
+        return productDao.getProductDetails(id)
+    }
+
+    fun getProductListFromCategoryIdInnerJoin(categoryID: Long): LiveData<List<CategoryAndProductModel>> {
+        return productDao.getProductListFromCategoryIdInnerJoin(categoryID)
+    }
+
 /*    public suspend fun getCategoryByInsertingOrFetching(categoryName: String): Category {
         var queriedCategory = getCategoryIdFromName(categoryName)
         if (queriedCategory == null) {

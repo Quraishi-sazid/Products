@@ -1,31 +1,25 @@
 package com.example.hishab.fragments
 
-import android.app.AlertDialog
-import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.hishab.R
 import com.example.hishab.adapter.CategoryAdapter
+import com.example.hishab.adapter.SimpleGenericAdapterWithBinding
 import com.example.hishab.databinding.FragmentCategoryListBinding
 import com.example.hishab.databinding.LayoutCategoryInputBinding
+import com.example.hishab.databinding.LayoutCategroyItemBinding
 import com.example.hishab.interfaces.IHandleAlertDialog
-import com.example.hishab.interfaces.ISwipeItemCallback
-import com.example.hishab.interfaces.IViewPagerSwipeListener
 import com.example.hishab.models.CategoryProxy
-import com.example.hishab.models.ShoppingItemProxy
 import com.example.hishab.models.entities.Category
 import com.example.hishab.utils.CustomAlertDialog
 import com.example.hishab.utils.SwipeToDeleteCallback
@@ -42,11 +36,11 @@ import kotlinx.coroutines.withContext
 @AndroidEntryPoint
 class CategoryListFragment : Fragment()/*,IViewPagerSwipeListener*/ {
     lateinit var binding: FragmentCategoryListBinding
-    lateinit var categoryAdapter: CategoryAdapter
+    lateinit var categoryAdapter: SimpleGenericAdapterWithBinding<CategoryProxy, LayoutCategroyItemBinding>
     private val categoryListViewModel: CategoryViewModel by viewModels()
     lateinit var handleAlertDialog: IHandleAlertDialog
     lateinit var swipeToDeleteCallback: SwipeToDeleteCallback<CategoryProxy>
-    var compositeDisposable= CompositeDisposable()
+    var compositeDisposable = CompositeDisposable()
     var proxyId = 1
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -67,21 +61,29 @@ class CategoryListFragment : Fragment()/*,IViewPagerSwipeListener*/ {
     }
 
     private fun getCategoryData() {
-            categoryListViewModel.getCategoryWithTotalProductMapped().observe(viewLifecycleOwner,
-                Observer {
-                    var categoryList = it
-                    categoryList.forEach({
-                        it.proxyId = proxyId++
-                    })
-                    setUpRecyclerView(categoryList)
+        categoryListViewModel.getCategoryWithTotalProductMapped().observe(viewLifecycleOwner,
+            Observer {
+                var categoryList = it
+                categoryList.forEach({
+                    it.proxyId = proxyId++
                 })
+                setUpRecyclerView(categoryList)
+            })
     }
 
     private fun setUpRecyclerView(categoryList: List<CategoryProxy>) {
-        categoryAdapter = CategoryAdapter(categoryList)
+        categoryAdapter = SimpleGenericAdapterWithBinding.Create(R.layout.layout_categroy_item)
+        categoryAdapter.viewInlateLiveData.observe(viewLifecycleOwner){
+            it.second.category = it.first
+        }
+        categoryAdapter.viewClickLiveData.observe(viewLifecycleOwner){
+            var directions = ViewPagerTabFragmentDirections.actionViewPagerTabFragmentToProductCategoryMappingFragment()
+            directions.categoryId = it!!.categoryId.toInt()
+            findNavController().navigate(directions)
+        }
         binding.rvCategory.layoutManager = LinearLayoutManager(activity)
         binding.rvCategory.adapter = categoryAdapter
-        categoryAdapter.submitList(categoryAdapter.dataSource)
+        categoryAdapter.update(categoryList)
         swipeToDeleteCallback = SwipeToDeleteCallback<CategoryProxy>(requireContext())
         ItemTouchHelper(swipeToDeleteCallback).attachToRecyclerView(
             binding.rvCategory
@@ -89,12 +91,14 @@ class CategoryListFragment : Fragment()/*,IViewPagerSwipeListener*/ {
         swipeToDeleteCallback.onSwipeObservable.subscribe { rvSwipeItemResponse ->
             if (rvSwipeItemResponse.direction == ItemTouchHelper.LEFT) {
                 CoroutineScope(Dispatchers.IO).launch {
-                    var id = categoryAdapter.getElementAt(rvSwipeItemResponse.adapterPosition).categoryId
-                    var categoryName = categoryAdapter.getElementAt(rvSwipeItemResponse.adapterPosition).categoryName
-                    var totalProductMappedWithCategroy = categoryListViewModel.getProductCountMappedWithCategoryId(id)
+                    var id =
+                        categoryAdapter.getElementAt(rvSwipeItemResponse.adapterPosition).categoryId
+                    var categoryName =
+                        categoryAdapter.getElementAt(rvSwipeItemResponse.adapterPosition).categoryName
+                    var totalProductMappedWithCategroy =
+                        categoryListViewModel.getProductCountMappedWithCategoryId(id)
                     activity?.runOnUiThread(Runnable {
-                        if(totalProductMappedWithCategroy==0)
-                        {
+                        if (totalProductMappedWithCategroy == 0) {
                             Util.showItemSwipeDeleteAlertDialog(
                                 requireContext(),
                                 "Delete Entry",
@@ -102,9 +106,12 @@ class CategoryListFragment : Fragment()/*,IViewPagerSwipeListener*/ {
                                 id,
                                 handleAlertDialog
                             )
-                        }
-                        else
-                            Toast.makeText(context,"$totalProductMappedWithCategroy products mapped with $categoryName category. can't be deleted",Toast.LENGTH_LONG).show()
+                        } else
+                            Toast.makeText(
+                                context,
+                                "$totalProductMappedWithCategroy products mapped with $categoryName category. can't be deleted",
+                                Toast.LENGTH_LONG
+                            ).show()
 
                     })
                 }
@@ -112,7 +119,7 @@ class CategoryListFragment : Fragment()/*,IViewPagerSwipeListener*/ {
                 showDialog(categoryAdapter.dataSource[rvSwipeItemResponse.adapterPosition].getCategory())
             }
         }
-      //  onSwipedRightOrLeft=Util.getViewSwipeObservable(binding.rvCategory)
+        //  onSwipedRightOrLeft=Util.getViewSwipeObservable(binding.rvCategory)
     }
 
     private fun setHandleAlertDialog() {
@@ -136,26 +143,37 @@ class CategoryListFragment : Fragment()/*,IViewPagerSwipeListener*/ {
             R.id.btn_yes
         )
         compositeDisposable.add(customAlertDialog.onViewCreated.subscribe { binding ->
-            if(updateCategory!=null)
-            {
+            if (updateCategory != null) {
                 binding.category = updateCategory
-            }
-            else
-                binding.category=Category()
+            } else
+                binding.category = Category()
         })
         compositeDisposable.add(customAlertDialog.onSubmitButtonPressed.subscribe { binding ->
             CoroutineScope(Dispatchers.IO).launch {
-                if (binding.category?.getCategoryName() != null && !binding.category?.getCategoryName()
-                        .equals("")
-                )
-                    if (isUpdating)
-                        categoryListViewModel.updateCategory(binding.category!!)
-                    else {
-                        categoryListViewModel.insertCategory(binding.category!!)
+                if (isNewCategory(binding.category?.getCategoryName()))
+                    {
+                        if (binding.category?.getCategoryName() != null && !binding.category?.getCategoryName()
+                                .equals("")
+                        ) {
+                            if (isUpdating)
+                                categoryListViewModel.updateCategory(binding.category!!)
+                            else {
+                                categoryListViewModel.insertCategory(binding.category!!)
+                            }
+                        }
+                        customAlertDialog.dismiss()
                     }
-                customAlertDialog.dismiss()
+                else
+                    withContext(Dispatchers.Main){
+                        Toast.makeText(requireContext(),"Category already exists",Toast.LENGTH_SHORT).show()
+                    }
             }
         })
+    }
+
+    private fun isNewCategory(categoryName: String?): Boolean {
+        return categoryAdapter.dataSource?.filter { categoryProxy -> categoryProxy.categoryName == categoryName }
+            .isEmpty()
     }
 
     override fun onDestroyView() {

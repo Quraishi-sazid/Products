@@ -27,8 +27,6 @@ import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
 class BudgetAndSpentFragment : Fragment(), IViewPagerSwipeListener {
-
-
     private lateinit var binding: FragmentBudgetAndSpentBinding;
     private val args: BudgetAndSpentFragmentArgs by navArgs()
     private val budgetAndSpentViewModel: BudgetAndSpentViewModel by viewModels()
