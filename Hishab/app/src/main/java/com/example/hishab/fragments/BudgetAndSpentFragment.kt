@@ -1,6 +1,11 @@
 package com.example.hishab.fragments
 
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -17,12 +22,15 @@ import com.example.hishab.databinding.LayoutBudgetSpentItemBinding
 import com.example.hishab.interfaces.IViewPagerSwipeListener
 import com.example.hishab.models.entities.Budget
 import com.example.hishab.models.entities.CustomDate
+import com.example.hishab.utils.AlarmReceiver
+import com.example.hishab.utils.Constant
 import com.example.hishab.utils.Util
 import com.example.hishab.viewmodel.BudgetAndSpentViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import java.util.*
 import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
@@ -58,12 +66,14 @@ class BudgetAndSpentFragment : Fragment(), IViewPagerSwipeListener {
             try {
                 var directions =
                     ViewPagerTabFragmentDirections.actionViewPagerTabFragmentToAddBudgetFragment()
-                directions.budgetList = simpleGenericAdapterWithBinding.dataSource.toTypedArray()
+                directions.budgetList =
+                    simpleGenericAdapterWithBinding.dataSource.toTypedArray()
                 findNavController().navigate(directions)
             } catch (exception: Exception) {
                 var directions =
                     BudgetAndSpentFragmentDirections.actionBudgetAndSpentFragmentToAddBudgetFragment()
-                directions.budgetList = simpleGenericAdapterWithBinding.dataSource.toTypedArray()
+                directions.budgetList =
+                    simpleGenericAdapterWithBinding.dataSource.toTypedArray()
                 findNavController().navigate(directions)
             }
 
