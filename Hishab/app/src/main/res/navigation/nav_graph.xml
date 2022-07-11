@@ -51,6 +51,9 @@
             app:argType="com.example.hishab.models.entities.CustomDate"
             app:nullable="true"
             android:defaultValue="@null" />
+        <action
+            android:id="@+id/action_purchaseHistoryFragment_to_addShoppingFragment"
+            app:destination="@id/addShoppingFragment" />
     </fragment>
     <fragment
         android:id="@+id/categoryDetailsFragment"
@@ -184,6 +187,9 @@
         <action
             android:id="@+id/action_viewPagerTabFragment_to_productCategoryMappingFragment"
             app:destination="@id/productCategoryMappingFragment" />
+        <action
+            android:id="@+id/action_viewPagerTabFragment_to_addShoppingFragment2"
+            app:destination="@id/addShoppingFragment" />
     </fragment>
     <fragment
         android:id="@+id/budgetAndSpentHistoryFragment"

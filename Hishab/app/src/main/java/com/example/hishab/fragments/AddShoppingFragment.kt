@@ -68,6 +68,7 @@ class AddShoppingFragment : Fragment() {
             viewModel.buyingId = args.buyingId.toLong()
             viewModel.time = args.time
             viewModel.productId = args.productId
+            myCalendar.timeInMillis = args.time
             adapter.selectedProductId = viewModel.productId
         }
 

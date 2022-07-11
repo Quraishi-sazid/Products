@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavDirections
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.DiffUtil
@@ -83,6 +85,22 @@ class PurchaseHistoryFragment : Fragment(), IViewPagerSwipeListener {
         }
         adapter.thirdViewInlateLiveData.observe(viewLifecycleOwner) {
             it.second.purchaseHistory = it.first
+        }
+        adapter.thirdViewClickLiveData.observe(viewLifecycleOwner){
+            try{
+                var directions = ViewPagerTabFragmentDirections.actionViewPagerTabFragmentToAddShoppingFragment()
+                directions.productId = it.getProductId()
+                directions.time = it.getTime()
+                directions.buyingId = it.getBuyingId()!!.toInt()
+                findNavController().navigate(directions)
+            }catch (exception: Exception){
+                var directions = PurchaseHistoryFragmentDirections.actionPurchaseHistoryFragmentToAddShoppingFragment()
+                directions.productId = it.getProductId()
+                directions.time = it.getTime()
+                directions.buyingId = it.getBuyingId()!!.toInt()
+                findNavController().navigate(directions)
+            }
+
         }
         recyclerView = inflate.findViewById<RecyclerView>(R.id.recycler_view)!!
         recyclerView.layoutManager = LinearLayoutManager(activity)

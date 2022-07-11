@@ -85,6 +85,9 @@ data class PurchaseHistory(
     fun getTime(): Long {
         return time!!
     }
+    fun getProductId():Long{
+        return productId!!
+    }
 
 
 
