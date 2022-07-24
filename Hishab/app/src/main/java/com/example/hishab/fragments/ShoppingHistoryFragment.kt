@@ -1,21 +1,19 @@
 package com.example.hishab.fragments
 
+import android.R.attr.phoneNumber
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hishab.R
 import com.example.hishab.adapter.GenericAdapterForThreeViewTypes
-import com.example.hishab.adapter.ShoppingHistoryAdapter
-import com.example.hishab.behaviors.FabBehavior
 import com.example.hishab.databinding.*
 import com.example.hishab.interfaces.IRecyclerViewItemClickCallback
 import com.example.hishab.interfaces.IViewPagerSwipeListener
@@ -24,12 +22,16 @@ import com.example.hishab.models.ThreeLayout
 import com.example.hishab.models.TwoPredicate
 import com.example.hishab.utils.Util
 import com.example.hishab.viewmodel.ShoppingHistoryViewModel
+import com.google.firebase.FirebaseException
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.PhoneAuthCredential
+import com.google.firebase.auth.PhoneAuthOptions
+import com.google.firebase.auth.PhoneAuthProvider
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.Observable
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 import java.util.function.Predicate
+
 
 @AndroidEntryPoint
 class ShoppingHistoryFragment : Fragment(), IViewPagerSwipeListener {
@@ -49,6 +51,7 @@ class ShoppingHistoryFragment : Fragment(), IViewPagerSwipeListener {
         fetchBuyingList()
         setButtonClick()
         setNavigationCallBack()
+
         return binding.root
     }
 

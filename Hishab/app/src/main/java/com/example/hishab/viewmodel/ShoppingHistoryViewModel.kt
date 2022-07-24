@@ -3,15 +3,10 @@ package com.example.hishab.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.viewModelScope
-import com.example.hishab.adapter.ShoppingHistoryAdapter
 import com.example.hishab.models.ShoppingHistory
 import com.example.hishab.repository.Repository
 import com.example.hishab.utils.Util
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel

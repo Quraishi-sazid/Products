@@ -13,7 +13,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.hishab.R
-import com.example.hishab.adapter.CategoryAdapter
 import com.example.hishab.adapter.SimpleGenericAdapterWithBinding
 import com.example.hishab.databinding.FragmentCategoryListBinding
 import com.example.hishab.databinding.LayoutCategoryInputBinding

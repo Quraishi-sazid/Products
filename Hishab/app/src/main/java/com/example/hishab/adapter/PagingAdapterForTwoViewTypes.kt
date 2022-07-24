@@ -14,7 +14,7 @@ class PagingAdapterForTwoViewTypes<T1, T2, B1 : ViewDataBinding, B2 : ViewDataBi
     val layoutId1: Int,
     val layoutId2: Int,
     val checkIfFirstViewTypePredicate: Predicate<Int>,
-    private var diffUtilCallback: DiffUtil.ItemCallback<Any>
+    private val diffUtilCallback: DiffUtil.ItemCallback<Any>
 ) : PagingDataAdapter<Any, RecyclerView.ViewHolder>(diffUtilCallback) {
     var firstViewInlateLiveData = MutableLiveData<Pair<T1, B1>>()
     var secondViewInlateLiveData = MutableLiveData<Pair<T2, B2>>()
@@ -84,7 +84,7 @@ class PagingAdapterForTwoViewTypes<T1, T2, B1 : ViewDataBinding, B2 : ViewDataBi
 
 
     companion object {
-        fun <T1,T2, B1 : ViewDataBinding,B2 : ViewDataBinding> Create(layoutId1: Int,layoutId2: Int,predicate: Predicate<Int>, diffUtil: DiffUtil.ItemCallback<Any>?=null)
+        fun <T1,T2, B1 : ViewDataBinding,B2 : ViewDataBinding> create(layoutId1: Int, layoutId2: Int, predicate: Predicate<Int>, diffUtil: DiffUtil.ItemCallback<Any>?=null)
                 : PagingAdapterForTwoViewTypes<T1,T2, B1,B2> {
             var passingDiffUtil = diffUtil
             if (passingDiffUtil == null) {

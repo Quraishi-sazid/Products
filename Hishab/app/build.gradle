@@ -7,6 +7,8 @@ plugins {
 
 }
 apply plugin: "kotlin-kapt"
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.android.application'
 android {
     compileSdkVersion 31
     buildToolsVersion "30.0.3"
@@ -86,6 +88,12 @@ dependencies {
     //hilt
     implementation("com.google.dagger:hilt-android:2.38.1")
     kapt("com.google.dagger:hilt-android-compiler:2.38.1")
+
+    implementation platform('com.google.firebase:firebase-bom:30.2.0')
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-auth'
+    implementation 'com.google.firebase:firebase-firestore'
+    implementation 'com.google.android.gms:play-services-auth:20.2.0'
 
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.5.30")
     testImplementation 'junit:junit:4.+'
