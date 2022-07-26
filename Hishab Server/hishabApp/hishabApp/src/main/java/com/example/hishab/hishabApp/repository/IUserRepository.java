@@ -8,5 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface IUserRepository extends JpaRepository<UserModel,Integer> {
     UserModel findFirstByMobileNo(String mobileNo);
-    UserModel findFirstByMobileNoAndUserId(String mobileNo,int userId);
+    UserModel findFirstByMobileNoAndId(String mobileNo,int userId);
+
 }

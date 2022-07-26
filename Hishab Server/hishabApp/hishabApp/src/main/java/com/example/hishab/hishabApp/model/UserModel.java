@@ -11,7 +11,7 @@ import lombok.Data;
 public class UserModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int userId;
+    private int id;
     private String mobileNo;
     private String email;
     private String name;
