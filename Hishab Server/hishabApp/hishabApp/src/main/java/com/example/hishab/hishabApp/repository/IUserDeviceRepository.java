@@ -9,6 +9,7 @@ import java.util.List;
 
 @Repository
 public interface IUserDeviceRepository extends JpaRepository<UserDeviceModel,Integer> {
-        List<UserDeviceModel> findById(int userId);
+        List<UserDeviceModel> findAllByUserUserId(int userId);
         UserDeviceModel findByFirebaseId(String firebaseId);
+       List<UserDeviceModel> findAllByUserName(String name);
 }

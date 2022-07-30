@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import net.minidev.json.JSONObject;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/home/api")
 public class UserController {
@@ -36,8 +38,9 @@ public class UserController {
             if (existingUser == null) {
                 UserModel newUser = new UserModel();
                 newUser.setMobileNo(phoneNo);
+                //newUser.setUserId(1);
                 responseUserModel = userRepository.save(newUser);
-                responseUserDeviceModel.setUser(newUser);
+                responseUserDeviceModel.setUser(responseUserModel);
                 responseUserDeviceModel = userDeviceRepository.save(responseUserDeviceModel);
             } else {
                 responseUserModel = existingUser;
@@ -48,15 +51,25 @@ public class UserController {
                     responseUserDeviceModel = userDeviceRepository.findByFirebaseId(firebaseId);
                 }
             }
-            response.put("user_id", responseUserModel.getId());
+            response.put("user_id", responseUserModel.getUserId());
             response.put("user_device_id", responseUserDeviceModel.getUserDeviceId());
         }
         return response;
     }
 
+    @GetMapping("/findAll/{userId}")
+    public List<UserDeviceModel>findAll(@PathVariable int userId){
+        return userDeviceRepository.findAllByUserUserId(userId);
+    }
+
+    /*@GetMapping("/findAll")
+    public List<UserDeviceModel> findAllDeviceInforamtion(@RequestParam String userId){
+        return userDeviceRepository.findAllByUserName(userId);
+    }*/
+
     @PostMapping("/Registration")
     public UserModel Registration(@RequestBody UserModel userModel) {
-        UserModel existingUser = userRepository.findFirstByMobileNoAndId(userModel.getMobileNo(), userModel.getId());
+        UserModel existingUser = userRepository.findFirstByMobileNoAndUserId(userModel.getMobileNo(), userModel.getUserId());
         if (existingUser == null) {
             return null;
         } else {
