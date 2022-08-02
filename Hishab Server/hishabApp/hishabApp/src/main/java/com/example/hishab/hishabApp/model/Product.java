@@ -13,9 +13,9 @@ import javax.persistence.*;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int productId;
+    public int productId;
 
-    String productName;
+    public String productName;
 /*    @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "category_id",nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
