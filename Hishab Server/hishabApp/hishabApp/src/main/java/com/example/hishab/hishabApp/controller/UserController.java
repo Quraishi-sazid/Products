@@ -5,7 +5,11 @@ import com.example.hishab.hishabApp.model.UserDeviceModel;
 import com.example.hishab.hishabApp.model.UserModel;
 import com.example.hishab.hishabApp.repository.IUserDeviceRepository;
 import com.example.hishab.hishabApp.repository.IUserRepository;
+import com.example.hishab.hishabApp.security.jwt.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 import net.minidev.json.JSONObject;
 
@@ -15,6 +19,8 @@ import java.util.List;
 @RequestMapping("/home/api")
 public class UserController {
 
+    @Autowired
+    AuthenticationManager authenticationManager;
     @Autowired
     IUserRepository userRepository;
     @Autowired
@@ -26,19 +32,21 @@ public class UserController {
         if (receivedObject.get("mobile") == null || ((String) receivedObject.get("mobile")).equals("")) {
             response.put("user_id", -1);
             response.put("user_device_id", -1);
+            response.put("jwt",-1);
         } else {
             UserModel responseUserModel;
             UserDeviceModel responseUserDeviceModel = new UserDeviceModel();
             String phoneNo = (String) receivedObject.get("mobile");
             String deviceModel = (String) receivedObject.get("deviceModel");
             String firebaseId = (String) receivedObject.get("firebase_id");
+            String jwtToken = JwtUtils.generateJwtToken(phoneNo);
+
             responseUserDeviceModel.setDeviceModel(deviceModel);
             responseUserDeviceModel.setFirebaseId(firebaseId);
-            UserModel existingUser = userRepository.findFirstByMobileNo(phoneNo);
+            UserModel existingUser = userRepository.findFirstByMobileNo(phoneNo).orElse(null);
             if (existingUser == null) {
                 UserModel newUser = new UserModel();
                 newUser.setMobileNo(phoneNo);
-                //newUser.setUserId(1);
                 responseUserModel = userRepository.save(newUser);
                 responseUserDeviceModel.setUser(responseUserModel);
                 responseUserDeviceModel = userDeviceRepository.save(responseUserDeviceModel);
@@ -53,19 +61,22 @@ public class UserController {
             }
             response.put("user_id", responseUserModel.getUserId());
             response.put("user_device_id", responseUserDeviceModel.getUserDeviceId());
+            response.put("jwt",jwtToken);
         }
         return response;
     }
 
     @GetMapping("/findAll/{userId}")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public List<UserDeviceModel>findAll(@PathVariable int userId){
         return userDeviceRepository.findAllByUserUserId(userId);
     }
 
-    /*@GetMapping("/findAll")
-    public List<UserDeviceModel> findAllDeviceInforamtion(@RequestParam String userId){
-        return userDeviceRepository.findAllByUserName(userId);
-    }*/
+    @GetMapping("/findAll")
+    public /*List<UserDeviceModel>*/ String findAllDeviceInforamtion(/*@RequestParam String userId*/){
+       // return userDeviceRepository.findAllByUserName(userId);
+        return "dfdfsdf";
+    }
 
     @PostMapping("/Registration")
     public UserModel Registration(@RequestBody UserModel userModel) {
