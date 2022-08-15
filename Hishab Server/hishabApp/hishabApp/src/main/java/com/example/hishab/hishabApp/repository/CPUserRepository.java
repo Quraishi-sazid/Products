@@ -15,5 +15,4 @@ public interface CPUserRepository extends JpaRepository<CPUserMapping,Integer> {
     @Query(value ="select u.* FROM tbl_category_product_mapping cp inner join tbl_cp_user_mapping  u ON\n" +
             "cp.category_product_mapping_id = u.category_product_mapping_id WHERE cp.product_id=:productId and u.user_id=:userId",nativeQuery = true)
     CPUserMapping findUserMappingByProductId(@Param("productId") Integer productId,@Param("userId") Integer userId);
-
 }

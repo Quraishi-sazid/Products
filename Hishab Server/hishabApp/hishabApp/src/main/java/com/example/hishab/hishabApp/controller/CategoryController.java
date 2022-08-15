@@ -17,11 +17,11 @@ public class CategoryController {
     ICategoryRepository categoryRepository;
 
     @PostMapping("/addOrUpdate")
-    int addOrUpdateCategory(@RequestParam int categoryId, @RequestParam String newCategoryName, @RequestParam String oldCategoryName) {
+    Category addOrUpdateCategory(@RequestParam int categoryId, @RequestParam String newCategoryName, @RequestParam String oldCategoryName) {
         if (categoryId == -1) {
-            return addCategory(newCategoryName).getCategoryId();
+            return addCategory(newCategoryName);
         } else {
-           return categoryRepository.save(new Category(categoryId, newCategoryName)).getCategoryId();
+           return categoryRepository.save(new Category(categoryId, newCategoryName));
         }
     }
 

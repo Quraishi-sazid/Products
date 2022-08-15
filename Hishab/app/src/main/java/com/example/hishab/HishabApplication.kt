@@ -1,9 +1,11 @@
 package com.example.hishab
 
 import android.app.Application
+import android.content.Context
 import android.util.Log
 import com.example.hishab.utils.AlarmHelper
 import com.example.hishab.utils.AlarmReceiver
+import com.example.hishab.utils.PreferenceHelper
 import dagger.hilt.android.HiltAndroidApp
 import java.util.*
 
@@ -13,6 +15,7 @@ class HishabApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        PreferenceHelper.sharedPreferences = applicationContext.getSharedPreferences("HishabPreference", Context.MODE_PRIVATE)
         reminderAlarmHelper = AlarmHelper.Create(applicationContext, AlarmHelper.ReminderAlarmRequestCode, AlarmReceiver::class.java)
         setAlarms()
     }

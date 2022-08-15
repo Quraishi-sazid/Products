@@ -14,8 +14,9 @@ import org.springframework.web.bind.annotation.*;
 import net.minidev.json.JSONObject;
 
 import java.util.List;
-
+//@CrossOrigin(origins = "http://localhost:8080")
 @RestController
+
 @RequestMapping("/home/api")
 public class UserController {
 
@@ -61,7 +62,7 @@ public class UserController {
             }
             response.put("user_id", responseUserModel.getUserId());
             response.put("user_device_id", responseUserDeviceModel.getUserDeviceId());
-            response.put("jwt",jwtToken);
+            response.put("jwt:",jwtToken);
         }
         return response;
     }
@@ -76,6 +77,12 @@ public class UserController {
     public /*List<UserDeviceModel>*/ String findAllDeviceInforamtion(/*@RequestParam String userId*/){
        // return userDeviceRepository.findAllByUserName(userId);
         return "dfdfsdf";
+    }
+
+    @GetMapping("/test")
+    public /*List<UserDeviceModel>*/ String test(/*@RequestParam String userId*/){
+        // return userDeviceRepository.findAllByUserName(userId);
+        return "testing done";
     }
 
     @PostMapping("/Registration")

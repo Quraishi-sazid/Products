@@ -27,7 +27,12 @@ public class BudgetController {
     CategoryController categoryController;
 
     @PostMapping("/addOrUpdateBudget")
-    Budget addBudget(@RequestParam("budgetId") int budgetId,@RequestParam("budget") int budget, @RequestParam("month") int month, @RequestParam("year") int year, @RequestParam("user_id") int userId, @RequestParam("category_id") String categoryName) {
+    Budget addBudget(@RequestParam("budgetId") int budgetId,
+                     @RequestParam("budget") int budget,
+                     @RequestParam("month") int month,
+                     @RequestParam("year") int year,
+                     @RequestParam("user_id") int userId,
+                     @RequestParam("category_id") String categoryName) {
         UserModel userModel = userRepository.findUserModelByUserId(userId);
         Category category = categoryController.addCategory(categoryName);
         Budget budgetModel = new Budget(budget,month,year,userModel,category);
