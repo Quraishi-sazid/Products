@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import com.example.hishab.models.CategoryProxy
 import com.example.hishab.models.entities.Category
+import com.example.hishab.repository.CategoryRepository
 import com.example.hishab.repository.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -13,7 +14,7 @@ import javax.inject.Inject
 class CategoryViewModel @Inject constructor(application: Application) :
     AndroidViewModel(application) {
     @Inject
-    lateinit var repository: Repository
+    lateinit var repository: CategoryRepository
 
     fun getCategoryWithTotalProductMapped(): LiveData<List<CategoryProxy>> {
         return repository.getCategoryWithProductTableMap()
@@ -27,8 +28,8 @@ class CategoryViewModel @Inject constructor(application: Application) :
         repository.deleteCategoryById(deleteId)
     }
 
-    suspend fun updateCategory(updateCategory: Category) {
-        repository.updateCategory(updateCategory)
+    suspend fun updateCategory(updateCategory: Category, oldCategoryName:String?) {
+        repository.updateCategory(updateCategory,oldCategoryName)
     }
 
     suspend fun getProductCountMappedWithCategoryId(id: Long):Int {

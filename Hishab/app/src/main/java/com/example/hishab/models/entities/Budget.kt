@@ -38,6 +38,8 @@ class Budget():BaseObservable(), Serializable, Parcelable {
     @ColumnInfo(name="year")
     var year:Int=0
 
+    var payloadId:Long = -1
+
     @Bindable
     @Ignore
     var categoryName:String?=null

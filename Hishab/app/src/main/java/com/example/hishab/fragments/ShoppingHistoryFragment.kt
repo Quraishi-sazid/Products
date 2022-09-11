@@ -97,8 +97,6 @@ class ShoppingHistoryFragment : Fragment(), IViewPagerSwipeListener {
             it.second.month1 =it.first
         }
         buyingListAdapter.thirdViewInlateLiveData.observe(viewLifecycleOwner){
-            Log.v("SSS",it.component1().getYear().toString())
-            Log.v("SSS",it.component1().getTime().toString())
             it.second.shoppingHistory =it.first
         }
         buyingListAdapter.thirdViewClickLiveData.observe(viewLifecycleOwner){
@@ -111,12 +109,10 @@ class ShoppingHistoryFragment : Fragment(), IViewPagerSwipeListener {
     }
 
     private fun fetchBuyingList() {
-       // CoroutineScope(Dispatchers.IO).launch {
             viewModel.getBuyingHistoryLiveData().observe(viewLifecycleOwner, {
                 var processedList = viewModel.processData(it)
                 buyingListAdapter.submitList(processedList)
             })
-       // }
     }
 
     override lateinit var onSwipedRightOrLeft: Observable<Pair<Float, Float>>

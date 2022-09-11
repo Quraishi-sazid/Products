@@ -1,18 +1,23 @@
 package com.example.hishab.di
 
 import android.app.Application
+import android.content.Context
 import androidx.room.Room
+import androidx.room.RoomDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.hishab.db.AppDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import javax.inject.Singleton
 
 
-/*
-@EntryPoint
+
+/*@EntryPoint
 @InstallIn(SingletonComponent::class)
 interface FooEntryPoint {
     val database: AppDatabase
@@ -25,18 +30,27 @@ object DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideAppDatabase(app: Application):AppDatabase
+    fun provideAppDatabase(app: Context):AppDatabase
     {
         synchronized(this) {
-            val instance = Room.databaseBuilder(
-                app.applicationContext,
-                AppDatabase::class.java,
-                "hishab_database"
-            ).allowMainThreadQueries().
-            fallbackToDestructiveMigration().
-            build()
-            return instance
+            return AppDatabase.INSTANCE ?: synchronized(this) {
+                val instance = Room.databaseBuilder(
+                    app,
+                    AppDatabase::class.java,
+                    "hishab_database3"
+                ).addCallback(object : RoomDatabase.Callback() {
+                    override fun onCreate(db: SupportSQLiteDatabase) {
+                        super.onCreate(db)
+                        GlobalScope.launch {
+                            AppDatabase.insertPredefinedData()
+                        }
+                    }
+                }).fallbackToDestructiveMigration()
+                    .build()
+                AppDatabase.INSTANCE = instance
+                instance
+            }
         }
     }
-}
-*/
+}*/
+

@@ -46,20 +46,24 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
+
     //@Bean
     public AuthTokenFilter authenticationJwtTokenFilter(){
        return new AuthTokenFilter(userDetailsService);
     }
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
-                .antMatchers("/home/api/test").permitAll()
-                .antMatchers("/home/api/login").permitAll()
-                .antMatchers("/**").hasRole("USER")
+                .antMatchers("/**").permitAll()
+				/*
+				 * .antMatchers("/home/api/test").permitAll()
+				 * .antMatchers("/home/api/login").permitAll()
+				 * .antMatchers("/home/api/registration").permitAll()
+				 * .antMatchers("/**").hasRole("USER")
+				 */
                 .anyRequest().authenticated();
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }

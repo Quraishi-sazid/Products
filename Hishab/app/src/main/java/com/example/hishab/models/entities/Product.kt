@@ -19,6 +19,7 @@ class Product @Inject constructor() :
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "product_id")
     private var _productId: Long = 0
+    var payloadId:Long = -1
 
     @ColumnInfo(name = "product_name")
     private var productName: String = ""

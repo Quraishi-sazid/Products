@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit
 class FirebaseOTPHelper private constructor(val activity: Activity) {
     lateinit var phoneAuthOptions: PhoneAuthOptions;
     var validCode: String? = "";
+    var phoneNo:String = "";
     var verificationId:String? ="";
 
     companion object {
@@ -28,6 +29,7 @@ class FirebaseOTPHelper private constructor(val activity: Activity) {
         phoneNo: String,
         callback: PhoneAuthProvider.OnVerificationStateChangedCallbacks? = null
     ) {
+        this.phoneNo = phoneNo
         val options = PhoneAuthOptions.newBuilder(FirebaseAuth.getInstance())
             .setPhoneNumber(phoneNo) // Phone number to verify
             .setTimeout(120L, TimeUnit.SECONDS) // Timeout and unit

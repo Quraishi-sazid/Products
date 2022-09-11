@@ -28,4 +28,6 @@ public class Product {
     public Product(String productName) {
         this.productName = productName;
     }
+    @Transient
+    public int categoryId;
 }

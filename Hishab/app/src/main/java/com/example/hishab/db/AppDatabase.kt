@@ -20,8 +20,9 @@ import kotlinx.coroutines.launch
         PurchaseItem::class,
         Shopping::class,
         CustomDate::class,
-        Budget::class
-    ),views =[Vw_category_spent::class], version = 1)
+        Budget::class,
+        PayLoad::class
+    ),views =[Vw_category_spent::class], version = 3)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun ProductDao(): ProductDao
     abstract fun CategoryDao(): CategoryDao
@@ -30,6 +31,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun PurchaseShoppingCategoryDao(): PurchaseHistoryDao
     abstract fun BudgetDao(): BudgetDao
     abstract fun customDao(): DateDao
+    abstract fun paylodDao():PayLoadDao
 
 
     companion object {
@@ -57,7 +59,7 @@ abstract class AppDatabase : RoomDatabase() {
             }
         }
 
-        private suspend fun insertPredefinedData() {
+        public suspend fun insertPredefinedData() {
             INSTANCE?.CategoryDao()
                 ?.insertCategories(*getDefaultCategoryList().map { it }
                     .toTypedArray())

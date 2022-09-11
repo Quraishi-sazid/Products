@@ -6,6 +6,7 @@ import com.example.hishab.db.AppDatabase
 import com.example.hishab.db.dao.*
 import com.example.hishab.models.*
 import com.example.hishab.models.entities.*
+import dagger.hilt.EntryPoints
 import io.reactivex.Flowable
 
 

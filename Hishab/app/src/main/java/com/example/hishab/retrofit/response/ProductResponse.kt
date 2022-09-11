@@ -1,4 +1,12 @@
 package com.example.hishab.retrofit.response
 
-data class ProductResponse(var productId: Int, var productName: String) {
+
+import com.example.hishab.models.entities.Product
+import com.example.hishab.retrofit.response.CategoryResponse
+
+class ProductResponse() {
+    var product: Product? = null
+    var localId = 0
+    var categoryResponse: CategoryResponse? = null
+
 }

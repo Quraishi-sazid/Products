@@ -19,6 +19,8 @@ class Category @Inject constructor () :BaseObservable(),Parcelable {
     @PrimaryKey(autoGenerate = true) @androidx.room.ColumnInfo(name="category_id") var  categoryId:Long=0
     @NonNull
     @ColumnInfo(name="category_name") private var categoryName:String=""
+    @ColumnInfo(name="remote_id") var remoteId:Long=-1
+    var payloadId:Long = -1
     @Bindable
     fun getCategoryName():String
     {

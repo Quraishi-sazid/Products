@@ -38,6 +38,7 @@ class PurchaseItem @Inject constructor() : BaseObservable() {
         purchaseId = value
         notifyPropertyChanged(BR.purchaseId)
     }
+    var payloadId:Long = -1
 
     @Bindable
     public fun getCost(): Int {

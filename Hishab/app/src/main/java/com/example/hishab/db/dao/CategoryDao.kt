@@ -11,21 +11,33 @@ import com.example.hishab.models.entities.Category
 @Dao
 interface CategoryDao {
     @Insert
-    suspend fun insertCategory(category: Category):Long
+    suspend fun insertCategory(category: Category): Long
+
     @Query("SELECT * FROM category")
-    fun getAllCategory():  List<Category>
+    fun getAllCategory(): List<Category>
+
     @Query("SELECT * FROM category where category_name like :name")
-    suspend fun getCategoryFromName(name:String): Category
+    suspend fun getCategoryFromName(name: String): Category
+
     @Query("Select * FROM category where category_id=:id")
-    suspend fun getCategoryById(id:Long):Category
+    suspend fun getCategoryById(id: Long): Category
+
     @Query("Select -1 as proxyId, c.category_id as categoryId, c.category_name as categoryName,count(p.product_id) as totalProductMappedWithThis from category as c left join product_table as p on c.category_id=p.category_id group by c.category_id")
-    fun getCategoryWithTotalProductMapped():LiveData<List<CategoryProxy>>
+    fun getCategoryWithTotalProductMapped(): LiveData<List<CategoryProxy>>
+
     @Insert
     suspend fun insertCategories(vararg category: Category)
+
     @Query("Delete from category where category_id=:deleteId")
     suspend fun deleteCategoryById(deleteId: Long)
+
     @Update
     suspend fun updateCategory(updateCategory: Category)
+
     @Query("Select category_name from category where category_id=:categoryId")
-    fun getCategoryNameFromCategoryId(categoryId: Long):String?
+    fun getCategoryNameFromCategoryId(categoryId: Long): String?
+
+    @Query("update category set remote_id =:remoteId,payloadId =:payloadId where category_id =:categoryId")
+    suspend fun updateLocalIdAndPayloadId(remoteId: Long, payloadId: Long, categoryId: Long)
+
 }

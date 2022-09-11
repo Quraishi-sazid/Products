@@ -15,5 +15,6 @@ public class UserModel {
     private String mobileNo;
     private String email;
     private String name;
+    private String photoUrl;
     private String password;
 }

@@ -85,17 +85,10 @@ public class UserController {
         return "testing done";
     }
 
-    @PostMapping("/Registration")
+    @PostMapping("/registration")
     public UserModel Registration(@RequestBody UserModel userModel) {
-        UserModel existingUser = userRepository.findFirstByMobileNoAndUserId(userModel.getMobileNo(), userModel.getUserId());
-        if (existingUser == null) {
-            return null;
-        } else {
-            if (existingUser.getName() == null) {
-                return userRepository.save(userModel);
-            }
-            return null;
-
-        }
+        if(userModel != null)
+            return userRepository.save(userModel);
+        return null;
     }
 }

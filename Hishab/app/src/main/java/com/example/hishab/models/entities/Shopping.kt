@@ -9,7 +9,8 @@ import androidx.room.PrimaryKey
 data class Shopping(
     private @ColumnInfo(name = "date_id") var dateId: Long = 0,
     private @ColumnInfo(name = "time") var time: Long = 0,
-    private @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "shopping_id") var shoppingId: Long = 0
+    private @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "shopping_id") var shoppingId: Long = 0,
+    var payloadId:Long = -1
 ) {
     fun getShoppingId(): Long {
         return shoppingId;

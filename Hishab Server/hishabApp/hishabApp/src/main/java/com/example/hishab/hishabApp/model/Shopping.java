@@ -24,15 +24,22 @@ public class Shopping {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     public UserModel userModel;
+    
+    public Shopping(Date date,UserModel userModel,int shoppingId) {
+		this.date = date;
+		this.userModel = userModel;
+		this.shoppingId = shoppingId;
+	}
+    public Shopping(Date date,UserModel userModel) {
+		this.date = date;
+		this.userModel = userModel;
+	}
 
     @JsonInclude()
     @Transient
     public int userId;
 
-    /*    @OneToMany(fetch = FetchType.LAZY)
-        @JoinColumn(name ="s_id",nullable = false)
-      //  @OnDelete(action = OnDeleteAction.CASCADE)
-        @JsonIgnore*/
+
     @JsonInclude()
     @Transient
     public List<ShoppingItem> shoppingItemList;

@@ -61,8 +61,7 @@ class CategoryListFragment : Fragment()/*,IViewPagerSwipeListener*/ {
 
     private fun getCategoryData() {
         categoryListViewModel.getCategoryWithTotalProductMapped().observe(viewLifecycleOwner,
-            Observer {
-                var categoryList = it
+            Observer { categoryList ->
                 categoryList.forEach({
                     it.proxyId = proxyId++
                 })
@@ -72,11 +71,12 @@ class CategoryListFragment : Fragment()/*,IViewPagerSwipeListener*/ {
 
     private fun setUpRecyclerView(categoryList: List<CategoryProxy>) {
         categoryAdapter = SimpleGenericAdapterWithBinding.Create(R.layout.layout_categroy_item)
-        categoryAdapter.viewInlateLiveData.observe(viewLifecycleOwner){
+        categoryAdapter.viewInlateLiveData.observe(viewLifecycleOwner) {
             it.second.category = it.first
         }
-        categoryAdapter.viewClickLiveData.observe(viewLifecycleOwner){
-            var directions = ViewPagerTabFragmentDirections.actionViewPagerTabFragmentToProductCategoryMappingFragment()
+        categoryAdapter.viewClickLiveData.observe(viewLifecycleOwner) {
+            var directions =
+                ViewPagerTabFragmentDirections.actionViewPagerTabFragmentToProductCategoryMappingFragment()
             directions.categoryId = it!!.categoryId.toInt()
             findNavController().navigate(directions)
         }
@@ -136,6 +136,7 @@ class CategoryListFragment : Fragment()/*,IViewPagerSwipeListener*/ {
 
     private fun showDialog(updateCategory: Category? = null) {
         var isUpdating = updateCategory != null
+        var oldCategoryName:String? = null
         var customAlertDialog = CustomAlertDialog<LayoutCategoryInputBinding>(
             requireContext(),
             R.layout.layout_category_input,
@@ -143,28 +144,31 @@ class CategoryListFragment : Fragment()/*,IViewPagerSwipeListener*/ {
         )
         compositeDisposable.add(customAlertDialog.onViewCreated.subscribe { binding ->
             if (updateCategory != null) {
+                oldCategoryName = updateCategory.getCategoryName()
                 binding.category = updateCategory
             } else
                 binding.category = Category()
         })
         compositeDisposable.add(customAlertDialog.onSubmitButtonPressed.subscribe { binding ->
             CoroutineScope(Dispatchers.IO).launch {
-                if (isNewCategory(binding.category?.getCategoryName()))
-                    {
-                        if (binding.category?.getCategoryName() != null && !binding.category?.getCategoryName()
-                                .equals("")
-                        ) {
-                            if (isUpdating)
-                                categoryListViewModel.updateCategory(binding.category!!)
-                            else {
-                                categoryListViewModel.insertCategory(binding.category!!)
-                            }
+                if (isNewCategory(binding.category?.getCategoryName())) {
+                    if (binding.category?.getCategoryName() != null && !binding.category?.getCategoryName()
+                            .equals("")
+                    ) {
+                        if (isUpdating)
+                            categoryListViewModel.updateCategory(binding.category!!,oldCategoryName)
+                        else {
+                            categoryListViewModel.insertCategory(binding.category!!)
                         }
-                        customAlertDialog.dismiss()
                     }
-                else
-                    withContext(Dispatchers.Main){
-                        Toast.makeText(requireContext(),"Category already exists",Toast.LENGTH_SHORT).show()
+                    customAlertDialog.dismiss()
+                } else
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(
+                            requireContext(),
+                            "Category already exists",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
             }
         })
@@ -180,5 +184,5 @@ class CategoryListFragment : Fragment()/*,IViewPagerSwipeListener*/ {
         compositeDisposable.clear()
     }
 
-    /*override*/ lateinit var onSwipedRightOrLeft: Observable<Pair<Float, Float>>
+    lateinit var onSwipedRightOrLeft: Observable<Pair<Float, Float>>
 }

@@ -3,6 +3,11 @@ package com.example.hishab.utils
 import android.content.Context
 import android.content.SharedPreferences
 
+/**
+ * Todo
+ * use jetpack secure reference
+ */
+
 class PreferenceHelper {
     companion object {
         lateinit var sharedPreferences: SharedPreferences
@@ -18,7 +23,7 @@ class PreferenceHelper {
             editor.commit()
         }
 
-        fun save(key: String, value: String) {
+        fun save(key: String, value: String?) {
             val editor: SharedPreferences.Editor = sharedPreferences.edit()
             editor.putString(key, value)
             editor.commit()
