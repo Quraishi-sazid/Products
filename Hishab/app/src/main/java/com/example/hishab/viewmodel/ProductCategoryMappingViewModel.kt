@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import com.example.hishab.models.CategoryAndProductModel
 import com.example.hishab.models.entities.Category
+import com.example.hishab.repository.ProductRepository
 import com.example.hishab.repository.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -14,11 +15,11 @@ class ProductCategoryMappingViewModel @Inject constructor(application: Applicati
     AndroidViewModel(application) {
     lateinit var catagoryList: List<Category>
     fun getProductCategoryListInnerJoin(): LiveData<List<CategoryAndProductModel>> {
-        return repository.getProductCategoryListInnerJoin()
+        return productRepository.getProductCategoryListInnerJoin()
     }
 
     fun getProductListFromCategoryIdInnerJoin(categoryID : Long): LiveData<List<CategoryAndProductModel>> {
-        return repository.getProductListFromCategoryIdInnerJoin(categoryID)
+        return productRepository.getProductListFromCategoryIdInnerJoin(categoryID)
     }
 
     suspend fun insertCategoryProductMapping(
@@ -26,7 +27,7 @@ class ProductCategoryMappingViewModel @Inject constructor(application: Applicati
         categoryName: String,
         productName: String
     ) {
-        repository.getProductIdByInsertingInDataBase(categoryId, categoryName, productName)
+        productRepository.getProductIdByInsertingInDataBase(categoryId, categoryName, productName)
     }
 
     fun deleteProduct(productId: Long) {
@@ -34,7 +35,7 @@ class ProductCategoryMappingViewModel @Inject constructor(application: Applicati
     }
 
     fun updateProductName(productId: Long, productName: String) {
-        repository.updateProductName(productId, productName)
+        productRepository.updateProductName(productId, productName)
     }
 
     fun getPurchaseCountOfProductId(productId: Long): Int {
@@ -62,4 +63,7 @@ class ProductCategoryMappingViewModel @Inject constructor(application: Applicati
 
     @Inject
     lateinit var repository: Repository
+
+    @Inject
+    lateinit var productRepository: ProductRepository
 }

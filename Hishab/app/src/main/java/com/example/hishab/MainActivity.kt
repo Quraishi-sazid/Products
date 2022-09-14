@@ -21,7 +21,6 @@ class MainActivity : AppCompatActivity() {
         bottomNavigationView =
             findViewById<BottomNavigationView>(R.id.activity_main_bottom_navigation_view)
         BottomNavigationViewWithViewPagerManager.create(navHostFragment, bottomNavigationView)
-        testWorkManager();
     }
 
     fun cancelJob() {
@@ -29,16 +28,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun testWorkManager() {
-        val constraints: Constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .build()
-        var request =
-            OneTimeWorkRequest.Builder(ApiCallerWorker::class.java).setConstraints(constraints)
-                .build()
-        WorkManager.getInstance(this)
-            .beginUniqueWork("RemoteUpdateWork", ExistingWorkPolicy.REPLACE, request).enqueue()
-    }
+
 
 
 }

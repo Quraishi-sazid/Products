@@ -9,17 +9,17 @@ import javax.inject.Inject
 @Entity(tableName = "product_table")
 class Product @Inject constructor() :
     BaseObservable() {
-    constructor(productName: String, categoryId: Long,productId: Long=0):this()
-    {
-        this.productId=productId
-        this.productName=productName
-        this.categoryId=categoryId
+    constructor(productName: String, categoryId: Long, productId: Long = 0) : this() {
+        this.productId = productId
+        this.productName = productName
+        this.categoryId = categoryId
     }
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "product_id")
     private var _productId: Long = 0
-    var payloadId:Long = -1
+    var payloadId: Long = -1
+    var remoteId: Int = -1
 
     @ColumnInfo(name = "product_name")
     private var productName: String = ""

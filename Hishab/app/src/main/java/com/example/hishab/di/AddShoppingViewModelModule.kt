@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import com.example.hishab.repository.CategoryRepository
 import com.example.hishab.repository.PayloadRepository
+import com.example.hishab.repository.ProductRepository
 import com.example.hishab.repository.Repository
 import dagger.Module
 import dagger.Provides
@@ -13,29 +14,36 @@ import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 
-
-
 @Module
 @InstallIn(SingletonComponent::class)
 object ViewModelModule {
     @Singleton
     @Provides
-    fun provideRepository(app: Application):Repository
-    {
-        return  Repository(app)
+    fun provideRepository(app: Application): Repository {
+        return Repository(app)
     }
 
     @Singleton
     @Provides
-    fun provideCategoryRepository(app: Application):CategoryRepository
-    {
-        return  CategoryRepository(app)
+    fun provideCategoryRepository(app: Application): CategoryRepository {
+        return CategoryRepository(app)
     }
 
     @Singleton
     @Provides
-    fun providePayLoadRepository(app: Context):PayloadRepository
-    {
-        return  PayloadRepository(app)
+    fun providePayLoadRepository(@ApplicationContext context: Context): PayloadRepository {
+        return PayloadRepository(context)
+    }
+
+    /*@Singleton
+    @Provides
+    fun providePayLoadRepository(app: Application): PayloadRepository {
+        return PayloadRepository(app)
+    }*/
+
+    @Singleton
+    @Provides
+    fun provideProductRepository(context: Application): ProductRepository {
+        return ProductRepository(context)
     }
 }

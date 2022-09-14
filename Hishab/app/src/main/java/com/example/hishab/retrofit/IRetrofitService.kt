@@ -3,8 +3,10 @@ package com.example.hishab.retrofit
 import com.example.hishab.retrofit.commonmodel.UserModel
 import com.example.hishab.retrofit.request.CategoryRequest
 import com.example.hishab.retrofit.request.LoginRequest
+import com.example.hishab.retrofit.request.ProductRequest
 import com.example.hishab.retrofit.response.CategoryResponse
 import com.example.hishab.retrofit.response.LoginResponse
+import com.example.hishab.retrofit.response.ProductResponse
 import com.google.gson.JsonObject
 
 import retrofit2.Call
@@ -26,5 +28,9 @@ interface IRetrofitService {
     fun addOrUpdateCategory(@Body categoryRequest: CategoryRequest): Call<CategoryResponse>
     @POST(ApiURL.CATEGORYLIST_ADD_OR_UPDATE)
     suspend fun addOrUpdateCategoryList(@Body categoryRequestResponseList: List<CategoryRequest> ): Response<List<CategoryResponse>>
+    @POST(ApiURL.PRODUCT_ADD_OR_UPDATE)
+    suspend fun addOrUpdateProduct(@Body productRequest: ProductRequest): Response<ProductResponse>
+    @POST(ApiURL.PRODUCTLIST_ADD_OR_UPDATE)
+    suspend fun addOrUpdateProductList(@Body productRequestList: List<ProductRequest> ): Response<List<ProductResponse>>
 
 }

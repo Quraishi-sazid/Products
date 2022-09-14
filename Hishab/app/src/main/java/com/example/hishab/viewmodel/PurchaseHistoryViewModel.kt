@@ -31,6 +31,9 @@ class PurchaseHistoryViewModel @Inject constructor(app: Application) : AndroidVi
     @Inject
     lateinit var repository: Repository
 
+    @Inject
+    lateinit var productRepository: Repository
+
     fun getPurchaseItems(lastPurchaseId: Long, loadSize: Int): List<PurchaseHistory> {
         return repository.getPurchaseHistory(lastPurchaseId, loadSize);
     }
@@ -83,9 +86,9 @@ class PurchaseHistoryViewModel @Inject constructor(app: Application) : AndroidVi
         repository.deletePurchaseHistory(position);
     }
 
-    suspend fun getProductCategoryList(): LiveData<List<CategoryAndProductModel>> {
-        return repository.getProductCategoryListLeftJoin()
-    }
+    /*suspend fun getProductCategoryList(): LiveData<List<CategoryAndProductModel>> {
+        return productRepository.getProductCategoryListLeftJoin()
+    }*/
 
     //coroutineScope(smaller C) is structured Concurrency. it is used when we want to return value from a function
     private fun generatePagingQuery(

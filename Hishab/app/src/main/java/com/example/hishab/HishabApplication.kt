@@ -3,21 +3,30 @@ package com.example.hishab
 import android.app.Application
 import android.content.Context
 import android.util.Log
+import androidx.hilt.work.HiltWorkerFactory
+import androidx.work.*
 import com.example.hishab.utils.AlarmHelper
 import com.example.hishab.utils.AlarmReceiver
 import com.example.hishab.utils.PreferenceHelper
+import com.example.hishab.workManager.ApiCallerWorker
 import dagger.hilt.android.HiltAndroidApp
 import java.util.*
+import javax.inject.Inject
 
 @HiltAndroidApp
-class HishabApplication : Application() {
+class HishabApplication : Application(), Configuration.Provider {
     lateinit var reminderAlarmHelper: AlarmHelper<AlarmReceiver>
+    @Inject
+    lateinit var workerFactory: HiltWorkerFactory
+
 
     override fun onCreate() {
         super.onCreate()
         PreferenceHelper.sharedPreferences = applicationContext.getSharedPreferences("HishabPreference", Context.MODE_PRIVATE)
         reminderAlarmHelper = AlarmHelper.Create(applicationContext, AlarmHelper.ReminderAlarmRequestCode, AlarmReceiver::class.java)
         setAlarms()
+        setWorkManager()
+       // WorkManager.initialize(this,workManagerConfiguration)
     }
 
     private fun setAlarms() {
@@ -33,6 +42,23 @@ class HishabApplication : Application() {
         }
 
 
+    }
+
+    private fun setWorkManager() {
+        val constraints: Constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+        var request =
+            OneTimeWorkRequest.Builder(ApiCallerWorker::class.java).setConstraints(constraints)
+                .build()
+        WorkManager.getInstance(applicationContext)
+            .beginUniqueWork("RemoteUpdateWork", ExistingWorkPolicy.KEEP, request).enqueue()
+    }
+
+    override fun getWorkManagerConfiguration(): Configuration {
+        return Configuration.Builder()
+            .setWorkerFactory(workerFactory)
+            .build()
     }
 
 }

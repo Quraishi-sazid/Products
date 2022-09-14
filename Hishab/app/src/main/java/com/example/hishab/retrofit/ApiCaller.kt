@@ -21,7 +21,6 @@ class ApiCaller<Req, T>(private val responseFunction: Call<T>, var param: Req? =
                 var response = CommonResponse(param, ApiCallStatus.SUCCESS, call, response, null)
                 liveData.value = response
             }
-
             override fun onFailure(call: Call<T>, t: Throwable) {
                 liveData.value = CommonResponse(param, ApiCallStatus.ERROR, call, null, t)
             }
@@ -52,7 +51,5 @@ class ApiCaller<Req, T>(private val responseFunction: Call<T>, var param: Req? =
         })
         return subject
     }
-
-
 }
 

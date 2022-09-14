@@ -8,6 +8,7 @@ import com.example.hishab.models.CategoryAndProductModel
 import com.example.hishab.models.PurchaseHistory
 import com.example.hishab.models.ShoppingHistory
 import com.example.hishab.models.entities.*
+import com.example.hishab.repository.ProductRepository
 import com.example.hishab.repository.Repository
 import com.example.hishab.utils.Util
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,12 +23,14 @@ class AddShoppingViewModel @Inject constructor(app: Application) : AndroidViewMo
 
     @Inject
     lateinit var repository: Repository
+    @Inject
+    lateinit var productRepository: ProductRepository
     var buyingId: Long = -1
     var time: Long = -1
     var productId: Long = -1
     var dateId = -1L;
     fun getProductCategoryList(): LiveData<List<CategoryAndProductModel>> {
-        return repository.getProductCategoryListLeftJoin()
+        return productRepository.getProductCategoryListLeftJoin()
     }
 
     suspend fun insertBuying(
@@ -46,7 +49,7 @@ class AddShoppingViewModel @Inject constructor(app: Application) : AndroidViewMo
 
     suspend fun insertOrUpdatePurchaseItem(shoppingItemProxy: ShoppingItemProxy) {
         if (shoppingItemProxy.product.productId == 0L) {
-            shoppingItemProxy.purchaseItem.productId = repository.getProductIdByInsertingInDataBase(
+            shoppingItemProxy.purchaseItem.productId = productRepository.getProductIdByInsertingInDataBase(
                 shoppingItemProxy.getCategoryId(),
                 shoppingItemProxy.getCategoryName(),
                 shoppingItemProxy.getProductName()

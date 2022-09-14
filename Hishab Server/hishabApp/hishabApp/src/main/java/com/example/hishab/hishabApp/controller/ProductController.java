@@ -97,11 +97,4 @@ public class ProductController {
     	});
     	return responseList;
     }
-    
-    
-
-/*    @GetMapping("/productByCategoryId/{categoryId}")
-    public List<Product> getProductByCategoryId(@PathVariable int categoryId) {
-        return productRepository.findProductsByCategoryCategoryId(categoryId);
-    }*/
 }

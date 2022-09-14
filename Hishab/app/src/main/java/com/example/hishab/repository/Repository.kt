@@ -6,7 +6,6 @@ import com.example.hishab.db.AppDatabase
 import com.example.hishab.db.dao.*
 import com.example.hishab.models.*
 import com.example.hishab.models.entities.*
-import dagger.hilt.EntryPoints
 import io.reactivex.Flowable
 
 
@@ -37,14 +36,6 @@ class Repository(application: Application) {
 
     suspend fun getCategoryIdFromName(name: String): Category {
         return categoryDao.getCategoryFromName(name);
-    }
-
-    suspend fun insertShopping(product: Product): Long {
-        return productDao.insert(product)
-    }
-
-    suspend fun getShoppingItemFromNameAndCId(itemName: String, categoryId: Long): Product {
-        return productDao.getShoppingItemFromItemNameAndCategoryId(itemName, categoryId);
     }
 
     suspend fun insertPurchaseItem(purchaseItem: PurchaseItem) {
@@ -89,14 +80,6 @@ class Repository(application: Application) {
             month,
             year
         )
-    }
-
-    fun getProductCategoryListLeftJoin(): LiveData<List<CategoryAndProductModel>> {
-        return productDao.getProductCategoryListLeftJoin()
-    }
-
-    fun getProductCategoryListInnerJoin(): LiveData<List<CategoryAndProductModel>> {
-        return productDao.getProductCategoryListInnerJoin()
     }
 
     suspend fun getDateId(customDate: CustomDate): Long {
@@ -150,52 +133,6 @@ class Repository(application: Application) {
         categoryDao.updateCategory(updateCategory)
     }
 
-
-    suspend fun getProductIdByInsertingInDataBase(
-        categoryId: Long,
-        categoryName: String,
-        productName: String
-    ): Long {
-        if (categoryId == 0L) {
-            var quariedCategory = categoryDao.getCategoryFromName(categoryName)
-            var insertedCategoryId = -1L
-            if (quariedCategory == null) {
-                insertedCategoryId = insertCategory(Category(categoryName))
-            } else
-                insertedCategoryId = quariedCategory.categoryId
-            return insertShopping(Product(productName, insertedCategoryId))
-        } else {
-            var queriedShoppingItem =
-                getProductFromCategoryIdAndProductNameByInsertingOrFetching(
-                    categoryId,
-                    productName
-                )
-            return queriedShoppingItem.productId
-        }
-    }
-
-    private suspend fun getProductFromCategoryIdAndProductNameByInsertingOrFetching(
-        categoryId: Long,
-        productName: String
-    ): Product {
-
-        var quariedProduct = getShoppingItemFromNameAndCId(
-            productName,
-            categoryId
-        )
-        if (quariedProduct == null) {
-            quariedProduct = Product()
-            quariedProduct.categoryId = categoryId
-            quariedProduct.setProductName(productName)
-            quariedProduct.productId = insertShopping(quariedProduct)
-        }
-        return quariedProduct
-    }
-
-    fun updateProductName(productId: Long, productName: String) {
-        productDao.updateProductName(productName, productId)
-    }
-
     fun getPurchaseCountOfProductId(productId: Long): Int {
         return productDao.getPurchaseCountOfProductId(productId)
     }
@@ -239,10 +176,6 @@ class Repository(application: Application) {
         return purchaseDao.getCategoryCostFromMonthAndYear(month, year)
     }
 
-    suspend fun getProductCountMappedWithCategoryId(id: Long): Int {
-        return productDao.getProductCountMappedWithCategoryId(id)
-    }
-
     suspend fun updateTimeForShopping(milisec: Long,shoppingId:Long) {
         shoppingDao.updateShoppingTime(milisec,shoppingId)
     }
@@ -271,17 +204,5 @@ class Repository(application: Application) {
         return productDao.getProductDetails(id)
     }
 
-    fun getProductListFromCategoryIdInnerJoin(categoryID: Long): LiveData<List<CategoryAndProductModel>> {
-        return productDao.getProductListFromCategoryIdInnerJoin(categoryID)
-    }
-
-/*    public suspend fun getCategoryByInsertingOrFetching(categoryName: String): Category {
-        var queriedCategory = getCategoryIdFromName(categoryName)
-        if (queriedCategory == null) {
-            queriedCategory = Category(categoryName)
-            queriedCategory.categoryId = insertCategory(queriedCategory)
-        }
-        return queriedCategory
-    }*/
 
 }

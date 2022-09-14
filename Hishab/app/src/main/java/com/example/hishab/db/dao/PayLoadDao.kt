@@ -13,5 +13,5 @@ interface PayLoadDao {
    @Query("select group_concat(payload_id, '#4567#') as payloadIds, apiName as apiName, group_concat(payLoad, '#4567#') as allPayload from tbl_payload group by apiName")
    suspend fun getFailedApiCalls(): List<PayLoadQuery>
    @Query("delete from tbl_payload where payload_id =:payLoadId")
-   suspend fun deleteById(payLoadId: Int)
+   suspend fun deleteById(payLoadId: Long)
 }

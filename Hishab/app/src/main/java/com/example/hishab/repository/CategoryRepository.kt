@@ -40,8 +40,12 @@ class CategoryRepository(application: Context) {
         payLoadDao = database.paylodDao()
     }
 
+    suspend fun insertCategoryLocally(category: Category):Long{
+         return categoryDao.insertCategory(category)
+    }
+
     suspend fun insertCategory(category: Category, oldCategoryName: String? = null) {
-        category.categoryId = categoryDao.insertCategory(category)
+        category.categoryId = insertCategoryLocally(category)
         handleRemote(category, oldCategoryName)
     }
 
@@ -95,7 +99,7 @@ class CategoryRepository(application: Context) {
                     categoryResponse.localId.toLong()
                 )
                 if (payLoadId != -1) {
-                    payLoadDao.deleteById(payLoadId)
+                    payLoadDao.deleteById(payLoadId.toLong())
                 }
         }
     }
@@ -119,9 +123,16 @@ class CategoryRepository(application: Context) {
     }
 
     suspend fun insertOrUpdateCategoryListInRemote (
-        categoryRequestResponseList: List<CategoryRequest>,
-        payLoadIdList: List<Int>,): Response<List<CategoryResponse>> {
+        categoryRequestResponseList: List<CategoryRequest>): Response<List<CategoryResponse>> {
         return RetrofitHelper.hishabApi.addOrUpdateCategoryList(categoryRequestResponseList);
+    }
+
+    suspend fun getCategoryFromName(categoryName: String): Category {
+        return categoryDao.getCategoryFromName(categoryName)
+    }
+
+    suspend fun getCategoryById(categoryId: Long): Category {
+        return categoryDao.getCategoryById(categoryId)
     }
 
 }

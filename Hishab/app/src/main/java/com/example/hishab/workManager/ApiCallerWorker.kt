@@ -1,37 +1,45 @@
 package com.example.hishab.workManager
 import android.content.Context
 import android.util.Log
+import androidx.hilt.work.HiltWorker
 import androidx.work.Data;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 import com.example.hishab.models.PayLoadQuery
 import com.example.hishab.repository.CategoryRepository
 import com.example.hishab.repository.PayloadRepository
+import com.example.hishab.repository.ProductRepository
 import com.example.hishab.retrofit.ApiCallStatus
 import com.example.hishab.retrofit.ApiURL
 import com.example.hishab.retrofit.request.CategoryRequest
+import com.example.hishab.retrofit.request.ProductRequest
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.util.concurrent.atomic.AtomicInteger
+import javax.inject.Inject
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-class ApiCallerWorker(val context:Context,workerParameters: WorkerParameters): Worker(context,workerParameters) {
-    /*@Inject
+@HiltWorker
+class ApiCallerWorker @AssistedInject  constructor
+    (@Assisted val context:Context, @Assisted workerParameters: WorkerParameters): Worker(context,workerParameters) {
+    @Inject
     lateinit var payloadRepository: PayloadRepository
     @Inject
-    lateinit var categoryRepository: CategoryRepository*/
-    var payloadRepository: PayloadRepository
+    lateinit var categoryRepository: CategoryRepository
+
+    @Inject
+    lateinit var productRepository : ProductRepository
+    /*var payloadRepository: PayloadRepository
     var categoryRepository: CategoryRepository
     init {
         payloadRepository = PayloadRepository(context)
         categoryRepository = CategoryRepository(context)
-    }
-
-
-
+    }*/
     override fun doWork(): Result {
         Log.v("override fun doWork(): Result ","override fun doWork(): Result ")
         runBlocking {
@@ -54,11 +62,24 @@ class ApiCallerWorker(val context:Context,workerParameters: WorkerParameters): W
                     ApiURL.CATEGORY_ADD_OR_UPDATE->{
                         var categoryRequestResponseList = payloadQuery.payloadList<CategoryRequest>()
                         GlobalScope.launch {
-                            var response = categoryRepository.insertOrUpdateCategoryListInRemote(categoryRequestResponseList,payLoadIdList)
+                            var response = categoryRepository.insertOrUpdateCategoryListInRemote(categoryRequestResponseList)
                             if(response.isSuccessful){
                                 var count = 0
                                 response?.body()?.forEach{
                                     categoryRepository.handleSuccess(it,payLoadIdList[count++])
+                                }
+                            }
+                            resumeContinuationIfCompleted(apiCallCounter, data, continuation)
+                        }
+                    }
+                    ApiURL.PRODUCT_ADD_OR_UPDATE->{
+                        var productRequestList = payloadQuery.payloadList<ProductRequest>()
+                        GlobalScope.launch {
+                            var response = productRepository.insertOrUpdateProductListInRemote(productRequestList)
+                            if(response.isSuccessful){
+                                var count = 0
+                                response?.body()?.forEach{
+                                    productRepository.handleSuccess(it,payLoadIdList[count++].toLong())
                                 }
                             }
                             resumeContinuationIfCompleted(apiCallCounter, data, continuation)
