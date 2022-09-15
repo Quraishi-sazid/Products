@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import com.example.hishab.db.AppDatabase
 import com.example.hishab.db.dao.ProductDao
+import com.example.hishab.di.RepositoryEntryPoint
 import com.example.hishab.models.CategoryAndProductModel
 import com.example.hishab.models.ProductDetailsModel
 import com.example.hishab.models.entities.Category
@@ -16,23 +17,27 @@ import com.example.hishab.retrofit.request.ProductRequest
 import com.example.hishab.retrofit.response.ProductResponse
 import com.example.hishab.utils.Constant
 import com.example.hishab.utils.PreferenceHelper
+import dagger.hilt.EntryPoint
+import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import retrofit2.Response
 import javax.inject.Inject
 
 class ProductRepository(context: Context) {
-
-    @Inject
     lateinit var categoryRepository: CategoryRepository
-
-    @Inject
     lateinit var payloadRepository: PayloadRepository
 
     private var productDao: ProductDao
 
     init {
         productDao = AppDatabase.getDatabase(context).ProductDao()
+        var repositoryEntryPoint = EntryPointAccessors.fromApplication(
+            context.applicationContext,
+            RepositoryEntryPoint::class.java
+        )
+        categoryRepository = repositoryEntryPoint.categoryRepository
+        payloadRepository = repositoryEntryPoint.payloadRepository
     }
 
     suspend fun insertProduct(product: Product): Long {
@@ -79,7 +84,7 @@ class ProductRepository(context: Context) {
         categoryId: Long,
         categoryName: String,
         productName: String
-    ): Long {
+    ): Product {
         if (categoryId == 0L) {
             var quariedCategory = categoryRepository.getCategoryFromName(categoryName)
             var insertedCategoryId = -1L
@@ -88,14 +93,16 @@ class ProductRepository(context: Context) {
                     categoryRepository.insertCategoryLocally(Category(categoryName))
             } else
                 insertedCategoryId = quariedCategory.categoryId
-            return insertProduct(Product(productName, insertedCategoryId))
+            var insertableProduct = Product(productName, insertedCategoryId)
+            insertableProduct.productId = insertProduct(insertableProduct)
+            return insertableProduct
         } else {
             var queriedShoppingItem =
                 getProductFromCategoryIdAndProductNameByInsertingOrFetching(
                     categoryId,
                     productName
                 )
-            return queriedShoppingItem.productId
+            return queriedShoppingItem
         }
     }
 
@@ -104,42 +111,56 @@ class ProductRepository(context: Context) {
         if (category == null)
             category = categoryRepository.getCategoryById(product.categoryId)
         var productRequest = createProductRequest(product, category)
-        var response = RetrofitHelper.hishabApi.addOrUpdateProduct(productRequest)
-        if (response.isSuccessful) {
-            var productResponse = response.body()
-            GlobalScope.launch {
-                handleSuccess(productResponse, product.payloadId)
-            }
-        } else {
-            if (product.payloadId == -1L) {
+        try {
+            var response = RetrofitHelper.hishabApi.addOrUpdateProduct(productRequest)
+            if (response.isSuccessful) {
+                var productResponse = response.body()
                 GlobalScope.launch {
-                    var payLoadId = payloadRepository.InsertIntoPayload(
-                        PayLoad(
-                            0,
-                            PRODUCT_ADD_OR_UPDATE,
-                            productRequest.convertToJson()
-                        )
-                    )
-                    productDao.updateRemoteAndPayloadId(
-                        -1,
-                        payLoadId,
-                        productRequest.localId.toLong()
-                    )
+                    handleSuccess(productResponse, product.payloadId)
                 }
+            } else {
+                handleError(product, productRequest)
+            }
+        }catch (ex:Exception){
+            handleError(product, productRequest)
+        }
+    }
+
+    private fun handleError(
+        product: Product,
+        productRequest: ProductRequest
+    ) {
+        if (product.payloadId == -1L) {
+            GlobalScope.launch {
+                var payLoadId = payloadRepository.InsertIntoPayload(
+                    PayLoad(
+                        0,
+                        PRODUCT_ADD_OR_UPDATE,
+                        productRequest.convertToJson()
+                    )
+                )
+                productDao.updateRemoteAndPayloadId(
+                    -1,
+                    payLoadId,
+                    productRequest.localId.toLong()
+                )
             }
         }
     }
 
-    public suspend fun handleSuccess(
+    suspend fun handleSuccess(
         productResponse: ProductResponse?, payLoadId: Long
     ) {
-        if (productResponse != null && productResponse.product != null) {
-            payloadRepository.deleteFromPayloadById(payLoadId)
+        if (productResponse != null) {
             productDao.updateRemoteAndPayloadId(
-                productResponse!!.product!!.productId.toInt(),
-                productResponse.product!!.payloadId,
+                productResponse!!.productId.toInt(),
+                -1L,
                 productResponse.localId.toLong()
             )
+            if(payLoadId != -1L){
+                payloadRepository.deleteFromPayloadById(payLoadId)
+            }
+
         }
     }
 

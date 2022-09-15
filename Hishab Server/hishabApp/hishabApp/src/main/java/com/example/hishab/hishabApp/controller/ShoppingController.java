@@ -7,6 +7,7 @@ import com.example.hishab.hishabApp.apiModels.ShoppingItemRequest;
 import com.example.hishab.hishabApp.apiModels.ShoppingItemResponse;
 import com.example.hishab.hishabApp.apiModels.ShoppingRequest;
 import com.example.hishab.hishabApp.apiModels.ShoppingResponse;
+import com.example.hishab.hishabApp.model.Product;
 import com.example.hishab.hishabApp.model.Shopping;
 import com.example.hishab.hishabApp.model.ShoppingItem;
 import com.example.hishab.hishabApp.model.UserModel;
@@ -60,7 +61,7 @@ public class ShoppingController {
 	
 	private ShoppingItemResponse shoppingItemToShoppingItemResponse(ShoppingItemRequest shoppingItemRequest,ShoppingItem shoppingItem) {
 		CategoryResponse categoryResponse = new CategoryResponse(shoppingItemRequest.getCategoryLocalId(),shoppingItemRequest.getCategoryId());
-		ProductResponse productResponse = new ProductResponse(shoppingItem.product,shoppingItemRequest.getProductLocalId(),categoryResponse);
+		ProductResponse productResponse = new ProductResponse(shoppingItem.product.productName,shoppingItem.product.productId,shoppingItemRequest.getProductLocalId(),categoryResponse);
 		return new ShoppingItemResponse(shoppingItemRequest.getLocalId(),shoppingItem.shoppingItemId,productResponse);
 	}
 	/*
@@ -79,8 +80,9 @@ public class ShoppingController {
 		ShoppingItem shoppingItem = new ShoppingItem();
 		if (item.getProductRequest().getProductId() == -1) {
 			if (item.getProductRequest().categoryRequest != null && item.getProductRequest().categoryRequest.getNewCategoryName() != "") {
-				shoppingItem.setProduct(productController.addOrUpdateProduct(new ProductRequest(-1,item.getProductRequest().categoryRequest,
-						item.getProductRequest().getProductName(),insertedShopping.userModel.getUserId(), item.getLocalId())).getProduct());
+				ProductResponse productResponse = productController.addOrUpdateProduct(new ProductRequest(-1,item.getProductRequest().categoryRequest,
+						item.getProductRequest().getProductName(),insertedShopping.userModel.getUserId(), item.getLocalId())); 
+				shoppingItem.setProduct(new Product(productResponse.getProductId(),productResponse.getProductName(),productResponse.getCategoryResponse().getCategoryId()));
 			}
 		}
 		if (shoppingItem.getProduct().getProductId() != -1) {

@@ -54,7 +54,7 @@ public class ProductController {
     }
 
 	private ProductResponse getProductResponse(ProductRequest productRequest, Product product) {
-		return new ProductResponse(product,productRequest.localId, new CategoryResponse(productRequest.categoryRequest.getLocalId(),product.categoryId));
+		return new ProductResponse(product.productName,product.productId,productRequest.localId, new CategoryResponse(productRequest.categoryRequest.getLocalId(),product.categoryId));
 	}
 
     private Product insertNewProduct(int categoryId, String categoryName, String productName, UserModel userModel) {
@@ -92,7 +92,7 @@ public class ProductController {
     	List<ProductResponse> responseList = new ArrayList<ProductResponse>();
     	productRequestList.forEach(productRequest ->{
     		ProductResponse productRespose = addOrUpdateProduct(productRequest);
-    		productRespose.getProduct().productName = "";
+    		productRespose.setProductName("");
     		responseList.add(productRespose);
     	});
     	return responseList;

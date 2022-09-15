@@ -6,6 +6,8 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.hishab.db.AppDatabase
+import com.example.hishab.repository.CategoryRepository
+import com.example.hishab.repository.PayloadRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.EntryPoint
@@ -23,6 +25,13 @@ import javax.inject.Singleton
 interface FooEntryPoint {
     val database: AppDatabase
 }*/
+
+@EntryPoint
+@InstallIn(SingletonComponent::class)
+interface RepositoryEntryPoint {
+    val categoryRepository : CategoryRepository
+    val payloadRepository : PayloadRepository
+}
 
 
 @Module

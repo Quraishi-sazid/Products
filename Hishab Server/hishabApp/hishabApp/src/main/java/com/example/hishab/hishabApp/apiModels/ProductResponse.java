@@ -9,7 +9,8 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class ProductResponse {
-	Product product;
+	String productName;
+	int productId;
 	int localId;
 	CategoryResponse categoryResponse;
 }

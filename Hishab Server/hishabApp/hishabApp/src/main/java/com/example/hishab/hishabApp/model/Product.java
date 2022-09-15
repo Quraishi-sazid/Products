@@ -2,6 +2,8 @@ package com.example.hishab.hishabApp.model;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -10,6 +12,7 @@ import javax.persistence.*;
 @Data
 @Entity
 @Table(name = "tbl_product")
+@AllArgsConstructor
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

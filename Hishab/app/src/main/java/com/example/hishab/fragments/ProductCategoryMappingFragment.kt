@@ -186,7 +186,8 @@ class ProductCategoryMappingFragment : Fragment(), IViewPagerSwipeListener {
                     if (isUpdateNeed) {
                         productCategoryMappingViewModel.updateProductName(
                             swippedCategoryAndProductModel.getProductId()!!,
-                            binding.product!!.getProductName()!!
+                            binding.product!!.getProductName()!!,
+                            binding.product!!.categoryId,
                         )
                     } else
                         requireActivity().runOnUiThread() {

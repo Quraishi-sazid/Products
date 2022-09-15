@@ -3,11 +3,14 @@ package com.example.hishab.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.viewModelScope
 import com.example.hishab.models.CategoryAndProductModel
 import com.example.hishab.models.entities.Category
+import com.example.hishab.models.entities.Product
 import com.example.hishab.repository.ProductRepository
 import com.example.hishab.repository.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,15 +30,19 @@ class ProductCategoryMappingViewModel @Inject constructor(application: Applicati
         categoryName: String,
         productName: String
     ) {
-        productRepository.getProductIdByInsertingInDataBase(categoryId, categoryName, productName)
+        var product = productRepository.getProductIdByInsertingInDataBase(categoryId, categoryName, productName)
+        productRepository.saveToRemote(product)
     }
 
     fun deleteProduct(productId: Long) {
         repository.deleteByProductById(productId)
     }
 
-    fun updateProductName(productId: Long, productName: String) {
+    fun updateProductName(productId: Long, productName: String,categoryID: Long) {
         productRepository.updateProductName(productId, productName)
+        viewModelScope.launch {
+            productRepository.saveToRemote(Product(productName,categoryID,productId))
+        }
     }
 
     fun getPurchaseCountOfProductId(productId: Long): Int {

@@ -53,7 +53,7 @@ class AddShoppingViewModel @Inject constructor(app: Application) : AndroidViewMo
                 shoppingItemProxy.getCategoryId(),
                 shoppingItemProxy.getCategoryName(),
                 shoppingItemProxy.getProductName()
-            )
+            ).productId
         } else {
             shoppingItemProxy.purchaseItem.productId = shoppingItemProxy.product.productId
         }
