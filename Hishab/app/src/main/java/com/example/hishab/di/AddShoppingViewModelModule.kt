@@ -2,10 +2,7 @@ package com.example.hishab.di
 
 import android.app.Application
 import android.content.Context
-import com.example.hishab.repository.CategoryRepository
-import com.example.hishab.repository.PayloadRepository
-import com.example.hishab.repository.ProductRepository
-import com.example.hishab.repository.Repository
+import com.example.hishab.repository.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -45,5 +42,11 @@ object ViewModelModule {
     @Provides
     fun provideProductRepository(context: Application): ProductRepository {
         return ProductRepository(context)
+    }
+
+    @Singleton
+    @Provides
+    fun provideBudgetRepository(context: Application): BudgetRepository {
+        return BudgetRepository(context)
     }
 }

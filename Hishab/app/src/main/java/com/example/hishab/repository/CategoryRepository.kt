@@ -1,30 +1,26 @@
 package com.example.hishab.repository
 
-import android.app.Application
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import com.example.hishab.db.AppDatabase
 import com.example.hishab.db.dao.BudgetDao
 import com.example.hishab.db.dao.CategoryDao
 import com.example.hishab.db.dao.PayLoadDao
 import com.example.hishab.db.dao.ProductDao
+import com.example.hishab.interfaces.IPayloadHandler
+import com.example.hishab.models.CategoryCostModel
 import com.example.hishab.models.CategoryProxy
 import com.example.hishab.models.entities.Category
-import com.example.hishab.models.entities.PayLoad
 import com.example.hishab.remotedatasource.CategoryRemoteDataSource
 import com.example.hishab.retrofit.ApiCallStatus
-import com.example.hishab.retrofit.ApiURL
 import com.example.hishab.retrofit.RetrofitHelper
 import com.example.hishab.retrofit.request.CategoryRequest
 import com.example.hishab.retrofit.response.CategoryResponse
-import com.example.hishab.retrofit.response.CommonResponse
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import retrofit2.Call
 import retrofit2.Response
 
-class CategoryRepository(application: Context) {
+class CategoryRepository(application: Context) : IPayloadHandler {
     //var database = EntryPoints.get(application, FooEntryPoint::class.java).database
     var database = AppDatabase.getDatabase(application)
     var categoryRemoteDataSource = CategoryRemoteDataSource()
@@ -40,8 +36,8 @@ class CategoryRepository(application: Context) {
         payLoadDao = database.paylodDao()
     }
 
-    suspend fun insertCategoryLocally(category: Category):Long{
-         return categoryDao.insertCategory(category)
+    suspend fun insertCategoryLocally(category: Category): Long {
+        return categoryDao.insertCategory(category)
     }
 
     suspend fun insertCategory(category: Category, oldCategoryName: String? = null) {
@@ -69,20 +65,9 @@ class CategoryRepository(application: Context) {
                     }
                 }
                 ApiCallStatus.ERROR -> {
-                    GlobalScope.launch {
-                        var payLoadId = payLoadDao.insertPayload(
-                            PayLoad(
-                                0,
-                                ApiURL.CATEGORY_ADD_OR_UPDATE,
-                                it.request!!.convertToJson()
-                            )
-                        )
-                        categoryDao.updateLocalIdAndPayloadId(
-                            -1,
-                            payLoadId,
-                            it.request.localId.toLong()
-                        )
-                    }
+                    /* GlobalScope.launch {
+                         saveDataToPayloadDb(it!!.request!!.localId.toLong())
+                     }*/
                 }
             }
         }
@@ -91,16 +76,12 @@ class CategoryRepository(application: Context) {
         }
     }
 
-    suspend fun handleSuccess(categoryResponse: CategoryResponse?, payLoadId: Int = -1) {
+    suspend fun handleSuccess(categoryResponse: CategoryResponse?) {
         if (categoryResponse != null) {
-                categoryDao.updateLocalIdAndPayloadId(
-                    categoryResponse.categoryId.toLong(),
-                    -1L,
-                    categoryResponse.localId.toLong()
-                )
-                if (payLoadId != -1) {
-                    payLoadDao.deleteById(payLoadId.toLong())
-                }
+            categoryDao.updateRemoteId(
+                categoryResponse.categoryId.toLong(),
+                categoryResponse.localId.toLong()
+            )
         }
     }
 
@@ -122,8 +103,9 @@ class CategoryRepository(application: Context) {
         return productDao.getProductCountMappedWithCategoryId(id)
     }
 
-    suspend fun insertOrUpdateCategoryListInRemote (
-        categoryRequestResponseList: List<CategoryRequest>): Response<List<CategoryResponse>> {
+    suspend fun insertOrUpdateCategoryListInRemote(
+        categoryRequestResponseList: List<CategoryRequest>
+    ): Response<List<CategoryResponse>> {
         return RetrofitHelper.hishabApi.addOrUpdateCategoryList(categoryRequestResponseList);
     }
 
@@ -133,6 +115,36 @@ class CategoryRepository(application: Context) {
 
     suspend fun getCategoryById(categoryId: Long): Category {
         return categoryDao.getCategoryById(categoryId)
+    }
+
+    override suspend fun updateRemote() {
+        var categoryRequestList = ArrayList<CategoryRequest>()
+        categoryDao.getUnupdatedCategories().forEach { category ->
+            categoryRequestList.add(CategoryRequest(category))
+        }
+        try {
+            var response = insertOrUpdateCategoryListInRemote(categoryRequestList)
+            if (response.body() != null) {
+                response.body()!!.forEach { handleSuccess(it) }
+            }
+        } catch (ex: Exception) {
+        }
+    }
+
+    fun getCategorySpentsOfMonth(
+        categoryIdList: List<Long>,
+        month: Int,
+        year: Int
+    ): List<CategoryCostModel> {
+        return categoryDao.getCategorySpents(categoryIdList, month, year)
+    }
+
+    fun getAllCategories():List<Category>{
+        return categoryDao.getAllCategory()
+    }
+
+    suspend fun getAllCategoriesSuspended():List<Category>{
+        return categoryDao.getAllCategory()
     }
 
 }

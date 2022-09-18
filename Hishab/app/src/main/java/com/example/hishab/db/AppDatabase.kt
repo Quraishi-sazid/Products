@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
         CustomDate::class,
         Budget::class,
         PayLoad::class
-    ),views =[Vw_category_spent::class], version = 3)
+    ),views =[Vw_category_spent::class], version = 4)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun ProductDao(): ProductDao
     abstract fun CategoryDao(): CategoryDao

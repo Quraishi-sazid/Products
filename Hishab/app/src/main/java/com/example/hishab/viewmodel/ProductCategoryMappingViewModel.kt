@@ -35,7 +35,7 @@ class ProductCategoryMappingViewModel @Inject constructor(application: Applicati
     }
 
     fun deleteProduct(productId: Long) {
-        repository.deleteByProductById(productId)
+        productRepository.deleteByProductById(productId)
     }
 
     fun updateProductName(productId: Long, productName: String,categoryID: Long) {
@@ -46,11 +46,11 @@ class ProductCategoryMappingViewModel @Inject constructor(application: Applicati
     }
 
     fun getPurchaseCountOfProductId(productId: Long): Int {
-        return repository.getPurchaseCountOfProductId(productId)
+        return productRepository.getPurchaseCountOfProductId(productId)
     }
 
     suspend fun getAllCategories() {
-        catagoryList = repository.getAllCategoriesSuspended()
+        catagoryList = productRepository.categoryRepository.getAllCategoriesSuspended()
     }
 
     fun getCategorySeparatedProductList(productCategoryMappingList: List<CategoryAndProductModel>): List<Any> {
@@ -67,9 +67,6 @@ class ProductCategoryMappingViewModel @Inject constructor(application: Applicati
         }
         return returnList
     }
-
-    @Inject
-    lateinit var repository: Repository
 
     @Inject
     lateinit var productRepository: ProductRepository

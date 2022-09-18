@@ -5,6 +5,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import com.example.hishab.models.CategoryCostModel
 import com.example.hishab.models.CategoryProxy
 import com.example.hishab.models.entities.Category
 
@@ -37,7 +38,12 @@ interface CategoryDao {
     @Query("Select category_name from category where category_id=:categoryId")
     fun getCategoryNameFromCategoryId(categoryId: Long): String?
 
-    @Query("update category set remote_id =:remoteId,payloadId =:payloadId where category_id =:categoryId")
-    suspend fun updateLocalIdAndPayloadId(remoteId: Long, payloadId: Long, categoryId: Long)
+    @Query("update category set remote_id =:remoteId where category_id =:categoryId")
+    suspend fun updateRemoteId(remoteId: Long, categoryId: Long)
+    @Query("Select * from category where remote_id =-1")
+    suspend fun getUnupdatedCategories():List<Category>
+
+    @Query("Select cost as Cost,category_id as CategoryId ,category_name as CategoryName from Vw_category_spent where category_id in (:categoryIds) and month=:month and year=:year")
+    fun getCategorySpents(categoryIds:List<Long>, month:Int, year:Int): List<CategoryCostModel>
 
 }

@@ -11,5 +11,9 @@ class Constant {
         val AlarmReceiverRequestCode = 2002
         val User_Id = "userId";
         val UserName = "user_name";
+        val Category = "Category"
+        val Product = "Product"
+        val Shopping = "Shopping"
+        val Budget = "Budget"
     }
 }

@@ -46,6 +46,8 @@ interface ProductDao {
     @Query("select s.product_name as productName,s.product_id as productId,c.category_id as categoryId,c.category_name as categoryName from  category c inner join product_table s on c.category_id=s.category_id where c.category_id =:categoryID")
     fun getProductListFromCategoryIdInnerJoin(categoryID: Long): LiveData<List<CategoryAndProductModel>>
 
-    @Query("update product_table set remoteId =:remoteId,payloadId =:payloadId where product_id =:productId")
-    suspend fun updateRemoteAndPayloadId(remoteId: Int, payloadId: Long, productId: Long)
+    @Query("update product_table set remoteId =:remoteId where product_id =:productId")
+    suspend fun updateRemoteAndPayloadId(remoteId: Int, productId: Long)
+    @Query("Select * from product_table where remoteId=-1")
+    suspend fun getUnupdatedProducts():List<Product>
 }

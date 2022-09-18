@@ -14,7 +14,7 @@ class PayloadRepository(context: Context) {
     init {
         payLoadDao = database.paylodDao()
     }
-    suspend fun getPayLoadQuery():List<PayLoadQuery>{
+    /*suspend fun getPayLoadQuery():List<PayLoadQuery>{
         return payLoadDao.getFailedApiCalls()
     }
     suspend fun deleteFromPayloadById(payloadId:Long){
@@ -23,5 +23,5 @@ class PayloadRepository(context: Context) {
 
     suspend fun InsertIntoPayload(payLoad: PayLoad):Long {
        return payLoadDao.insertPayload(payLoad)
-    }
+    }*/
 }

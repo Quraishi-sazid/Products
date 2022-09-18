@@ -15,7 +15,7 @@ class ShoppingHistoryViewModel @Inject constructor(app: Application) : AndroidVi
     @Inject
     lateinit var repository: Repository
     fun getBuyingHistoryLiveData(): LiveData<List<ShoppingHistory>> {
-        return repository.getBuingHistory()
+        return repository.getBuyingHistory()
     }
 
     fun processData(list: List<ShoppingHistory>): List<Any> {

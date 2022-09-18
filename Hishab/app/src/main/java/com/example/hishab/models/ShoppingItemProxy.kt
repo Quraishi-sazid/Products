@@ -6,7 +6,7 @@ import com.example.hishab.models.entities.PurchaseItem
 import com.example.hishab.models.entities.Product
 import java.io.Serializable
 
-data class ShoppingItemProxy(public var proxyId:Long, public val category: Category, public val product: Product, public val purchaseItem: PurchaseItem):Serializable, BaseObservable() {
+data class ShoppingItemProxy(var proxyId:Long,val category: Category,val product: Product, val purchaseItem: PurchaseItem):Serializable, BaseObservable() {
     fun isUpdating():Boolean
     {
         return purchaseItem.getPurchaseId()!=0L

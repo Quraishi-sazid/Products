@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import com.example.hishab.db.AppDatabase
 import com.example.hishab.db.dao.ProductDao
 import com.example.hishab.di.RepositoryEntryPoint
+import com.example.hishab.interfaces.IPayloadHandler
 import com.example.hishab.models.CategoryAndProductModel
 import com.example.hishab.models.ProductDetailsModel
 import com.example.hishab.models.entities.Category
@@ -24,9 +25,9 @@ import kotlinx.coroutines.launch
 import retrofit2.Response
 import javax.inject.Inject
 
-class ProductRepository(context: Context) {
-    lateinit var categoryRepository: CategoryRepository
-    lateinit var payloadRepository: PayloadRepository
+class ProductRepository(context: Context) : IPayloadHandler {
+    var categoryRepository: CategoryRepository
+    var payloadRepository: PayloadRepository
 
     private var productDao: ProductDao
 
@@ -116,17 +117,17 @@ class ProductRepository(context: Context) {
             if (response.isSuccessful) {
                 var productResponse = response.body()
                 GlobalScope.launch {
-                    handleSuccess(productResponse, product.payloadId)
+                    handleSuccess(productResponse)
                 }
             } else {
-                handleError(product, productRequest)
+                // handleError(product, productRequest)
             }
-        }catch (ex:Exception){
-            handleError(product, productRequest)
+        } catch (ex: Exception) {
+            // handleError(product, productRequest)
         }
     }
 
-    private fun handleError(
+    /*private fun handleError(
         product: Product,
         productRequest: ProductRequest
     ) {
@@ -146,21 +147,15 @@ class ProductRepository(context: Context) {
                 )
             }
         }
-    }
+    }*/
 
-    suspend fun handleSuccess(
-        productResponse: ProductResponse?, payLoadId: Long
-    ) {
+    suspend fun handleSuccess(productResponse: ProductResponse?) {
         if (productResponse != null) {
+            categoryRepository.handleSuccess(productResponse.categoryResponse)
             productDao.updateRemoteAndPayloadId(
                 productResponse!!.productId.toInt(),
-                -1L,
                 productResponse.localId.toLong()
             )
-            if(payLoadId != -1L){
-                payloadRepository.deleteFromPayloadById(payLoadId)
-            }
-
         }
     }
 
@@ -199,8 +194,30 @@ class ProductRepository(context: Context) {
 
     suspend fun insertOrUpdateProductListInRemote(
         productRequestList: List<ProductRequest>
-    ): Response<List<ProductResponse>> {
-        return RetrofitHelper.hishabApi.addOrUpdateProductList(productRequestList)
+    ): List<ProductResponse>? {
+        try {
+            var response = RetrofitHelper.hishabApi.addOrUpdateProductList(productRequestList)
+            if (response.isSuccessful)
+                return response.body()
+            else
+                return null
+        } catch (ex: Exception) {
+            return null
+        }
+
+    }
+
+    override suspend fun updateRemote() {
+        var productRequestList = ArrayList<ProductRequest>()
+        productDao.getUnupdatedProducts().forEach { product ->
+            var category = categoryRepository.getCategoryById(product.categoryId)
+            var productRequest = ProductRequest(product, category)
+            productRequestList.add(productRequest)
+            insertOrUpdateProductListInRemote(productRequestList)?.forEach { productResponse ->
+                handleSuccess(productResponse)
+            }
+        }
+
     }
 
 }

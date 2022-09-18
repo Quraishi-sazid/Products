@@ -8,6 +8,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.hishab.db.AppDatabase
 import com.example.hishab.repository.CategoryRepository
 import com.example.hishab.repository.PayloadRepository
+import com.example.hishab.repository.ProductRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.EntryPoint
@@ -31,6 +32,7 @@ interface FooEntryPoint {
 interface RepositoryEntryPoint {
     val categoryRepository : CategoryRepository
     val payloadRepository : PayloadRepository
+    val productRepository : ProductRepository
 }
 
 

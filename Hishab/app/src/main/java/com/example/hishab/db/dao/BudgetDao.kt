@@ -22,8 +22,7 @@ interface BudgetDao {
     @Insert
     fun insert(b:Budget):Long
 
-    @Query("Select cost as Cost,category_id as CategoryId ,category_name as CategoryName from Vw_category_spent where category_id in (:categoryIds) and month=:month and year=:year")
-    fun getCategorySpents(categoryIds:List<Long>, month:Int, year:Int): List<CategoryCostModel>
+
     @Insert
     abstract fun insertAll(vararg budgetList:Budget)
     @Update

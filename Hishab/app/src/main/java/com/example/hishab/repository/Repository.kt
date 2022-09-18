@@ -10,32 +10,18 @@ import io.reactivex.Flowable
 
 
 class Repository(application: Application) {
-    private var categoryDao: CategoryDao
-    private var productDao: ProductDao
     private var purchaseDao: PurchaseDao
     private var purchaseHistoryDao: PurchaseHistoryDao
     private var shoppingDao: ShoppingDao
     private var customDateDao: DateDao
-    private var budgetDao: BudgetDao
     var database = AppDatabase.getDatabase(application)
     //var database = EntryPoints.get(application, FooEntryPoint::class.java).database
 
     init {
-        categoryDao = database.CategoryDao()
-        productDao = database.ProductDao()
         purchaseDao = database.PurchaseDao()
         purchaseHistoryDao = database.PurchaseShoppingCategoryDao()
         shoppingDao = database.shoppingDao()
         customDateDao = database.customDao()
-        budgetDao = database.BudgetDao()
-    }
-
-    suspend fun insertCategory(category: Category): Long {
-        return categoryDao.insertCategory(category)
-    }
-
-    suspend fun getCategoryIdFromName(name: String): Category {
-        return categoryDao.getCategoryFromName(name);
     }
 
     suspend fun insertPurchaseItem(purchaseItem: PurchaseItem) {
@@ -108,7 +94,7 @@ class Repository(application: Application) {
         return purchaseHistoryDao.getPurchaseHistoryByBuyingId(buyingId)
     }
 
-    fun getBuingHistory(): LiveData<List<ShoppingHistory>> {
+    fun getBuyingHistory(): LiveData<List<ShoppingHistory>> {
         return shoppingDao.getBuyingHistory()
     }
 
@@ -120,58 +106,6 @@ class Repository(application: Application) {
         shoppingDao.updateDateId(dateId, buyingId);
     }
 
-    fun getCategoryWithProductTableMap(): LiveData<List<CategoryProxy>> {
-        return categoryDao.getCategoryWithTotalProductMapped();
-    }
-
-    suspend fun deleteCategoryById(deleteId: Long) {
-        categoryDao.deleteCategoryById(deleteId)
-        budgetDao.deleteByCategoryId(deleteId)
-    }
-
-    suspend fun updateCategory(updateCategory: Category) {
-        categoryDao.updateCategory(updateCategory)
-    }
-
-    fun getPurchaseCountOfProductId(productId: Long): Int {
-        return productDao.getPurchaseCountOfProductId(productId)
-    }
-
-    fun deleteByProductById(productId: Long) {
-        productDao.deleteByProductById(productId)
-    }
-
-    fun getBudgetList(month: Int, year: Int): Flowable<List<Budget>> {
-        return budgetDao.getBudgetFlowable(month, year)
-    }
-
-    fun getCategoryNameFromCategoryId(categoryId: Long): String? {
-        return categoryDao.getCategoryNameFromCategoryId(categoryId)
-    }
-
-    fun getCategorySpentsOfMonth(
-        categoryIdList: List<Long>,
-        month: Int,
-        year: Int
-    ): List<CategoryCostModel> {
-        return budgetDao.getCategorySpents(categoryIdList, month, year)
-    }
-
-    fun updateBudgetList(budgetList: List<Budget>) {
-        budgetDao.updateBudgetList(budgetList)
-    }
-
-    fun getPreviousMonthsBudgetAndSpentHistory(
-        year: Int,
-        month: Int
-    ): Flowable<List<MonthlySpentModel>> {
-        return budgetDao.getPreviousBudgetSpentList(month, year)
-    }
-
-    fun getBudgetFromMonthAndYear(year: Int, month: Int): Int {
-        return budgetDao.getBudgetFromMonthAndYear(year, month)
-    }
-
     suspend fun getCategoryCostFromMonthAndYear(month: Int, year: Int): List<CategoryCostModel> {
         return purchaseDao.getCategoryCostFromMonthAndYear(month, year)
     }
@@ -179,30 +113,5 @@ class Repository(application: Application) {
     suspend fun updateTimeForShopping(milisec: Long,shoppingId:Long) {
         shoppingDao.updateShoppingTime(milisec,shoppingId)
     }
-
-    fun getCategoryBudgetList(month:Int,year:Int): List<BudgetCategoryQuery> {
-        var list = budgetDao.getCategoryAndBudgetList(year,month)
-        return list
-    }
-
-    suspend fun updateBudgetById(categoryId: Long, budget: Int, month: Int, year: Int){
-         budgetDao.updateBudgetById(categoryId,budget,month,year)
-    }
-
-    fun insertBudget(budget: Budget) {
-        budgetDao.insert(budget)
-    }
-    fun getAllCategories():List<Category>{
-        return categoryDao.getAllCategory()
-    }
-
-    suspend fun getAllCategoriesSuspended():List<Category>{
-        return categoryDao.getAllCategory()
-    }
-
-    fun getProductDetailsLiveData(id:Long):LiveData<List<ProductDetailsModel>>{
-        return productDao.getProductDetails(id)
-    }
-
 
 }

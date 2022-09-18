@@ -14,7 +14,7 @@ public data class PayLoad(
     var payloadId : Long=0,
     @NonNull
     public var apiName:String,
-    public var payLoad:String,
+    public var tableId:Long,
     public var savingTime:Long = System.currentTimeMillis()
 ) {
 

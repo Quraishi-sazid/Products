@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.AndroidViewModel
 import com.example.hishab.models.MonthlySpentModel
+import com.example.hishab.repository.BudgetRepository
 import com.example.hishab.repository.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.Flowable
@@ -14,7 +15,7 @@ class BudgetAndSpentHistoryViewModel@Inject constructor (app: Application) :Andr
 
 
     @Inject
-    lateinit var repository:Repository
+    lateinit var repository:BudgetRepository
 
     fun getPreviousMonthsBudgetAndSpentHistory(year:Int,month:Int): Flowable<List<MonthlySpentModel>> {
        return repository.getPreviousMonthsBudgetAndSpentHistory(year,month)
