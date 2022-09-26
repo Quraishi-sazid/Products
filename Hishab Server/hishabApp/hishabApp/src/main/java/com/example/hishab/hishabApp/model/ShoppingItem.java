@@ -23,6 +23,14 @@ public class ShoppingItem {
    // @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     public Shopping shopping;
+    
+    public ShoppingItem() {}
+    
+    public ShoppingItem(int shoppingItemId,int cost,String descString) {
+    	this.cost = cost;
+    	this.description = descString;
+    	this.shoppingItemId = shoppingItemId;
+    }
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "product_id", nullable = false)

@@ -3,15 +3,17 @@ package com.example.hishab.repository
 import android.app.Application
 import com.example.hishab.db.AppDatabase
 import com.example.hishab.db.dao.BudgetDao
+import com.example.hishab.di.FooEntryPoint
 import com.example.hishab.models.BudgetCategoryQuery
 import com.example.hishab.models.MonthlySpentModel
 import com.example.hishab.models.entities.Budget
+import dagger.hilt.android.EntryPointAccessors
 import io.reactivex.Flowable
 import javax.inject.Inject
 
 class BudgetRepository(application: Application)  {
 
-    var database = AppDatabase.getDatabase(application)
+    var database = EntryPointAccessors.fromApplication(application, FooEntryPoint::class.java).database
     private var budgetDao: BudgetDao
     init {
         budgetDao = database.BudgetDao()

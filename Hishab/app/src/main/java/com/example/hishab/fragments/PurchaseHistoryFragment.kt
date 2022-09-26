@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.paging.PagingData
@@ -17,7 +16,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hishab.R
 import com.example.hishab.adapter.PagingAdapterForThreeViewTypes
-import com.example.hishab.adapter.PagingAdapterForTwoViewTypes
 import com.example.hishab.databinding.LayoutItemYearBinding
 import com.example.hishab.databinding.LayoutMonthItemBinding
 import com.example.hishab.databinding.LayoutPurchaseItemBinding
@@ -25,7 +23,7 @@ import com.example.hishab.interfaces.IViewPagerSwipeListener
 import com.example.hishab.models.PurchaseHistory
 import com.example.hishab.models.ThreeLayout
 import com.example.hishab.models.TwoPredicate
-import com.example.hishab.repository.Repository
+import com.example.hishab.repository.ShoppingRepository
 import com.example.hishab.utils.Util
 import com.example.hishab.viewmodel.PurchaseHistoryViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -48,7 +46,7 @@ class PurchaseHistoryFragment : Fragment(), IViewPagerSwipeListener {
     var count = 1
 
     @Inject
-    lateinit var repository: Repository
+    lateinit var shoppingRepository: ShoppingRepository
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

@@ -19,6 +19,7 @@ class Product @Inject constructor() :
     @ColumnInfo(name = "product_id")
     private var _productId: Long = 0
     var remoteId: Int = -1
+    var isSynced = false
 
     @ColumnInfo(name = "product_name")
     private var productName: String = ""

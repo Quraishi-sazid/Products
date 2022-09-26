@@ -7,6 +7,7 @@ import java.text.DateFormatSymbols
 
 data class PurchaseHistory(
     private val purchaseId: Long?,
+    private val remoteId:Int? = -1,
     private val categoryName: String?,
     private var ItemName: String,
     private val cost: Int,
@@ -89,6 +90,9 @@ data class PurchaseHistory(
         return productId!!
     }
 
+    fun getRemoteId():Int?{
+        return remoteId
+    }
 
 
 }

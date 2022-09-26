@@ -34,11 +34,12 @@ class PurchaseItem @Inject constructor() : BaseObservable() {
         return purchaseId
     }
 
+    var isSynced = false
     public fun setPurchaseId(value: Long) {
         purchaseId = value
         notifyPropertyChanged(BR.purchaseId)
     }
-    var payloadId:Long = -1
+    var remoteId:Int = -1
 
     @Bindable
     public fun getCost(): Int {

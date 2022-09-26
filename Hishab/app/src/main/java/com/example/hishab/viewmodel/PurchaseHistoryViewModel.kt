@@ -9,19 +9,15 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.hishab.interfaces.IPagingQuery
-import com.example.hishab.models.CategoryAndProductModel
 import com.example.hishab.models.PagingQueryModel
 import com.example.hishab.models.PurchaseHistory
 import com.example.hishab.models.entities.CustomDate
 import com.example.hishab.paging.CustomPagingSource
-import com.example.hishab.repository.Repository
+import com.example.hishab.repository.ShoppingRepository
 import com.example.hishab.utils.Util
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.Flowable
-import io.reactivex.Observable
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collectLatest
 import javax.inject.Inject
 
 @HiltViewModel
@@ -29,13 +25,13 @@ class PurchaseHistoryViewModel @Inject constructor(app: Application) : AndroidVi
     private lateinit var purchaseHistoryListLiveData: LiveData<List<PurchaseHistory>>
 
     @Inject
-    lateinit var repository: Repository
+    lateinit var shoppingRepository: ShoppingRepository
 
     @Inject
-    lateinit var productRepository: Repository
+    lateinit var productShoppingRepository: ShoppingRepository
 
     fun getPurchaseItems(lastPurchaseId: Long, loadSize: Int): List<PurchaseHistory> {
-        return repository.getPurchaseHistory(lastPurchaseId, loadSize);
+        return shoppingRepository.getPurchaseHistory(lastPurchaseId, loadSize);
     }
 
     fun getDetailsOfCategory(
@@ -43,7 +39,7 @@ class PurchaseHistoryViewModel @Inject constructor(app: Application) : AndroidVi
         lastPurchaseId: Long,
         loadSize: Int
     ): List<PurchaseHistory> {
-        return repository.getDetailsOfCategory(categoryId, lastPurchaseId, loadSize)
+        return shoppingRepository.getDetailsOfCategory(categoryId, lastPurchaseId, loadSize)
     }
 
     fun getDetailsOfCategoryOfMonthAndYear(
@@ -53,7 +49,7 @@ class PurchaseHistoryViewModel @Inject constructor(app: Application) : AndroidVi
         month: Int,
         year: Int
     ): List<PurchaseHistory> {
-        return repository.getDetailsOfCategoryOfMonthAndYear(
+        return shoppingRepository.getDetailsOfCategoryOfMonthAndYear(
             lastPurchaseId,
             limit,
             categoryId,
@@ -83,7 +79,7 @@ class PurchaseHistoryViewModel @Inject constructor(app: Application) : AndroidVi
     }
 
     suspend fun delete(position: Long) {
-        repository.deletePurchaseHistory(position);
+        shoppingRepository.deletePurchaseHistory(position);
     }
 
     /*suspend fun getProductCategoryList(): LiveData<List<CategoryAndProductModel>> {

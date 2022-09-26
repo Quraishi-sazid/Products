@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
         CustomDate::class,
         Budget::class,
         PayLoad::class
-    ),views =[Vw_category_spent::class], version = 4)
+    ),views =[Vw_category_spent::class], version = 8)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun ProductDao(): ProductDao
     abstract fun CategoryDao(): CategoryDao
@@ -43,7 +43,8 @@ abstract class AppDatabase : RoomDatabase() {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
-                    AppDatabase::class.java,
+                    AppDatabase::
+                    class.java,
                     "hishab_database3"
                 ).addCallback(object : RoomDatabase.Callback() {
                     override fun onCreate(db: SupportSQLiteDatabase) {

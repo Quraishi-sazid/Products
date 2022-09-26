@@ -10,6 +10,7 @@ import java.util.*
 
 data class ShoppingHistory(
     private var buyingId: Long,
+    var remoteId:Long,
     private var totalCost: Int,
     private var totalItem: Int,
     private var day: Int,

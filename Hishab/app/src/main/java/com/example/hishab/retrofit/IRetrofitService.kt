@@ -4,22 +4,18 @@ import com.example.hishab.retrofit.commonmodel.UserModel
 import com.example.hishab.retrofit.request.CategoryRequest
 import com.example.hishab.retrofit.request.LoginRequest
 import com.example.hishab.retrofit.request.ProductRequest
+import com.example.hishab.retrofit.request.ShoppingRequest
 import com.example.hishab.retrofit.response.CategoryResponse
 import com.example.hishab.retrofit.response.LoginResponse
 import com.example.hishab.retrofit.response.ProductResponse
-import com.google.gson.JsonObject
+import com.example.hishab.retrofit.response.shoppingResponse
 
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
-import retrofit2.http.GET
 import retrofit2.http.POST
-import retrofit2.http.Query
 
 interface IRetrofitService {
-    @GET("home/api/test")
-    fun getTestResult(): Call<String>
-
     @POST(value = ApiURL.LOGIN)
     fun login(@Body request: LoginRequest ): Call<LoginResponse>
     @POST(ApiURL.REGISTRATION)
@@ -32,5 +28,13 @@ interface IRetrofitService {
     suspend fun addOrUpdateProduct(@Body productRequest: ProductRequest): Response<ProductResponse>
     @POST(ApiURL.PRODUCTLIST_ADD_OR_UPDATE)
     suspend fun addOrUpdateProductList(@Body productRequestList: List<ProductRequest> ): Response<List<ProductResponse>>
+    @POST(ApiURL.SHOPPING_ADD)
+    suspend fun addShopping(@Body shoppingRequest: ShoppingRequest ): Response<shoppingResponse>
+    @POST(ApiURL.SHOPPING_ADD_LIST)
+    suspend fun addShoppingList(@Body shoppingRequestList: List<ShoppingRequest> ): Response<List<shoppingResponse>>
+    @POST(ApiURL.SHOPPING_UPDATE)
+    suspend fun updateShopping(@Body shoppingRequest: ShoppingRequest ): Response<shoppingResponse>
+    @POST(ApiURL.SHOPPING_UPDATE_LIST)
+    suspend fun updateShoppingList(@Body shoppingRequestList: List<ShoppingRequest> ): Response<List<shoppingResponse>>
 
 }

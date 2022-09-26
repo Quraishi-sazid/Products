@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import com.example.hishab.db.AppDatabase
 import com.example.hishab.db.dao.ProductDao
+import com.example.hishab.di.FooEntryPoint
 import com.example.hishab.di.RepositoryEntryPoint
 import com.example.hishab.interfaces.IPayloadHandler
 import com.example.hishab.models.CategoryAndProductModel
@@ -32,7 +33,7 @@ class ProductRepository(context: Context) : IPayloadHandler {
     private var productDao: ProductDao
 
     init {
-        productDao = AppDatabase.getDatabase(context).ProductDao()
+        productDao = EntryPointAccessors.fromApplication(context, FooEntryPoint::class.java).database.ProductDao()
         var repositoryEntryPoint = EntryPointAccessors.fromApplication(
             context.applicationContext,
             RepositoryEntryPoint::class.java
@@ -218,6 +219,10 @@ class ProductRepository(context: Context) : IPayloadHandler {
             }
         }
 
+    }
+
+    suspend fun getAllProductsSuspended() : List<Product> {
+        return productDao.getAllProducts()
     }
 
 }

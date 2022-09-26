@@ -6,9 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.hishab.db.AppDatabase
-import com.example.hishab.repository.CategoryRepository
-import com.example.hishab.repository.PayloadRepository
-import com.example.hishab.repository.ProductRepository
+import com.example.hishab.repository.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.EntryPoint
@@ -21,11 +19,11 @@ import javax.inject.Singleton
 
 
 
-/*@EntryPoint
+@EntryPoint
 @InstallIn(SingletonComponent::class)
 interface FooEntryPoint {
     val database: AppDatabase
-}*/
+}
 
 @EntryPoint
 @InstallIn(SingletonComponent::class)
@@ -33,6 +31,8 @@ interface RepositoryEntryPoint {
     val categoryRepository : CategoryRepository
     val payloadRepository : PayloadRepository
     val productRepository : ProductRepository
+    val shoppingRepository : ShoppingRepository
+    val budgetRepository : BudgetRepository
 }
 
 
@@ -57,7 +57,7 @@ object DatabaseModule {
                             AppDatabase.insertPredefinedData()
                         }
                     }
-                }).fallbackToDestructiveMigration()
+                })/*.allowMainThreadQueries()*/.fallbackToDestructiveMigration()
                     .build()
                 AppDatabase.INSTANCE = instance
                 instance

@@ -1,23 +1,20 @@
 package com.example.hishab.utils
 
-import android.app.Activity
-import android.app.AlarmManager
 import android.app.AlertDialog
-import android.app.PendingIntent
 import android.content.Context
 import android.content.DialogInterface
-import android.content.Intent
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.TimePicker
 import com.example.hishab.interfaces.IHandleAlertDialog
+import com.example.hishab.models.PurchaseHistory
 import com.example.hishab.models.ShoppingItemProxy
 import com.example.hishab.models.entities.Category
-import com.example.hishab.models.PurchaseHistory
-import com.example.hishab.models.entities.PurchaseItem
 import com.example.hishab.models.entities.Product
+import com.example.hishab.models.entities.PurchaseItem
 import io.reactivex.Observable
+import java.sql.Date
 import java.text.DateFormatSymbols
 import java.util.*
 import kotlin.math.abs
@@ -84,6 +81,8 @@ class Util {
             purchaseItem.setDescription(purchaseHistory.getDescipt()!!)
             purchaseItem.productId = (purchaseHistory.getShoppingId()!!)
             purchaseItem.shoppingId = buyingId
+            if (purchaseHistory.getRemoteId() != null)
+                purchaseItem.remoteId = purchaseHistory.getRemoteId()!!.toInt()
             return ShoppingItemProxy(proxyId, category, shoppingItem, purchaseItem)
         }
 

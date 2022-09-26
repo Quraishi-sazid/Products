@@ -16,8 +16,8 @@ import javax.inject.Singleton
 object ViewModelModule {
     @Singleton
     @Provides
-    fun provideRepository(app: Application): Repository {
-        return Repository(app)
+    fun provideRepository(app: Application): ShoppingRepository {
+        return ShoppingRepository(app)
     }
 
     @Singleton

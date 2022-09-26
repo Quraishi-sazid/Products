@@ -26,5 +26,9 @@ interface PurchaseDao {
 
     @Update
     suspend fun update(vararg purchaseItems: PurchaseItem)
+    @Query("update tbl_shopping_item set remoteId=:remoteId,isSynced =1 where purchase_id =:localId")
+    suspend fun updateShoppingItemRemoteId(remoteId: Int, localId: Int)
+    @Query("select * from tbl_shopping_item where isSynced =0")
+    suspend fun getAllUnUpdatedPurchaseItem() : List<PurchaseItem>
 
 }

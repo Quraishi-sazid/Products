@@ -9,6 +9,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class ShoppingResponse {
 	private int shoppingId;
+	private int localId;
 	private List<ShoppingItemResponse>itemResponses;
 	
 }

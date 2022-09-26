@@ -6,7 +6,6 @@ import androidx.lifecycle.LiveData
 import com.example.hishab.models.CategoryProxy
 import com.example.hishab.models.entities.Category
 import com.example.hishab.repository.CategoryRepository
-import com.example.hishab.repository.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

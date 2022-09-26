@@ -20,6 +20,7 @@ class Category @Inject constructor () :BaseObservable(),Parcelable {
     @NonNull
     @ColumnInfo(name="category_name") private var categoryName:String=""
     @ColumnInfo(name="remote_id") var remoteId:Long=-1
+    var isSynced:Boolean=false
     @Bindable
     fun getCategoryName():String
     {

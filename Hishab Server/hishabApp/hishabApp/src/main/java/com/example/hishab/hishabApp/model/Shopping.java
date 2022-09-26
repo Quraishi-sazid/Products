@@ -2,7 +2,11 @@ package com.example.hishab.hishabApp.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -11,6 +15,7 @@ import java.util.Date;
 import java.util.List;
 
 @Data
+@NoArgsConstructor
 @Entity
 @Table(name = "tbl_shopping")
 public class Shopping {
@@ -24,6 +29,7 @@ public class Shopping {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     public UserModel userModel;
+    
     
     public Shopping(Date date,UserModel userModel,int shoppingId) {
 		this.date = date;

@@ -3,8 +3,9 @@ package com.example.hishab.retrofit.response
 
 import com.example.hishab.retrofit.response.ShoppingItemResponse
 
-class ShoppingResponse {
+class shoppingResponse {
     var shoppingId = 0
+    var localId = 0L
     var itemResponses: List<ShoppingItemResponse>? = null
 
     constructor() {}

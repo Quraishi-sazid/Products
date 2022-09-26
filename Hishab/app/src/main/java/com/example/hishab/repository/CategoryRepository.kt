@@ -7,6 +7,7 @@ import com.example.hishab.db.dao.BudgetDao
 import com.example.hishab.db.dao.CategoryDao
 import com.example.hishab.db.dao.PayLoadDao
 import com.example.hishab.db.dao.ProductDao
+import com.example.hishab.di.FooEntryPoint
 import com.example.hishab.interfaces.IPayloadHandler
 import com.example.hishab.models.CategoryCostModel
 import com.example.hishab.models.CategoryProxy
@@ -16,13 +17,13 @@ import com.example.hishab.retrofit.ApiCallStatus
 import com.example.hishab.retrofit.RetrofitHelper
 import com.example.hishab.retrofit.request.CategoryRequest
 import com.example.hishab.retrofit.response.CategoryResponse
+import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import retrofit2.Response
 
 class CategoryRepository(application: Context) : IPayloadHandler {
-    //var database = EntryPoints.get(application, FooEntryPoint::class.java).database
-    var database = AppDatabase.getDatabase(application)
+    var database = EntryPointAccessors.fromApplication(application, FooEntryPoint::class.java).database
     var categoryRemoteDataSource = CategoryRemoteDataSource()
     private var categoryDao: CategoryDao
     private var budgetDao: BudgetDao
@@ -86,6 +87,7 @@ class CategoryRepository(application: Context) : IPayloadHandler {
     }
 
     suspend fun updateCategory(updateCategory: Category, oldCategoryName: String?) {
+        updateCategory.isSynced = false
         categoryDao.updateCategory(updateCategory)
         handleRemote(updateCategory, oldCategoryName)
     }

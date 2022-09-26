@@ -1,12 +1,9 @@
 package com.example.hishab.hishabApp.model;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+
 
 import javax.persistence.*;
 @Data
@@ -16,9 +13,9 @@ import javax.persistence.*;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public int productId;
+    private int productId;
 
-    public String productName;
+    private String productName;
 /*    @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "category_id",nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -31,6 +28,10 @@ public class Product {
     public Product(String productName) {
         this.productName = productName;
     }
-    @Transient
-    public int categoryId;
+    public Product(int id, String productName) {
+		this.productId = id;
+		this.productName = productName;
+	}
+	@Transient
+    private int categoryId;
 }

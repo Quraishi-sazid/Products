@@ -5,6 +5,7 @@ import com.example.hishab.hishabApp.apiModels.ProductRequest;
 import com.example.hishab.hishabApp.apiModels.ProductResponse;
 import com.example.hishab.hishabApp.model.*;
 import com.example.hishab.hishabApp.repository.*;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -31,11 +32,12 @@ public class ProductController {
 
     @PostMapping("/addOrUpdateProduct")
     public ProductResponse addOrUpdateProduct(@RequestBody ProductRequest productRequest) {
-        Product existingProduct = productRepository.findFirstByProductName(productRequest.productName);
+    	Integer id = productRepository.findFirstByProductNameNativetest(productRequest.productName);
         UserModel userModel = userRepository.findUserModelByUserId(productRequest.userId);
-        if (existingProduct == null) {
+        if (id == null) {
             return getProductResponse(productRequest, insertNewProduct(productRequest.categoryRequest.getCategoryId(), productRequest.categoryRequest.getNewCategoryName(), productRequest.productName, userModel)); 
         } else {
+            Product existingProduct = new Product(id,productRequest.productName);
             Category productCategory;
             if (productRequest.getCategoryRequest().getCategoryId() == -1)
                 productCategory = categoryController.addCategory(productRequest.categoryRequest.getNewCategoryName());
@@ -43,18 +45,18 @@ public class ProductController {
                 productCategory = categoryController.findCategoryById(productRequest.categoryRequest.getCategoryId());
             if (categoryAndProductMappingRepository.findFirstByCategoryCategoryIdAndProductProductId(productCategory.getCategoryId(), existingProduct.getProductId()) == null) {
                 updateMappingTable(userModel, productCategory, existingProduct);
-                existingProduct.categoryId = productCategory.getCategoryId();
+                existingProduct.setCategoryId(productCategory.getCategoryId());
                 return getProductResponse(productRequest, existingProduct);
             } else {
                 Product product= insertProductWithMappingTables(userModel, productCategory, productRequest.productName, existingProduct);
-                product.categoryId = productCategory.getCategoryId();
+                product.setCategoryId(productCategory.getCategoryId());
                 return getProductResponse(productRequest, product);
             }
         }
     }
 
 	private ProductResponse getProductResponse(ProductRequest productRequest, Product product) {
-		return new ProductResponse(product.productName,product.productId,productRequest.localId, new CategoryResponse(productRequest.categoryRequest.getLocalId(),product.categoryId));
+		return new ProductResponse(product.getProductName(),product.getProductId(),productRequest.localId, new CategoryResponse(productRequest.categoryRequest.getLocalId(),product.getCategoryId()));
 	}
 
     private Product insertNewProduct(int categoryId, String categoryName, String productName, UserModel userModel) {
@@ -64,7 +66,7 @@ public class ProductController {
         else
             productCategory = new Category(categoryId, categoryName);
         Product insertedProduct = insertProductWithMappingTables(userModel, productCategory, productName, null);
-        insertedProduct.categoryId = productCategory.getCategoryId();
+        insertedProduct.setCategoryId(productCategory.getCategoryId());
         return insertedProduct;
     }
 

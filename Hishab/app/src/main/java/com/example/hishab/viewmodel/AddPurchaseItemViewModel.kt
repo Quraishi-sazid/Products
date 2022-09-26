@@ -5,7 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import com.example.hishab.models.PurchaseHistory
 import com.example.hishab.models.ShoppingItemProxy
 import com.example.hishab.models.entities.*
-import com.example.hishab.repository.Repository
+import com.example.hishab.repository.ShoppingRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -19,7 +19,7 @@ class AddPurchaseItemViewModel @Inject constructor (app:Application) :AndroidVie
     @Inject
     lateinit var category:Category
     @Inject
-    lateinit var repository:Repository
+    lateinit var shoppingRepository:ShoppingRepository
     lateinit var backUpCategory: Category
     lateinit var backUpProduct: Product
 

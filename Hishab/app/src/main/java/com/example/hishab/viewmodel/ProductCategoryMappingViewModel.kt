@@ -8,7 +8,6 @@ import com.example.hishab.models.CategoryAndProductModel
 import com.example.hishab.models.entities.Category
 import com.example.hishab.models.entities.Product
 import com.example.hishab.repository.ProductRepository
-import com.example.hishab.repository.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

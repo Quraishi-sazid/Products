@@ -4,18 +4,17 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import com.example.hishab.models.ShoppingHistory
-import com.example.hishab.repository.Repository
+import com.example.hishab.repository.ShoppingRepository
 import com.example.hishab.utils.Util
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class ShoppingHistoryViewModel @Inject constructor(app: Application) : AndroidViewModel(app) {
-    var xx = 4
     @Inject
-    lateinit var repository: Repository
+    lateinit var shoppingRepository: ShoppingRepository
     fun getBuyingHistoryLiveData(): LiveData<List<ShoppingHistory>> {
-        return repository.getBuyingHistory()
+        return shoppingRepository.getBuyingHistory()
     }
 
     fun processData(list: List<ShoppingHistory>): List<Any> {
