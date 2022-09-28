@@ -59,12 +59,15 @@ class AddShoppingViewModel @Inject constructor(app: Application) : AndroidViewMo
 
     private suspend fun insertOrUpdatePurchaseItem(shoppingItemProxy: ShoppingItemProxy) {
         if (shoppingItemProxy.product.productId == 0L) {
-            shoppingItemProxy.purchaseItem.productId =
+            var product =
                 productRepository.getProductIdByInsertingInDataBase(
                     shoppingItemProxy.getCategoryId(),
                     shoppingItemProxy.getCategoryName(),
                     shoppingItemProxy.getProductName()
-                ).productId
+                )
+            shoppingItemProxy.purchaseItem.productId = product.productId
+            shoppingItemProxy.category.categoryId = product.categoryId
+            shoppingItemProxy.product.productId = product.productId
         } else {
             shoppingItemProxy.purchaseItem.productId = shoppingItemProxy.product.productId
         }

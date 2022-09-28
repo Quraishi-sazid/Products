@@ -2,7 +2,6 @@ package com.example.hishab.repository
 
 import android.content.Context
 import androidx.lifecycle.LiveData
-import com.example.hishab.db.AppDatabase
 import com.example.hishab.db.dao.ProductDao
 import com.example.hishab.di.FooEntryPoint
 import com.example.hishab.di.RepositoryEntryPoint
@@ -10,21 +9,16 @@ import com.example.hishab.interfaces.IPayloadHandler
 import com.example.hishab.models.CategoryAndProductModel
 import com.example.hishab.models.ProductDetailsModel
 import com.example.hishab.models.entities.Category
-import com.example.hishab.models.entities.PayLoad
 import com.example.hishab.models.entities.Product
-import com.example.hishab.retrofit.ApiURL.Companion.PRODUCT_ADD_OR_UPDATE
 import com.example.hishab.retrofit.RetrofitHelper
 import com.example.hishab.retrofit.request.CategoryRequest
 import com.example.hishab.retrofit.request.ProductRequest
 import com.example.hishab.retrofit.response.ProductResponse
 import com.example.hishab.utils.Constant
 import com.example.hishab.utils.PreferenceHelper
-import dagger.hilt.EntryPoint
 import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import retrofit2.Response
-import javax.inject.Inject
 
 class ProductRepository(context: Context) : IPayloadHandler {
     var categoryRepository: CategoryRepository
@@ -97,6 +91,7 @@ class ProductRepository(context: Context) : IPayloadHandler {
                 insertedCategoryId = quariedCategory.categoryId
             var insertableProduct = Product(productName, insertedCategoryId)
             insertableProduct.productId = insertProduct(insertableProduct)
+            insertableProduct.categoryId = insertedCategoryId
             return insertableProduct
         } else {
             var queriedShoppingItem =
@@ -128,32 +123,11 @@ class ProductRepository(context: Context) : IPayloadHandler {
         }
     }
 
-    /*private fun handleError(
-        product: Product,
-        productRequest: ProductRequest
-    ) {
-        if (product.payloadId == -1L) {
-            GlobalScope.launch {
-                var payLoadId = payloadRepository.InsertIntoPayload(
-                    PayLoad(
-                        0,
-                        PRODUCT_ADD_OR_UPDATE,
-                        productRequest.convertToJson()
-                    )
-                )
-                productDao.updateRemoteAndPayloadId(
-                    -1,
-                    payLoadId,
-                    productRequest.localId.toLong()
-                )
-            }
-        }
-    }*/
 
-    suspend fun handleSuccess(productResponse: ProductResponse?) {
+    suspend fun  handleSuccess(productResponse: ProductResponse?) {
         if (productResponse != null) {
             categoryRepository.handleSuccess(productResponse.categoryResponse)
-            productDao.updateRemoteAndPayloadId(
+            productDao.updateRemoteId(
                 productResponse!!.productId.toInt(),
                 productResponse.localId.toLong()
             )

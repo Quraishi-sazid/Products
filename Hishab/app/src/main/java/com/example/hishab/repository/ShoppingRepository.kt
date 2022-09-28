@@ -142,10 +142,10 @@ class ShoppingRepository(application: Application) : IPayloadHandler {
             idProductMap[it.productId] = it
         }
         purchaseDao.getAllUnUpdatedPurchaseItem().forEach {
-            if (!shoppingIdPurchseItemsMap.containsKey(it.shoppingId))
+            if (!shoppingIdPurchseItemsMap.containsKey(it.shoppingId)) {
                 shoppingIdPurchseItemsMap[it.shoppingId] = ArrayList<PurchaseItem>()
-            else
-                shoppingIdPurchseItemsMap[it.shoppingId]?.add(it)
+            }
+            shoppingIdPurchseItemsMap[it.shoppingId]?.add(it)
         }
         shoppingIdPurchseItemsMap.forEach {
             var shoppingId = it.key
@@ -173,12 +173,12 @@ class ShoppingRepository(application: Application) : IPayloadHandler {
                 )
         }
         if (newShoppingRequestList.size > 0)
-            saveShoppingRequestListToRemote(newShoppingRequestList,false)
+            saveShoppingRequestListToRemote(newShoppingRequestList, false)
         else
-            saveShoppingRequestListToRemote(updatebaleShoppingRequestList,true)
+            saveShoppingRequestListToRemote(updatebaleShoppingRequestList, true)
     }
 
-    suspend fun saveShoppingRequestToRemote(shoppingRequest: ShoppingRequest,isUpdating: Boolean) {
+    suspend fun saveShoppingRequestToRemote(shoppingRequest: ShoppingRequest, isUpdating: Boolean) {
         try {
             var shoppingResponse: shoppingResponse? = null
             if (!isUpdating) {
@@ -224,6 +224,7 @@ class ShoppingRepository(application: Application) : IPayloadHandler {
                 shoppingItemResponse.shoppingItemId,
                 shoppingItemResponse.localId
             )
+            productRepository.handleSuccess(shoppingItemResponse.productResponse)
         }
     }
 

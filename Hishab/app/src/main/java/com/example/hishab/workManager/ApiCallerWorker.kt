@@ -41,7 +41,7 @@ class ApiCallerWorker @AssistedInject constructor
         )
         handlerList.add(repositoryEntryPoint.categoryRepository)
         handlerList.add(repositoryEntryPoint.productRepository)
-        //handlerList.add(repositoryEntryPoint.shoppingRepository)
+        handlerList.add(repositoryEntryPoint.shoppingRepository)
     }
     override fun doWork(): Result {
         runBlocking {

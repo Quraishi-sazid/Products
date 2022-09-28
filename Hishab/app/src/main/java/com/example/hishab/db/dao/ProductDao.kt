@@ -47,7 +47,7 @@ interface ProductDao {
     fun getProductListFromCategoryIdInnerJoin(categoryID: Long): LiveData<List<CategoryAndProductModel>>
 
     @Query("update product_table set remoteId =:remoteId, isSynced = 1 where product_id =:productId")
-    suspend fun updateRemoteAndPayloadId(remoteId: Int, productId: Long)
+    suspend fun updateRemoteId(remoteId: Int, productId: Long)
     @Query("Select * from product_table where isSynced=0")
     suspend fun getUnupdatedProducts():List<Product>
     @Query("Select * from product_table")
