@@ -31,13 +31,13 @@ public class Shopping {
     public UserModel userModel;
     
     
-    public Shopping(Date date,UserModel userModel,int shoppingId) {
-		this.date = date;
+    public Shopping(Long time,UserModel userModel,int shoppingId) {
+		this.date = new Date(time);
 		this.userModel = userModel;
 		this.shoppingId = shoppingId;
 	}
-    public Shopping(Date date,UserModel userModel) {
-		this.date = date;
+    public Shopping(Long time,UserModel userModel) {
+		this.date = new Date(time);
 		this.userModel = userModel;
 	}
 

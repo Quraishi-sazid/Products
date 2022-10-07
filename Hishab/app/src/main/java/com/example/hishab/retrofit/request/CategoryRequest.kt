@@ -23,7 +23,7 @@ class CategoryRequest() : JsonConverter() {
     }
 
     constructor(category: Category) : this() {
-        categoryId =-1
+        categoryId = -1
         localId = category.categoryId.toInt()
         newCategoryName = category.getCategoryName()
     }

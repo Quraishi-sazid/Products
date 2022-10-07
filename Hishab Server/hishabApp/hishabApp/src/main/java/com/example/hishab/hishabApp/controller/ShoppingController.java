@@ -24,6 +24,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 @RestController
 @RequestMapping(path = "/shopping/api")
 public class ShoppingController {
@@ -36,12 +38,13 @@ public class ShoppingController {
 	@Autowired
 	IUserRepository userRepository;
 
+	@Transactional
 	@PostMapping("/addShopping")
 	public ShoppingResponse addShopping(@RequestBody ShoppingRequest incomingShopping) {
 		ShoppingResponse shoppingResponse = new ShoppingResponse(incomingShopping.getShoppingId(),
 				incomingShopping.getLocalId(), new ArrayList<ShoppingItemResponse>());
 		UserModel userModel = userRepository.findUserModelByUserId(incomingShopping.getUserId());
-		Shopping insertedShopping = shoppingRepository.save(new Shopping(incomingShopping.getDate(), userModel));
+		Shopping insertedShopping = shoppingRepository.save(new Shopping(incomingShopping.getTime(), userModel));
 		incomingShopping.getShoppingItemRequests().forEach(item -> {
 			shoppingResponse.getItemResponses()
 					.add(shoppingItemToShoppingItemResponse(item, insertProductIfNeeded(insertedShopping, item)));
@@ -80,6 +83,7 @@ public class ShoppingController {
 		return null;
 	}
 
+	@Transactional
 	@PostMapping("/updateShopping")
 	ShoppingResponse updateShoppingItem(@RequestBody ShoppingRequest incomingShopping) {
 		HashMap<Integer, ShoppingItemRequest> tempHashMap = new HashMap<Integer, ShoppingItemRequest>();
@@ -89,7 +93,7 @@ public class ShoppingController {
 		List<Integer> deleteList = new ArrayList<>();
 		UserModel userModel = userRepository.findUserModelByUserId(incomingShopping.getUserId());
 		Shopping shopping = shoppingRepository
-				.save(new Shopping(incomingShopping.getDate(), userModel, incomingShopping.getShoppingId()));
+				.save(new Shopping(incomingShopping.getTime(), userModel, incomingShopping.getShoppingId()));
 		incomingShopping.getShoppingItemRequests().forEach(item -> {
 			if (item.getShoppingItemId() == -1) {
 				var insertedItem = insertProductIfNeeded(shopping, item);
@@ -100,6 +104,7 @@ public class ShoppingController {
 				tempHashMap.put(item.getShoppingItemId(), item);
 		});
 
+		
 		shoppingItemRepository.findShoppingItemByShoppingShoppingId(incomingShopping.getShoppingId()).forEach(item -> {
 			if (newInserted.contains(item.shoppingItemId))
 				return;
@@ -116,6 +121,7 @@ public class ShoppingController {
 		return shoppingResponse;
 	}
 
+	@Transactional
 	@PostMapping("/updateShoppingList")
 	public List<ShoppingResponse> updateShoppingList(@RequestBody List<ShoppingRequest> incomingShoppingList) {
 		List<ShoppingResponse> shoppingResponses = new ArrayList<ShoppingResponse>();
@@ -125,6 +131,7 @@ public class ShoppingController {
 		return shoppingResponses;
 	}
 
+	@Transactional
 	@PostMapping("/addShoppingList")
 	public List<ShoppingResponse> addShoppingList(@RequestBody List<ShoppingRequest> incomingShoppingList) {
 		List<ShoppingResponse> shoppingResponses = new ArrayList<ShoppingResponse>();

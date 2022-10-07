@@ -15,6 +15,7 @@ class ShoppingRequest() : JsonConverter() {
     var userId = 0
     var date: String = ""
     var localId = 0L
+    var time:Long?=0L
     var shoppingItemRequests: List<ShoppingItemRequest>? = null
 
     constructor(
@@ -26,6 +27,7 @@ class ShoppingRequest() : JsonConverter() {
         this.shoppingId = shoppingId
         this.userId = userId
         this.date = SimpleDateFormat("yyyy-MM-dd").format(date)
+        this.time = date?.time
         this.shoppingItemRequests = shoppingItemRequests
     }
 
@@ -37,6 +39,7 @@ class ShoppingRequest() : JsonConverter() {
         localId = shopping.getShoppingId()
         userId = PreferenceHelper.get(Constant.User_Id, -1)
         this.date = SimpleDateFormat("yyyy-MM-dd").format(Date(shopping.getTime()))
+        this.time = shopping.getTime()
         shoppingItemRequests = shoppingItemRequestList
     }
 }

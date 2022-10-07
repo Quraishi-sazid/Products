@@ -15,5 +15,6 @@ public class ShoppingRequest {
 	int userId;
 	Date date;
 	int localId;
+	Long time;
 	List<ShoppingItemRequest>shoppingItemRequests;
 }

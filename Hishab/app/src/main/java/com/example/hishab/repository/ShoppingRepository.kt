@@ -174,7 +174,7 @@ class ShoppingRepository(application: Application) : IPayloadHandler {
         }
         if (newShoppingRequestList.size > 0)
             saveShoppingRequestListToRemote(newShoppingRequestList, false)
-        else
+        if(updatebaleShoppingRequestList.size > 0)
             saveShoppingRequestListToRemote(updatebaleShoppingRequestList, true)
     }
 

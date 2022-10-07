@@ -35,6 +35,7 @@ class ProductRequest() : JsonConverter() {
     }
     constructor(product:Product,category: Category) : this() {
             productId = product.remoteId
+            if(productId == 0) productId = -1
             productName = product.getProductName()
             userId = PreferenceHelper.get(Constant.User_Id, -1)
             localId = product.productId.toInt()
