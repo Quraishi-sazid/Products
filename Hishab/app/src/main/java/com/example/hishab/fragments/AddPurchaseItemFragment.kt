@@ -1,9 +1,11 @@
 package com.example.hishab.fragments
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
@@ -36,6 +38,7 @@ class AddPurchaseItemFragment : DialogFragment() {
         if (checkIsUpdating()) {
             addPurchaseItemViewModel.setValuesForUpdating(args.shoppingItemProxy!!)
         }
+        addPurchaseItemViewModel.categoryProductMappingList = args.productCategoryArray.toList()
         setValuesToView()
         setAdapterToAutoCompleteTextBoxes()
         setSubmitButtonClick()
@@ -43,8 +46,7 @@ class AddPurchaseItemFragment : DialogFragment() {
     }
 
     @Override
-    override fun onStart()
-    {
+    override fun onStart() {
         super.onStart()
         if (getDialog() == null)
             return;
@@ -79,27 +81,44 @@ class AddPurchaseItemFragment : DialogFragment() {
             }
         })
     }
+
     private fun setValuesToView() {
         binding.product = addPurchaseItemViewModel.product
         binding.purchaseItem = addPurchaseItemViewModel.purchaseItem
         binding.category = addPurchaseItemViewModel.category
     }
+
     private fun setSubmitButtonClick() {
         binding.btnSubmit.setOnClickListener(View.OnClickListener {
-            if (addPurchaseItemViewModel.isUpdating) {
-                addPurchaseItemViewModel.handleInformationChange()
-                args.callback?.onUpdateCallBack(args.shoppingItemProxy!!)
-            } else {
-                var returnShopingItem = ShoppingItemProxy(
-                    (args.buyingListSize).toLong(),
-                    addPurchaseItemViewModel.category,
-                    addPurchaseItemViewModel.product,
-                    addPurchaseItemViewModel.purchaseItem
-                )
-                args.callback?.onAddedCallback(returnShopingItem)
+            var validationModelWithMessage = addPurchaseItemViewModel.isValidInput()
+            if (validationModelWithMessage.isValid) {
+                if (addPurchaseItemViewModel.isUpdating) {
+                    addPurchaseItemViewModel.handleInformationChange()
+                    args.callback?.onUpdateCallBack(args.shoppingItemProxy!!)
+                    addPurchaseItemViewModel.needToRestoreBackUp=false
+                } else {
+                    var returnShopingItem = ShoppingItemProxy(
+                        (args.buyingListSize).toLong(),
+                        addPurchaseItemViewModel.category,
+                        addPurchaseItemViewModel.product,
+                        addPurchaseItemViewModel.purchaseItem
+                    )
+                    args.callback?.onAddedCallback(returnShopingItem)
+                    addPurchaseItemViewModel.needToRestoreBackUp=false
+                }
+                dismiss()
+            } else{
+                Toast.makeText(requireContext(), validationModelWithMessage.msg, Toast.LENGTH_SHORT)
+                    .show()
             }
-            dismiss()
+
         })
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        if(addPurchaseItemViewModel.needToRestoreBackUp)
+            addPurchaseItemViewModel.restoreBackUp()
+        dismiss()
     }
 
     override fun onDestroy() {

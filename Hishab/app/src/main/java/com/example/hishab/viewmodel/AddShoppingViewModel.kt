@@ -14,6 +14,8 @@ import com.example.hishab.retrofit.request.ShoppingItemRequest
 import com.example.hishab.retrofit.request.ShoppingRequest
 import com.example.hishab.utils.Util
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.collections.ArrayList
 
@@ -49,12 +51,15 @@ class AddShoppingViewModel @Inject constructor(app: Application) : AndroidViewMo
         }
         var shoppingItemRequestList = ArrayList<ShoppingItemRequest>()
         shoppingItemProxyList.forEach { shoppingItemRequestList.add(ShoppingItemRequest(it)) }
-        shoppingRepository.saveShoppingRequestToRemote(
-            ShoppingRequest(
-                shopping,
-                shoppingItemRequestList
-            ),false
-        )
+        GlobalScope.launch {
+            shoppingRepository.saveShoppingRequestToRemote(
+                ShoppingRequest(
+                    shopping,
+                    shoppingItemRequestList
+                ),false
+            )
+        }
+
     }
 
     private suspend fun insertOrUpdatePurchaseItem(shoppingItemProxy: ShoppingItemProxy) {
@@ -92,14 +97,17 @@ class AddShoppingViewModel @Inject constructor(app: Application) : AndroidViewMo
         dataSource.forEach { insertOrUpdatePurchaseItem(it) }
         var shoppingItemRequests = ArrayList<ShoppingItemRequest>()
         dataSource.forEach { shoppingItemRequests.add(ShoppingItemRequest(it)) }
-        shoppingRepository.saveShoppingRequestToRemote(
-            ShoppingRequest(
-                Shopping(
-                    dateId,
-                    updatingShoppingHistory
-                ), shoppingItemRequests
-            ),true
-        )
+        GlobalScope.launch {
+            shoppingRepository.saveShoppingRequestToRemote(
+                ShoppingRequest(
+                    Shopping(
+                        dateId,
+                        updatingShoppingHistory
+                    ), shoppingItemRequests
+                ),true
+            )
+        }
+
     }
 
     suspend fun deletePurchaseItem(purchaseItem: PurchaseItem) {

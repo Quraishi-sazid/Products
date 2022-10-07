@@ -23,7 +23,8 @@ import kotlinx.coroutines.launch
 import retrofit2.Response
 
 class CategoryRepository(application: Context) : IPayloadHandler {
-    var database = EntryPointAccessors.fromApplication(application, FooEntryPoint::class.java).database
+    var database =
+        EntryPointAccessors.fromApplication(application, FooEntryPoint::class.java).database
     var categoryRemoteDataSource = CategoryRemoteDataSource()
     private var categoryDao: CategoryDao
     private var budgetDao: BudgetDao
@@ -105,14 +106,18 @@ class CategoryRepository(application: Context) : IPayloadHandler {
         return productDao.getProductCountMappedWithCategoryId(id)
     }
 
-    suspend fun insertOrUpdateCategoryListInRemote(
+    private suspend fun insertOrUpdateCategoryListInRemote(
         categoryRequestResponseList: List<CategoryRequest>
     ): Response<List<CategoryResponse>> {
         return RetrofitHelper.hishabApi.addOrUpdateCategoryList(categoryRequestResponseList);
     }
 
     suspend fun getCategoryFromName(categoryName: String): Category {
-        return categoryDao.getCategoryFromName(categoryName)
+        var category = categoryDao.getCategoryFromName(categoryName)
+        if (category == null) {
+            category = Category(categoryDao.insertCategory(Category(categoryName)),categoryName)
+        }
+        return category
     }
 
     suspend fun getCategoryById(categoryId: Long): Category {
@@ -141,11 +146,11 @@ class CategoryRepository(application: Context) : IPayloadHandler {
         return categoryDao.getCategorySpents(categoryIdList, month, year)
     }
 
-    fun getAllCategories():List<Category>{
+    fun getAllCategories(): List<Category> {
         return categoryDao.getAllCategory()
     }
 
-    suspend fun getAllCategoriesSuspended():List<Category>{
+    suspend fun getAllCategoriesSuspended(): List<Category> {
         return categoryDao.getAllCategory()
     }
 

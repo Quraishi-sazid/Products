@@ -13,6 +13,7 @@ class Product @Inject constructor() :
         this.productId = productId
         this.productName = productName
         this.categoryId = categoryId
+        trimProductName()
     }
 
     @PrimaryKey(autoGenerate = true)
@@ -26,13 +27,16 @@ class Product @Inject constructor() :
 
     @Bindable
     fun getProductName(): String {
-        return productName
+        return productName.trim()
     }
 
     fun setProductName(value: String) {
-        productName = value
+        productName = value.trim()
+        productName.trim()
         notifyPropertyChanged(BR.itemName)
-
+    }
+    fun trimProductName(){
+        productName.trim()
     }
 
     @ColumnInfo(name = "category_id")

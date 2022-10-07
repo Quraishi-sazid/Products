@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.hishab.R
 import com.example.hishab.adapter.GenericAdapterForTwoViewTypes
-import com.example.hishab.adapter.SimpleGenericAdapterWithBinding
 import com.example.hishab.databinding.FragmentProductCategoryMappingBinding
 import com.example.hishab.databinding.LayoutMonthItemBinding
 import com.example.hishab.databinding.LayoutProductCategoryItemBinding
@@ -40,8 +39,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.function.Predicate
-import kotlin.coroutines.coroutineContext
 
 @AndroidEntryPoint
 class ProductCategoryMappingFragment : Fragment(), IViewPagerSwipeListener {
@@ -174,17 +171,18 @@ class ProductCategoryMappingFragment : Fragment(), IViewPagerSwipeListener {
 
                         )
                     binding.category = Category(swippedCategoryAndProductModel.getCategoryName()!!)
-                    binding.actvCategory.isEnabled = false
+                    //binding.actvCategory.isEnabled = false
                 })
                 compositeDisposable.add(customAlertDialog.onSubmitButtonPressed.filter {
                     it.product!!.getProductName() != null
                 }.observeOn(Schedulers.io()).map { binding ->
-                    var isUpdateNeed = !binding.product!!.getProductName()
-                        .equals(swippedCategoryAndProductModel.getCategoryName()) && isNewProduct(
-                        binding.product!!.getProductName()
-                    )
+                    var isCategoryChanged= swippedCategoryAndProductModel.getCategoryName()!=binding.category?.getCategoryName();
+                    var isUpdateNeed = (isNewProduct(binding.product!!.getProductName()) || isCategoryChanged) && !binding.category?.getCategoryName().isNullOrBlank()
                     if (isUpdateNeed) {
-                        productCategoryMappingViewModel.updateProductName(
+                        if(isCategoryChanged){
+                            binding!!.product?.categoryId = productCategoryMappingViewModel.getCategoryIdFromCategoryName(binding.category!!.getCategoryName())
+                        }
+                        productCategoryMappingViewModel.updateProductNameAndCategoryId(
                             swippedCategoryAndProductModel.getProductId()!!,
                             binding.product!!.getProductName()!!,
                             binding.product!!.categoryId,

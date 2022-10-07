@@ -25,8 +25,8 @@ interface ProductDao {
     @Query("select s.product_name as productName,s.product_id as productId,c.category_id as categoryId,c.category_name as categoryName from  category c inner join product_table s on c.category_id=s.category_id order by c.category_id")
     fun getProductCategoryListInnerJoin(): LiveData<List<CategoryAndProductModel>>
 
-    @Query("update product_table set product_name=:pName,isSynced = 0 where product_id=:pId")
-    fun updateProductName(pName: String, pId: Long)
+    @Query("update product_table set product_name=:pName,category_id=:cId, isSynced = 0 where product_id=:pId")
+    fun updateProductNameAndCategoryId(pName: String, cId:Long, pId: Long)
 
     @Query("select count(*) from tbl_shopping_item where product_id=:productId")
     fun getPurchaseCountOfProductId(productId: Long): Int

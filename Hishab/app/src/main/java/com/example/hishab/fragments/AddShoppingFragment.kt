@@ -194,6 +194,7 @@ class AddShoppingFragment : Fragment() {
         val shoppingToPurchaseItemFragmentAction =
             AddShoppingFragmentDirections.actionAddShoppingFragmentToAddPurchaseItemFragment(
                 categoryAndProductModelList.toTypedArray(),
+
                 distinctCategoryList.toTypedArray(),
                 shoppingItemProxy?.proxyId?.toInt() ?: adapter.currentList.size + 1
             )

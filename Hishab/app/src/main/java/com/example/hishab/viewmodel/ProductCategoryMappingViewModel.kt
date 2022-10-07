@@ -7,9 +7,12 @@ import androidx.lifecycle.viewModelScope
 import com.example.hishab.models.CategoryAndProductModel
 import com.example.hishab.models.entities.Category
 import com.example.hishab.models.entities.Product
+import com.example.hishab.repository.CategoryRepository
 import com.example.hishab.repository.ProductRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
@@ -37,8 +40,8 @@ class ProductCategoryMappingViewModel @Inject constructor(application: Applicati
         productRepository.deleteByProductById(productId)
     }
 
-    fun updateProductName(productId: Long, productName: String,categoryID: Long) {
-        productRepository.updateProductName(productId, productName)
+    fun updateProductNameAndCategoryId(productId: Long, productName: String, categoryID: Long) {
+        productRepository.updateProductNameAndCategoryId(productId,categoryID, productName)
         viewModelScope.launch {
             productRepository.saveToRemote(Product(productName,categoryID,productId))
         }
@@ -67,6 +70,16 @@ class ProductCategoryMappingViewModel @Inject constructor(application: Applicati
         return returnList
     }
 
+    fun getCategoryIdFromCategoryName(categoryName: String): Long {
+        var categoryId = -1L
+        runBlocking {
+            categoryId = categoryRepository.getCategoryFromName(categoryName).categoryId
+        }
+        return categoryId
+    }
+
     @Inject
     lateinit var productRepository: ProductRepository
+    @Inject
+    lateinit var categoryRepository: CategoryRepository
 }

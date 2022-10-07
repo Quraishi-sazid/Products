@@ -12,30 +12,34 @@ import androidx.databinding.ViewDataBinding
 import io.reactivex.Observable
 
 
-class CustomAlertDialog<B:ViewDataBinding>(val context: Context, val layoutId:Int, val submitButtonId: Int= -1) {
-   lateinit var onSubmitButtonPressed: Observable<B>
-   var onViewCreated: Observable<B>
-   var alertDialog:AlertDialog
-init {
-    val dialogBuilder: AlertDialog.Builder = AlertDialog.Builder(context)
-    val viewDataBinding=DataBindingUtil.inflate<B>(LayoutInflater.from(context),layoutId,null,false)
-    dialogBuilder.setView(viewDataBinding.root)
-    alertDialog= dialogBuilder.show()
-    onViewCreated=Observable.create<B>{
-        emitter->emitter.onNext(viewDataBinding)
-    }
-    if(submitButtonId!=-1)
-    {
-     onSubmitButtonPressed  = Observable.create<B>{
-            emitter->
-            viewDataBinding.root.findViewById<Button>(submitButtonId).setOnClickListener{
-                emitter.onNext(viewDataBinding)
+class CustomAlertDialog<B : ViewDataBinding>(
+    val context: Context,
+    val layoutId: Int,
+    val submitButtonId: Int = -1
+) {
+    lateinit var onSubmitButtonPressed: Observable<B>
+    var onViewCreated: Observable<B>
+    var alertDialog: AlertDialog
+
+    init {
+        val dialogBuilder: AlertDialog.Builder = AlertDialog.Builder(context)
+        val viewDataBinding =
+            DataBindingUtil.inflate<B>(LayoutInflater.from(context), layoutId, null, false)
+        dialogBuilder.setView(viewDataBinding.root)
+        alertDialog = dialogBuilder.show()
+        onViewCreated = Observable.create<B> { emitter ->
+            emitter.onNext(viewDataBinding)
+        }
+        if (submitButtonId != -1) {
+            onSubmitButtonPressed = Observable.create<B> { emitter ->
+                viewDataBinding.root.findViewById<Button>(submitButtonId).setOnClickListener {
+                    emitter.onNext(viewDataBinding)
+                }
             }
         }
     }
-}
-    fun dismiss()
-    {
+
+    fun dismiss() {
         alertDialog.dismiss()
     }
 

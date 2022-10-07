@@ -40,7 +40,7 @@ class ProductRepository(context: Context) : IPayloadHandler {
         return productDao.insert(product)
     }
 
-    suspend fun getShoppingItemFromNameAndCId(itemName: String, categoryId: Long): Product {
+    suspend fun getProductFromNameAndCId(itemName: String, categoryId: Long): Product {
         return productDao.getShoppingItemFromItemNameAndCategoryId(itemName, categoryId);
     }
 
@@ -52,8 +52,8 @@ class ProductRepository(context: Context) : IPayloadHandler {
         return productDao.getProductCategoryListInnerJoin()
     }
 
-    fun updateProductName(productId: Long, productName: String) {
-        productDao.updateProductName(productName, productId)
+    fun updateProductNameAndCategoryId(productId: Long,categoryId: Long, productName: String) {
+        productDao.updateProductNameAndCategoryId(productName,categoryId, productId)
     }
 
     fun getPurchaseCountOfProductId(productId: Long): Int {
@@ -154,7 +154,7 @@ class ProductRepository(context: Context) : IPayloadHandler {
         categoryId: Long,
         productName: String
     ): Product {
-        var quariedProduct = getShoppingItemFromNameAndCId(
+        var quariedProduct = getProductFromNameAndCId(
             productName,
             categoryId
         )

@@ -13,38 +13,48 @@ import com.example.hishab.BR
 import org.jetbrains.annotations.NotNull
 import javax.inject.Inject
 
-@Entity(tableName= "category")
-class Category @Inject constructor () :BaseObservable(),Parcelable {
+@Entity(tableName = "category")
+class Category @Inject constructor() : BaseObservable(), Parcelable {
     @NonNull
-    @PrimaryKey(autoGenerate = true) @androidx.room.ColumnInfo(name="category_id") var  categoryId:Long=0
+    @PrimaryKey(autoGenerate = true)
+    @androidx.room.ColumnInfo(name = "category_id")
+    var categoryId: Long = 0
+
     @NonNull
-    @ColumnInfo(name="category_name") private var categoryName:String=""
-    @ColumnInfo(name="remote_id") var remoteId:Long=-1
-    var isSynced:Boolean=false
+    @ColumnInfo(name = "category_name")
+    private var categoryName: String = ""
+    @ColumnInfo(name = "remote_id")
+    var remoteId: Long = -1
+    var isSynced: Boolean = false
+
     @Bindable
-    fun getCategoryName():String
-    {
+    fun getCategoryName(): String {
         return categoryName!!
     }
-    fun setCategoryName(value:String)
-    {
-        categoryName=value
+
+    fun setCategoryName(value: String) {
+        categoryName = value
+        trimCategoryName()
         notifyPropertyChanged(BR.categoryName)
+    }
+    fun setId(categoryId: Long) {
+        this.categoryId = categoryId
     }
 
 
-    constructor(categoryName: String):this()
-    {
-        this.categoryName=categoryName
+    constructor(categoryName: String) : this() {
+        this.categoryName = categoryName
+        trimCategoryName()
     }
 
     constructor(parcel: Parcel) : this() {
         categoryId = parcel.readLong()
         categoryName = parcel.readString()!!
+        trimCategoryName()
     }
-    constructor(categoryId:Long,categoryName:String):this()
-    {
-        this.categoryId=categoryId
+
+    constructor(categoryId: Long, categoryName: String) : this() {
+        this.categoryId = categoryId
         this.setCategoryName(categoryName)
     }
 
@@ -70,11 +80,15 @@ class Category @Inject constructor () :BaseObservable(),Parcelable {
             return arrayOfNulls(size)
         }
     }
-    fun deepCopy():Category
-    {
-        var category=Category()
-        category.categoryId=categoryId
-        category.setCategoryName(""+categoryName)
+
+    fun trimCategoryName(){
+        categoryName = categoryName.trim()
+    }
+
+    fun deepCopy(): Category {
+        var category = Category()
+        category.categoryId = categoryId
+        category.setCategoryName("" + categoryName)
         return category
     }
 

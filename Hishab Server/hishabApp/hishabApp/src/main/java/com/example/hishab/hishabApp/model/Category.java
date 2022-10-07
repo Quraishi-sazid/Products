@@ -11,9 +11,9 @@ import javax.persistence.*;
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int categoryId;
+    private int categoryId;
     @Column(unique = true)
-    String categoryName;
+    private String categoryName;
     public Category(){}
     public Category(String categoryName){
         this.categoryName = categoryName;
