@@ -118,8 +118,7 @@ class PagingAdapterForThreeViewTypes<T1, T2, T3, B1 : ViewDataBinding, B2 : View
             threeLayouts: ThreeLayout,
             twoPredicate: TwoPredicate,
             diffUtilCallback: DiffUtil.ItemCallback<Any>? = null
-        )
-                : PagingAdapterForThreeViewTypes<T1, T2, T3, B1, B2, B3> {
+        ): PagingAdapterForThreeViewTypes<T1, T2, T3, B1, B2, B3> {
             var passingDiffUtil = diffUtilCallback
             if (passingDiffUtil == null) {
                 passingDiffUtil = object : DiffUtil.ItemCallback<Any>() {

@@ -11,10 +11,25 @@ import com.example.hishab.utils.PreferenceHelper
 import com.example.hishab.workManager.ApiCallerWorker
 import dagger.hilt.android.HiltAndroidApp
 import java.util.*
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltAndroidApp
 class HishabApplication : Application(), Configuration.Provider {
+
+    companion object{
+         fun setWorkManager(context: Context) {
+            val constraints: Constraints = Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build()
+            var request =
+                PeriodicWorkRequest.Builder(ApiCallerWorker::class.java,30,TimeUnit.MINUTES).setConstraints(constraints)
+                    .build()
+            WorkManager.getInstance(context)
+                .enqueueUniquePeriodicWork("RemoteUpdateWork", ExistingPeriodicWorkPolicy.KEEP, request)
+        }
+    }
+
     lateinit var reminderAlarmHelper: AlarmHelper<AlarmReceiver>
     @Inject
     lateinit var workerFactory: HiltWorkerFactory
@@ -25,7 +40,7 @@ class HishabApplication : Application(), Configuration.Provider {
         PreferenceHelper.sharedPreferences = applicationContext.getSharedPreferences("HishabPreference", Context.MODE_PRIVATE)
         reminderAlarmHelper = AlarmHelper.Create(applicationContext, AlarmHelper.ReminderAlarmRequestCode, AlarmReceiver::class.java)
         setAlarms()
-        setWorkManager()
+        setWorkManager(applicationContext)
        // WorkManager.initialize(this,workManagerConfiguration)
     }
 
@@ -44,16 +59,7 @@ class HishabApplication : Application(), Configuration.Provider {
 
     }
 
-    private fun setWorkManager() {
-        val constraints: Constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .build()
-        var request =
-            OneTimeWorkRequest.Builder(ApiCallerWorker::class.java).setConstraints(constraints)
-                .build()
-        WorkManager.getInstance(applicationContext)
-            .beginUniqueWork("RemoteUpdateWork", ExistingWorkPolicy.KEEP, request).enqueue()
-    }
+
 
     override fun getWorkManagerConfiguration(): Configuration {
         return Configuration.Builder()

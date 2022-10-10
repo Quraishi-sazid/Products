@@ -13,6 +13,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.hishab.R
 import com.example.hishab.adapter.ViewPagerAdapter
 import com.example.hishab.databinding.FragmentViewPagerTabBinding
+import com.example.hishab.interfaces.IViewPagerFragmentChanged
 import com.example.hishab.interfaces.IViewPagerSwipeListener
 import com.example.hishab.models.ViewPagerFragmentProxy
 import com.example.hishab.utils.BottomNavigationTitleTabLayoutFragmentsMapping
@@ -20,6 +21,7 @@ import com.example.hishab.utils.BottomNavigationViewWithViewPagerManager
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import io.reactivex.Observable.just
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
@@ -42,7 +44,7 @@ class ViewPagerTabFragment : Fragment() {
     }
 
     private fun setUpTabLayoutAndViewPager() {
-       // binding.viewPager.isUserInputEnabled = false
+        // binding.viewPager.isUserInputEnabled = false
         binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 var fragment =
@@ -50,6 +52,9 @@ class ViewPagerTabFragment : Fragment() {
                         getSelectedItemId(),
                         position
                     ).fragment
+                if (fragment is IViewPagerFragmentChanged) {
+                    fragment.onFragmentChanged()
+                }
                 if (/*fragment is IViewPagerSwipeListener*/ false) {
 
                     io.reactivex.Observable.just(1).delay(1000, TimeUnit.MILLISECONDS).subscribe {
@@ -57,7 +62,7 @@ class ViewPagerTabFragment : Fragment() {
                         listener.onSwipedRightOrLeft.subscribe {
                             if (it.first < 0 && binding.viewPager.currentItem != 0) {
                                 binding.viewPager.currentItem--
-                            } else if(it.first > 0)
+                            } else if (it.first > 0)
                                 binding.viewPager.currentItem++
                         }
                     }

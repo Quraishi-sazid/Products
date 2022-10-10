@@ -6,6 +6,8 @@ import com.example.hishab.hishabApp.model.UserModel;
 import com.example.hishab.hishabApp.repository.IUserDeviceRepository;
 import com.example.hishab.hishabApp.repository.IUserRepository;
 import com.example.hishab.hishabApp.security.jwt.JwtUtils;
+import com.google.gson.Gson;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -50,9 +52,11 @@ public class UserController {
                 newUser.setMobileNo(phoneNo);
                 responseUserModel = userRepository.save(newUser);
                 responseUserDeviceModel.setUser(responseUserModel);
+                response.put("is_new_user",true);
                 responseUserDeviceModel = userDeviceRepository.save(responseUserDeviceModel);
             } else {
                 responseUserModel = existingUser;
+                response.put("is_new_user",false);
                 responseUserDeviceModel.setUser(responseUserModel);
                 try {
                     responseUserDeviceModel = userDeviceRepository.save(responseUserDeviceModel);
@@ -62,6 +66,7 @@ public class UserController {
             }
             response.put("user_id", responseUserModel.getUserId());
             response.put("user_device_id", responseUserDeviceModel.getUserDeviceId());
+            response.put("response_user_model", new Gson().toJson(responseUserModel));
             response.put("jwt:",jwtToken);
         }
         return response;

@@ -1,5 +1,6 @@
 package com.example.hishab.fragments
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
@@ -10,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
+import com.example.hishab.MainActivity
 import com.example.hishab.R
 import com.example.hishab.retrofit.ApiCallStatus
 import com.example.hishab.retrofit.ApiCaller
@@ -78,9 +80,16 @@ class OTPFragment : Fragment() {
                                                 Constant.jwt,
                                                 response.response!!.body()!!.jsonWebTokenJWT
                                             );
-                                            requireActivity().supportFragmentManager.beginTransaction()
-                                                .replace(R.id.container, RegisterFragment())
-                                                .commit()
+                                            if(response!!.response!!.body()!!.isNewUser){
+                                                requireActivity().supportFragmentManager.beginTransaction()
+                                                    .replace(R.id.container, RegisterFragment())
+                                                    .commit()
+                                            }
+                                            else{
+                                                requireActivity().startActivity(Intent(requireContext(), MainActivity::class.java))
+                                                requireActivity().finish()
+                                            }
+
                                         }
                                     } else {
                                         Toast.makeText(

@@ -30,7 +30,6 @@ class AddShoppingAdapter() : ListAdapter<ShoppingItemProxy, ViewHolder>(diffUtil
                         oldItem.product.getProductName()
                             .equals(newItem.product.getProductName()) &&
                         oldItem.purchaseItem.getCost() == newItem.purchaseItem.getCost()
-
             }
         }
     }

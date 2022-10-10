@@ -1,31 +1,21 @@
 package com.example.hishab.workManager
 
 import android.content.Context
-import android.util.Log
+import android.os.Handler
+import android.os.Looper
+import android.widget.Toast
 import androidx.hilt.work.HiltWorker
-import androidx.work.Data;
-import androidx.work.Worker;
-import androidx.work.WorkerParameters;
+import androidx.work.Data
+import androidx.work.Worker
+import androidx.work.WorkerParameters
+import com.example.hishab.HishabApplication
 import com.example.hishab.di.RepositoryEntryPoint
 import com.example.hishab.interfaces.IPayloadHandler
-import com.example.hishab.models.PayLoadQuery
-import com.example.hishab.repository.CategoryRepository
-import com.example.hishab.repository.PayloadRepository
-import com.example.hishab.repository.ProductRepository
-import com.example.hishab.retrofit.ApiCallStatus
-import com.example.hishab.retrofit.ApiURL
-import com.example.hishab.retrofit.request.CategoryRequest
-import com.example.hishab.retrofit.request.ProductRequest
-import com.example.hishab.utils.Constant
+import com.example.hishab.utils.NotificationHelper
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.EntryPointAccessors
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import java.util.concurrent.atomic.AtomicInteger
-import javax.inject.Inject
-import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -44,6 +34,14 @@ class ApiCallerWorker @AssistedInject constructor
         handlerList.add(repositoryEntryPoint.shoppingRepository)
     }
     override fun doWork(): Result {
+        /*val handler = Handler(Looper.getMainLooper())
+
+        handler.post(Runnable {
+            Toast.makeText(context,"show text",Toast.LENGTH_LONG).show()
+            val notificationHelper = NotificationHelper(context)
+            var nb = notificationHelper.getChannelNotification()
+            notificationHelper.getManager().notify(1, nb.build())
+        })*/
         runBlocking {
             retrieveAndSendToServer()
         }

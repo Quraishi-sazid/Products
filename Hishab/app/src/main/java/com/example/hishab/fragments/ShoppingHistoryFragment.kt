@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hishab.R
@@ -17,6 +18,7 @@ import com.example.hishab.adapter.GenericAdapterForThreeViewTypes
 import com.example.hishab.databinding.*
 import com.example.hishab.interfaces.IRecyclerViewItemClickCallback
 import com.example.hishab.interfaces.IViewPagerSwipeListener
+import com.example.hishab.models.PurchaseHistory
 import com.example.hishab.models.ShoppingHistory
 import com.example.hishab.models.ThreeLayout
 import com.example.hishab.models.TwoPredicate
@@ -81,6 +83,31 @@ class ShoppingHistoryFragment : Fragment(), IViewPagerSwipeListener {
     }
 
     private fun setRecyclerView() {
+        var diffUtil: DiffUtil.ItemCallback<Any> = object : DiffUtil.ItemCallback<Any>() {
+            override fun areItemsTheSame(
+                oldItem: Any,
+                newItem: Any
+            ): Boolean {
+                if (oldItem is ShoppingHistory && newItem is ShoppingHistory) {
+                    return oldItem.getBuyingId() == newItem.getBuyingId()
+                } else if (oldItem is String && newItem is String) {
+                    return oldItem == newItem
+                }
+                return false
+            }
+
+            override fun areContentsTheSame(
+                oldItem: Any,
+                newItem: Any
+            ): Boolean {
+                if (oldItem is ShoppingHistory && newItem is ShoppingHistory) {
+                    return oldItem == newItem
+                } else if (oldItem is String && newItem is String) {
+                    return oldItem == newItem
+                }
+                return false
+            }
+        }
         var layouts = ThreeLayout(
             R.layout.layout_item_year,
             R.layout.layout_month_item,
@@ -89,17 +116,17 @@ class ShoppingHistoryFragment : Fragment(), IViewPagerSwipeListener {
         var predicate =
             TwoPredicate(Predicate<Int> { buyingListAdapter.getItemAt(it) is Int },
                 Predicate<Int> { buyingListAdapter.getItemAt(it) is String })
-        buyingListAdapter = GenericAdapterForThreeViewTypes.Create(layouts, predicate)
-        buyingListAdapter.firstViewInlateLiveData.observe(viewLifecycleOwner){
-            it.second.year =it.first
+        buyingListAdapter = GenericAdapterForThreeViewTypes.Create(layouts, predicate, diffUtil)
+        buyingListAdapter.firstViewInlateLiveData.observe(viewLifecycleOwner) {
+            it.second.year = it.first
         }
-        buyingListAdapter.secondViewInlateLiveData.observe(viewLifecycleOwner){
-            it.second.month1 =it.first
+        buyingListAdapter.secondViewInlateLiveData.observe(viewLifecycleOwner) {
+            it.second.month1 = it.first
         }
-        buyingListAdapter.thirdViewInlateLiveData.observe(viewLifecycleOwner){
-            it.second.shoppingHistory =it.first
+        buyingListAdapter.thirdViewInlateLiveData.observe(viewLifecycleOwner) {
+            it.second.shoppingHistory = it.first
         }
-        buyingListAdapter.thirdViewClickLiveData.observe(viewLifecycleOwner){
+        buyingListAdapter.thirdViewClickLiveData.observe(viewLifecycleOwner) {
             goToAddBuyingFragment(it)
         }
         recyclerView = binding.rvBuyingList
@@ -109,10 +136,10 @@ class ShoppingHistoryFragment : Fragment(), IViewPagerSwipeListener {
     }
 
     private fun fetchBuyingList() {
-            viewModel.getBuyingHistoryLiveData().observe(viewLifecycleOwner, {
-                var processedList = viewModel.processData(it)
-                buyingListAdapter.submitList(processedList)
-            })
+        viewModel.getBuyingHistoryLiveData().observe(viewLifecycleOwner, {
+            var processedList = viewModel.processData(it)
+            buyingListAdapter.submitList(processedList)
+        })
     }
 
     override lateinit var onSwipedRightOrLeft: Observable<Pair<Float, Float>>
