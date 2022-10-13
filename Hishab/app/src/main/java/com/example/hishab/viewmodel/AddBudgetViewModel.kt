@@ -7,6 +7,7 @@ import com.example.hishab.models.entities.Budget
 import com.example.hishab.models.entities.Category
 import com.example.hishab.repository.BudgetRepository
 import com.example.hishab.repository.CategoryRepository
+import com.example.hishab.retrofit.request.BudgetRequest
 import com.example.hishab.utils.Util
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.Flowable
@@ -42,5 +43,9 @@ class AddBudgetViewModel @Inject constructor (app: Application) : AndroidViewMod
 
     suspend fun getBudgetFlowable() : Flowable<List<Budget>> {
         return budgetRepository.getBudgetList(month,year)
+    }
+
+    suspend fun saveToRemote(budgetList: ArrayList<BudgetCategoryQuery>) {
+        budgetRepository.saveToRemote(BudgetRequest(year,month,budgetList))
     }
 }

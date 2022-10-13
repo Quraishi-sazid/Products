@@ -32,6 +32,7 @@ class ApiCallerWorker @AssistedInject constructor
         handlerList.add(repositoryEntryPoint.categoryRepository)
         handlerList.add(repositoryEntryPoint.productRepository)
         handlerList.add(repositoryEntryPoint.shoppingRepository)
+        handlerList.add(repositoryEntryPoint.budgetRepository)
     }
     override fun doWork(): Result {
         /*val handler = Handler(Looper.getMainLooper())

@@ -68,7 +68,6 @@ class PurchaseHistoryFragment : Fragment(), IViewPagerSwipeListener,IViewPagerFr
         }
         CoroutineScope(Dispatchers.IO).launch {
             pagingFlow?.collectLatest {
-               // if(adapter.itemCount==0)
                 adapter.submitData(it)
             }
         }
@@ -82,10 +81,10 @@ class PurchaseHistoryFragment : Fragment(), IViewPagerSwipeListener,IViewPagerFr
             ): Boolean {
                 if(oldItem is PurchaseHistory && newItem is PurchaseHistory){
                     if(oldItem.getPurchaseId()!=null && newItem.getPurchaseId()!=null){
-                        return oldItem.getPurchaseId()!!.equals(newItem.getPurchaseId())
+                        return oldItem.getPurchaseId()!! == newItem.getPurchaseId()
                     }
                 }else if(oldItem is String && newItem is String){
-                    return oldItem.equals(newItem)
+                    return oldItem == newItem
                 }
                 return false
             }
@@ -140,36 +139,6 @@ class PurchaseHistoryFragment : Fragment(), IViewPagerSwipeListener,IViewPagerFr
         recyclerView.isNestedScrollingEnabled = false
         recyclerView.adapter = adapter
         onSwipedRightOrLeft = Util.getViewSwipeObservable(recyclerView)
-    }
-
-    private fun getDiffUtilCallBack(): DiffUtil.ItemCallback<Any> {
-        var diffUtilCallBack = object : DiffUtil.ItemCallback<Any>() {
-            override fun areItemsTheSame(oldItem: Any, newItem: Any): Boolean {
-                if (!Util.getType(oldItem).equals(Util.getType(newItem))) {
-                    return false;
-                }
-                if (oldItem is String && newItem is String)
-                    return oldItem.equals(newItem)
-                else if (oldItem is PurchaseHistory && newItem is PurchaseHistory) {
-                    return oldItem.getPurchaseId() == newItem.getPurchaseId()
-                }
-                return false
-            }
-
-            override fun areContentsTheSame(oldItem: Any, newItem: Any): Boolean {
-                if (oldItem is PurchaseHistory && newItem is PurchaseHistory) {
-                    val b = oldItem.getCategoryName().equals(newItem.getCategoryName()) &&
-                            oldItem.getItemName().equals(newItem.getItemName()) &&
-                            oldItem.getCost() == newItem.getCost() &&
-                            oldItem.getDay() == newItem.getDay() &&
-                            oldItem.getMonth() == newItem.getMonth() &&
-                            oldItem.getYear() == newItem.getYear()
-                    return b;
-                }
-                return true
-            }
-        }
-        return diffUtilCallBack
     }
 
     override lateinit var onSwipedRightOrLeft: Observable<Pair<Float, Float>>

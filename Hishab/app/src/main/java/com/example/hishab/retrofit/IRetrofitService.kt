@@ -1,14 +1,8 @@
 package com.example.hishab.retrofit
 
 import com.example.hishab.retrofit.commonmodel.UserModel
-import com.example.hishab.retrofit.request.CategoryRequest
-import com.example.hishab.retrofit.request.LoginRequest
-import com.example.hishab.retrofit.request.ProductRequest
-import com.example.hishab.retrofit.request.ShoppingRequest
-import com.example.hishab.retrofit.response.CategoryResponse
-import com.example.hishab.retrofit.response.LoginResponse
-import com.example.hishab.retrofit.response.ProductResponse
-import com.example.hishab.retrofit.response.shoppingResponse
+import com.example.hishab.retrofit.request.*
+import com.example.hishab.retrofit.response.*
 
 import retrofit2.Call
 import retrofit2.Response
@@ -36,5 +30,9 @@ interface IRetrofitService {
     suspend fun updateShopping(@Body shoppingRequest: ShoppingRequest ): Response<shoppingResponse>
     @POST(ApiURL.SHOPPING_UPDATE_LIST)
     suspend fun updateShoppingList(@Body shoppingRequestList: List<ShoppingRequest> ): Response<List<shoppingResponse>>
+    @POST(ApiURL.ADD_OR_UPDATE_BUDGET)
+    suspend fun addOrUpdateBudget(@Body budgetRequest: BudgetRequest ): Response<BudgetResponse>
+    @POST(ApiURL.ADD_OR_UPDATE_BUDGET_List)
+    suspend fun addOrUpdateBudgetList(@Body budgetRequestList: List<BudgetRequest> ): Response<List<BudgetItemResponse>>
 
 }

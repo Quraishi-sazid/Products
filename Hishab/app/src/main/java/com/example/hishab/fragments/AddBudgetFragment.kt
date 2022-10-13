@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,7 +22,6 @@ import com.example.hishab.models.entities.Budget
 import com.example.hishab.viewmodel.AddBudgetViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.Observable
-import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -68,11 +66,13 @@ class AddBudgetFragment : Fragment() {
                             map[it.categoryId]!!.getBudgetId(),
                             it.categoryId,
                             it.getCategoryName(),
+                            it.remoteId.toInt(),
+                            map[it.categoryId]!!.remoteId,
                             map[it.categoryId]!!.budget
                         )
                     )
                 else
-                    budgetList.add(BudgetCategoryQuery(-1, it.categoryId, it.getCategoryName(), 0))
+                    budgetList.add(BudgetCategoryQuery(-1, it.categoryId, it.getCategoryName(), -1,-1,0))
             }
             return@map budgetList
         }.observeOn(AndroidSchedulers.mainThread()).subscribe{
@@ -105,6 +105,10 @@ class AddBudgetFragment : Fragment() {
                     }
                 }
             }
+            GlobalScope.launch {
+                viewModel.saveToRemote(budgetList)
+            }
+
             requireActivity().onBackPressed();
         }
     }

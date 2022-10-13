@@ -38,7 +38,10 @@ class Budget():BaseObservable(), Serializable, Parcelable {
     @ColumnInfo(name="year")
     var year:Int=0
 
-    var payloadId:Long = -1
+    var remoteId:Int = -1
+    var isSynced:Boolean = false
+
+
 
     @Bindable
     @Ignore

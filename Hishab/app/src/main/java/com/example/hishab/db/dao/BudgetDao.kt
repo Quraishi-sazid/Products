@@ -2,6 +2,7 @@ package com.example.hishab.db.dao
 
 import androidx.room.*
 import com.example.hishab.models.BudgetCategoryQuery
+import com.example.hishab.models.BudgetGroupQueryModel
 import com.example.hishab.models.CategoryCostModel
 import com.example.hishab.models.MonthlySpentModel
 import com.example.hishab.models.entities.Budget
@@ -23,8 +24,18 @@ interface BudgetDao {
     fun insert(b:Budget):Long
 
 
+    @Query("select group_concat(budget_id, ',') as budgetIds,\n" +
+            " group_concat(c.category_id, ',')  as categoryIds,\n" +
+            " group_concat(c.category_name, ',')  as categoryNames,\n" +
+            " group_concat(c.remote_id, ',')  as categoryRemoteIds,\n" +
+            " group_concat(b.remoteId, ',')  as budgetRemoteIds,\n" +
+            " group_concat(budget, ',')  as budgets,\n" +
+            " b.year, b.month\n" +
+            " from category c inner join tbl_category_budget b on c.category_id = b.category_id where b.isSynced = 0\n" +
+            "  group by year,month")
+    fun getNotSyncedBudget():List<BudgetGroupQueryModel>
     @Insert
-    abstract fun insertAll(vararg budgetList:Budget)
+    fun insertAll(vararg budgetList:Budget)
     @Update
     fun updateBudgetList(budgetList: List<Budget>)
     @Query("delete from tbl_category_budget where category_id=:deleteId")
@@ -38,4 +49,18 @@ interface BudgetDao {
     fun getCategoryAndBudgetList(year: Int, month: Int):List<BudgetCategoryQuery>
     @Query("update tbl_category_budget set budget=:budget where category_id=:id and month=:month and year=:year")
     suspend fun updateBudgetById(id:Long,budget:Int,month:Int,year:Int)
+    @Query("update tbl_category_budget set remoteId=:budgetId and isSynced=1 where budget_id =:localId")
+    suspend fun updateRemoteId(budgetId: Int, localId: Long)
+
+
+
+    /*select group_concat(budget_id, ',') as budgetIds,
+ group_concat(c.category_id, ',')  as category_ids,
+ group_concat(c.category_name, ',')  as categoryNames,
+ group_concat(c.remote_id, ',')  as categoryRemoteIds,
+ group_concat(b.remoteId, ',')  as budgetRemoteIds,
+ group_concat(budget, ',')  as budgets,
+ b.year, b.month
+ from category c inner join tbl_category_budget b on c.category_id = b.category_id where b.isSynced = 0
+  group by year,month*/
 }

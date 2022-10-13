@@ -12,5 +12,7 @@ class ApiURL {
         const val SHOPPING_UPDATE = "/shopping/api/updateShopping"
         const val SHOPPING_ADD_LIST = "/shopping/api/addShoppingList"
         const val SHOPPING_UPDATE_LIST = "/shopping/api/updateShoppingList"
+        const val ADD_OR_UPDATE_BUDGET = "/budget/api/addOrUpdateBudget"
+        const val ADD_OR_UPDATE_BUDGET_List = "/budget/api/addOrUpdateBudgetList"
     }
 }

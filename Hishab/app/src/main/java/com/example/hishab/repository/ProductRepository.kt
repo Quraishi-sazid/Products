@@ -27,11 +27,11 @@ class ProductRepository(context: Context) : IPayloadHandler {
     private var productDao: ProductDao
 
     init {
-        productDao = EntryPointAccessors.fromApplication(context, FooEntryPoint::class.java).database.ProductDao()
-        var repositoryEntryPoint = EntryPointAccessors.fromApplication(
-            context.applicationContext,
-            RepositoryEntryPoint::class.java
-        )
+        productDao = EntryPointAccessors.fromApplication(
+            context,
+            FooEntryPoint::class.java
+        ).database.ProductDao()
+        var repositoryEntryPoint = EntryPointAccessors.fromApplication(context.applicationContext, RepositoryEntryPoint::class.java)
         categoryRepository = repositoryEntryPoint.categoryRepository
         payloadRepository = repositoryEntryPoint.payloadRepository
     }
@@ -52,8 +52,8 @@ class ProductRepository(context: Context) : IPayloadHandler {
         return productDao.getProductCategoryListInnerJoin()
     }
 
-    fun updateProductNameAndCategoryId(productId: Long,categoryId: Long, productName: String) {
-        productDao.updateProductNameAndCategoryId(productName,categoryId, productId)
+    fun updateProductNameAndCategoryId(productId: Long, categoryId: Long, productName: String) {
+        productDao.updateProductNameAndCategoryId(productName, categoryId, productId)
     }
 
     fun getPurchaseCountOfProductId(productId: Long): Int {
@@ -124,7 +124,7 @@ class ProductRepository(context: Context) : IPayloadHandler {
     }
 
 
-    suspend fun  handleSuccess(productResponse: ProductResponse?) {
+    suspend fun handleSuccess(productResponse: ProductResponse?) {
         if (productResponse != null) {
             categoryRepository.handleSuccess(productResponse.categoryResponse)
             productDao.updateRemoteId(
@@ -195,7 +195,7 @@ class ProductRepository(context: Context) : IPayloadHandler {
 
     }
 
-    suspend fun getAllProductsSuspended() : List<Product> {
+    suspend fun getAllProductsSuspended(): List<Product> {
         return productDao.getAllProducts()
     }
 
