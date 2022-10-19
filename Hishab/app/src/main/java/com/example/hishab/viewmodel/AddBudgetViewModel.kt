@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddBudgetViewModel @Inject constructor (app: Application) : AndroidViewModel(app) {
-    @Inject//hilt not instantiating.need to check
+    @Inject
     lateinit var budgetRepository : BudgetRepository
     @Inject
     lateinit var categoryRepository: CategoryRepository

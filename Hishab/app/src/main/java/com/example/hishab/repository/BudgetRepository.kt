@@ -13,7 +13,7 @@ import com.example.hishab.retrofit.RetrofitHelper
 import com.example.hishab.retrofit.request.BudgetItemRequest
 import com.example.hishab.retrofit.request.BudgetRequest
 import com.example.hishab.retrofit.response.BudgetResponse
-import com.example.hishab.utils.toTypedList
+import com.example.hishab.utils.toIntList
 import dagger.hilt.android.EntryPointAccessors
 import io.reactivex.Flowable
 import kotlinx.coroutines.GlobalScope
@@ -24,15 +24,16 @@ class BudgetRepository(application: Application) : IPayloadHandler {
     var categoryRepository: CategoryRepository
     var database = EntryPointAccessors.fromApplication(application, FooEntryPoint::class.java).database
     private var budgetDao: BudgetDao
+
     init {
         budgetDao = database.BudgetDao()
         var repositoryEntryPoint = EntryPointAccessors.fromApplication(application, RepositoryEntryPoint::class.java)
         categoryRepository = repositoryEntryPoint.categoryRepository
     }
+
     fun getBudgetList(month: Int, year: Int): Flowable<List<Budget>> {
         return budgetDao.getBudgetFlowable(month, year)
     }
-
 
     fun getCategoryBudgetList(month: Int, year: Int): List<BudgetCategoryQuery> {
         return budgetDao.getCategoryAndBudgetList(year, month)
@@ -64,14 +65,14 @@ class BudgetRepository(application: Application) : IPayloadHandler {
     override suspend fun updateRemote() {
         var notSyncedBudgetData:List<BudgetGroupQueryModel> = budgetDao.getNotSyncedBudget()
         notSyncedBudgetData.forEach {
-            var budgetIds = it.budgetIds.toTypedList<Int>()
-            var categoryIds = it.categoryIds.toTypedList<Int>()
-            var categoryNames = it.categoryNames.toTypedList<String>()
-            var categoryRemoteIds = it.categoryRemoteIds.toTypedList<Int>()
-            var budgetRemoteIds = it.budgetRemoteIds.toTypedList<Int>()
-            var budgets = it.budgets.toTypedList<Int>()
+            var budgetIds = it.budgetIds.toIntList()
+            var categoryIds = it.categoryIds.toIntList()
+            var categoryNames = it.categoryNames.split(",")
+            var categoryRemoteIds = it.categoryRemoteIds.toIntList()
+            var budgetRemoteIds = it.budgetRemoteIds.toIntList()
+            var budgets = it.budgets.toIntList()
             var budgetRequest = BudgetRequest(it.year,it.month)
-            for(i in 0..budgetIds.size){
+            for(i in 0..budgetIds.size - 1){
                 budgetRequest.addItem(BudgetItemRequest(
                     budgetRemoteIds[i],categoryIds[i],categoryNames[i],categoryRemoteIds[i],
                     budgetIds[i],budgets[i]
@@ -82,23 +83,26 @@ class BudgetRepository(application: Application) : IPayloadHandler {
     }
 
     suspend fun saveToRemote(budgetRequest: BudgetRequest) {
-        var response = RetrofitHelper.hishabApi.addOrUpdateBudget(budgetRequest)
-        if(response.isSuccessful){
-            if(response.body()!=null){
-                handleSuccess(response.body()!!)
+        try{
+            var response = RetrofitHelper.hishabApi.addOrUpdateBudget(budgetRequest)
+            if(response.isSuccessful){
+                if(response.body()!=null){
+                    handleSuccess(response.body()!!)
+                }
             }
+        }catch (ex:Exception){
+
         }
+
     }
 
      private fun handleSuccess(response: BudgetResponse) {
          GlobalScope.launch {
              response.budgetItemResponses.forEach { response ->
                  categoryRepository.handleSuccess(response.categoryResponse)
-                 budgetDao.updateRemoteId(response.budgetId,response.localId.toLong())
+                 budgetDao.updateRemoteId(response.budgetId,response.budgetLocalId.toLong())
              }
          }
 
     }
-
-
 }

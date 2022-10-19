@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BudgetItemResponse {
-	public int localId;
+	public int budgetLocalId;
 	public int budgetId;
 	public CategoryResponse categoryResponse;
 }

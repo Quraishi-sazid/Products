@@ -12,10 +12,10 @@ import com.example.hishab.hishabApp.repository.IBudgetRepository;
 import com.example.hishab.hishabApp.repository.IUserRepository;
 import com.example.hishab.hishabApp.repository.UserMonthRepository;
 
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,7 +39,7 @@ public class BudgetController {
     @Autowired
     UserMonthRepository userMonthRepository;
 
-    @PostMapping("/addOrUpdateBudget")
+    @PostMapping(value = "/addOrUpdateBudget", consumes = "application/json", produces = "application/json")
     BudgetResponse addOrUpdateBudget(@RequestBody BudgetRequest budgetRequest) {
     	BudgetResponse budgetResponse = new BudgetResponse();
     	budgetResponse.budgetItemResponses = new ArrayList<>();
@@ -61,7 +61,7 @@ public class BudgetController {
     }
     
     @PostMapping("/addOrUpdateBudgetList")
-    List<BudgetResponse> addOrUpdateBudgetList(List<BudgetRequest>budgetRequestList){
+    List<BudgetResponse> addOrUpdateBudgetList(@RequestBody List<BudgetRequest>budgetRequestList){
     	List<BudgetResponse>responseList = new ArrayList<BudgetResponse>();
     	budgetRequestList.forEach(req->{
     		responseList.add(addOrUpdateBudget(req));

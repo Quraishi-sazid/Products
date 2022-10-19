@@ -23,7 +23,6 @@ interface BudgetDao {
     @Insert
     fun insert(b:Budget):Long
 
-
     @Query("select group_concat(budget_id, ',') as budgetIds,\n" +
             " group_concat(c.category_id, ',')  as categoryIds,\n" +
             " group_concat(c.category_name, ',')  as categoryNames,\n" +
@@ -47,20 +46,9 @@ interface BudgetDao {
     //@Query("select post.budget_id as budgetID,cat.category_id as categoryId,category_name as categoryName, ifnull(post.budget,0) as budget from category cat left join (select category_id, budget_id,budget from tbl_category_budget where month =:month and year =:year) post  on cat.category_id = post.category_id")
     @Query("select post.budget_id as budgetID,cat.category_id as categoryId,category_name as categoryName, ifnull(post.budget,0) as budget from category cat left join tbl_category_budget post  on cat.category_id = post.category_id where month =:month and year =:year")
     fun getCategoryAndBudgetList(year: Int, month: Int):List<BudgetCategoryQuery>
-    @Query("update tbl_category_budget set budget=:budget where category_id=:id and month=:month and year=:year")
+    @Query("update tbl_category_budget set budget=:budget,isSynced=0   where category_id=:id and month=:month and year=:year")
     suspend fun updateBudgetById(id:Long,budget:Int,month:Int,year:Int)
-    @Query("update tbl_category_budget set remoteId=:budgetId and isSynced=1 where budget_id =:localId")
+    @Query("update tbl_category_budget set remoteId=:budgetId,isSynced=1 where budget_id =:localId")
     suspend fun updateRemoteId(budgetId: Int, localId: Long)
 
-
-
-    /*select group_concat(budget_id, ',') as budgetIds,
- group_concat(c.category_id, ',')  as category_ids,
- group_concat(c.category_name, ',')  as categoryNames,
- group_concat(c.remote_id, ',')  as categoryRemoteIds,
- group_concat(b.remoteId, ',')  as budgetRemoteIds,
- group_concat(budget, ',')  as budgets,
- b.year, b.month
- from category c inner join tbl_category_budget b on c.category_id = b.category_id where b.isSynced = 0
-  group by year,month*/
 }
