@@ -1,6 +1,7 @@
 package com.example.hishab.hishabApp.controller;
 
 import com.example.hishab.hishabApp.apiModels.CategoryResponse;
+import com.example.hishab.hishabApp.apiModels.IShoppingHistoryResponse;
 import com.example.hishab.hishabApp.apiModels.ProductRequest;
 import com.example.hishab.hishabApp.apiModels.ProductResponse;
 import com.example.hishab.hishabApp.apiModels.ShoppingItemRequest;
@@ -139,6 +140,12 @@ public class ShoppingController {
 			shoppingResponses.add(addShopping(item));
 		});
 		return shoppingResponses;
+	}
+	
+	@GetMapping("/getShoppingHistory")
+	public List<IShoppingHistoryResponse> getShoppingHistories(@RequestParam("userId") int userId)
+	{
+		return shoppingRepository.findShoppingHistory(userId);	
 	}
 
 }

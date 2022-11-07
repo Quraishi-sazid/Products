@@ -7,7 +7,9 @@ import com.example.hishab.retrofit.response.*
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 interface IRetrofitService {
     @POST(value = ApiURL.LOGIN)
@@ -34,5 +36,10 @@ interface IRetrofitService {
     suspend fun addOrUpdateBudget(@Body budgetRequest: BudgetRequest ): Response<BudgetResponse>
     @POST(ApiURL.ADD_OR_UPDATE_BUDGET_List)
     suspend fun addOrUpdateBudgetList(@Body budgetRequestList: List<BudgetRequest> ): Response<List<BudgetItemResponse>>
-
+    @GET(ApiURL.GET_CATEGORY_PRODUCT_HISTORY)
+    suspend fun getCategoryProductHistory(@Query("userId") userId:Int): Response<List<CategoryProductHistoryResponse>>
+    @GET(ApiURL.GET_BUDGET_HISTORY)
+    suspend fun getBudgetHistory(@Query("userId") userId:Int): Response<List<BudgetHistoryResponse>>
+    @GET(ApiURL.GET_SHOPPING_HISTORY)
+    suspend fun getShoppingHistory(@Query("userId") userId:Int): Response<List<ShoppingHistoryResponse>>
 }

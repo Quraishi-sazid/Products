@@ -56,7 +56,6 @@ class ViewPagerTabFragment : Fragment() {
                     fragment.onFragmentChanged()
                 }
                 if (/*fragment is IViewPagerSwipeListener*/ false) {
-
                     io.reactivex.Observable.just(1).delay(1000, TimeUnit.MILLISECONDS).subscribe {
                         var listener = fragment as IViewPagerSwipeListener
                         listener.onSwipedRightOrLeft.subscribe {

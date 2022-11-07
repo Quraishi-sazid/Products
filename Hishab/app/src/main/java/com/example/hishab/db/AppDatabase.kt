@@ -50,7 +50,7 @@ abstract class AppDatabase : RoomDatabase() {
                     override fun onCreate(db: SupportSQLiteDatabase) {
                         super.onCreate(db)
                         GlobalScope.launch {
-                            insertPredefinedData()
+                            //insertPredefinedData()
                         }
                     }
                 })/*.allowMainThreadQueries()*/.fallbackToDestructiveMigration()

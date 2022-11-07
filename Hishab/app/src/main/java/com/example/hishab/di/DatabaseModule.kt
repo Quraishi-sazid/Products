@@ -54,7 +54,7 @@ object DatabaseModule {
                     override fun onCreate(db: SupportSQLiteDatabase) {
                         super.onCreate(db)
                         GlobalScope.launch {
-                            AppDatabase.insertPredefinedData()
+                            //AppDatabase.insertPredefinedData()
                         }
                     }
                 })/*.allowMainThreadQueries()*/.fallbackToDestructiveMigration()

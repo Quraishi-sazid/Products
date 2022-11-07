@@ -21,7 +21,6 @@ import com.example.hishab.retrofit.RetrofitHelper
 import java.util.regex.Pattern
 
 class RegisterFragment : Fragment() {
-
     var inflate: View? = null
     lateinit var binding: FragmentRegisterBinding
     val VALID_EMAIL_ADDRESS_REGEX: Pattern =

@@ -14,5 +14,8 @@ class ApiURL {
         const val SHOPPING_UPDATE_LIST = "/shopping/api/updateShoppingList"
         const val ADD_OR_UPDATE_BUDGET = "/budget/api/addOrUpdateBudget"
         const val ADD_OR_UPDATE_BUDGET_List = "/budget/api/addOrUpdateBudgetList"
+        const val GET_CATEGORY_PRODUCT_HISTORY = "/category/api/getCategoryProductHistory"
+        const val GET_BUDGET_HISTORY = "/budget/api/getBudgetHistory"
+        const val GET_SHOPPING_HISTORY = "/shopping/api/getShoppingHistory"
     }
 }

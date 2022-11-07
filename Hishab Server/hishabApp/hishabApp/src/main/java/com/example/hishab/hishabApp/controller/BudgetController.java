@@ -4,6 +4,7 @@ import com.example.hishab.hishabApp.apiModels.BudgetItemResponse;
 import com.example.hishab.hishabApp.apiModels.BudgetRequest;
 import com.example.hishab.hishabApp.apiModels.BudgetResponse;
 import com.example.hishab.hishabApp.apiModels.CategoryResponse;
+import com.example.hishab.hishabApp.apiModels.IBudgetHistoryResponse;
 import com.example.hishab.hishabApp.model.Budget;
 import com.example.hishab.hishabApp.model.Category;
 import com.example.hishab.hishabApp.model.UserModel;
@@ -14,6 +15,7 @@ import com.example.hishab.hishabApp.repository.UserMonthRepository;
 
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -67,5 +69,10 @@ public class BudgetController {
     		responseList.add(addOrUpdateBudget(req));
     	});
     	return responseList;
+    }
+    
+    @GetMapping("/getBudgetHistory")
+    List<IBudgetHistoryResponse> findBudgetHistory(@RequestParam("userId") int userId){
+    	return budgetRepository.findCategoryBudget(userId);
     }
 }

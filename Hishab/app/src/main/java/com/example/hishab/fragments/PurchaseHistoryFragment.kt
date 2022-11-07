@@ -40,7 +40,7 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class PurchaseHistoryFragment : Fragment(), IViewPagerSwipeListener,IViewPagerFragmentChanged {
+class PurchaseHistoryFragment : Fragment(), IViewPagerSwipeListener, IViewPagerFragmentChanged {
     val purchaseHistoryViewModel: PurchaseHistoryViewModel by viewModels()
     lateinit var recyclerView: RecyclerView
     var pagingFlow: Flow<PagingData<Any>>? = null
@@ -64,7 +64,11 @@ class PurchaseHistoryFragment : Fragment(), IViewPagerSwipeListener,IViewPagerFr
         pagingFlow = try {
             purchaseHistoryViewModel.getFlow(args.categoryId, args.customDateModel)
         } catch (exception: Exception) {
-            purchaseHistoryViewModel.getFlow()
+            try {
+                purchaseHistoryViewModel.getFlow()
+            } catch (ex: Exception) {
+                null
+            }
         }
         CoroutineScope(Dispatchers.IO).launch {
             pagingFlow?.collectLatest {
@@ -74,27 +78,28 @@ class PurchaseHistoryFragment : Fragment(), IViewPagerSwipeListener,IViewPagerFr
     }
 
     private fun setUpRecyclerView(inflate: View) {
-        var diffUtil: DiffUtil.ItemCallback<Any> = object : DiffUtil.ItemCallback<Any>(){
+        var diffUtil: DiffUtil.ItemCallback<Any> = object : DiffUtil.ItemCallback<Any>() {
             override fun areItemsTheSame(
                 oldItem: Any,
                 newItem: Any
             ): Boolean {
-                if(oldItem is PurchaseHistory && newItem is PurchaseHistory){
-                    if(oldItem.getPurchaseId()!=null && newItem.getPurchaseId()!=null){
+                if (oldItem is PurchaseHistory && newItem is PurchaseHistory) {
+                    if (oldItem.getPurchaseId() != null && newItem.getPurchaseId() != null) {
                         return oldItem.getPurchaseId()!! == newItem.getPurchaseId()
                     }
-                }else if(oldItem is String && newItem is String){
+                } else if (oldItem is String && newItem is String) {
                     return oldItem == newItem
                 }
                 return false
             }
+
             override fun areContentsTheSame(
                 oldItem: Any,
                 newItem: Any
             ): Boolean {
-                if(oldItem is PurchaseHistory && newItem is PurchaseHistory){
+                if (oldItem is PurchaseHistory && newItem is PurchaseHistory) {
                     return oldItem.equals(newItem)
-                }else if(oldItem is String && newItem is String){
+                } else if (oldItem is String && newItem is String) {
                     return oldItem == newItem
                 }
                 return false
@@ -108,7 +113,7 @@ class PurchaseHistoryFragment : Fragment(), IViewPagerSwipeListener,IViewPagerFr
         )
         var twoPredicate = TwoPredicate(Predicate<Int> { adapter.getItemAt(it) is Int },
             Predicate<Int> { adapter.getItemAt(it) is String })
-        adapter = PagingAdapterForThreeViewTypes.Create(layouts,twoPredicate,diffUtil)
+        adapter = PagingAdapterForThreeViewTypes.Create(layouts, twoPredicate, diffUtil)
         adapter.firstViewInlateLiveData.observe(viewLifecycleOwner) {
             it.second.year = it.first;
         }
@@ -118,15 +123,17 @@ class PurchaseHistoryFragment : Fragment(), IViewPagerSwipeListener,IViewPagerFr
         adapter.thirdViewInlateLiveData.observe(viewLifecycleOwner) {
             it.second.purchaseHistory = it.first
         }
-        adapter.thirdViewClickLiveData.observe(viewLifecycleOwner){
-            try{
-                var directions = ViewPagerTabFragmentDirections.actionViewPagerTabFragmentToAddShoppingFragment()
+        adapter.thirdViewClickLiveData.observe(viewLifecycleOwner) {
+            try {
+                var directions =
+                    ViewPagerTabFragmentDirections.actionViewPagerTabFragmentToAddShoppingFragment()
                 directions.productId = it.getProductId()
                 directions.time = it.getTime()
                 directions.buyingId = it.getBuyingId()!!.toInt()
                 findNavController().navigate(directions)
-            }catch (exception: Exception){
-                var directions = PurchaseHistoryFragmentDirections.actionPurchaseHistoryFragmentToAddShoppingFragment()
+            } catch (exception: Exception) {
+                var directions =
+                    PurchaseHistoryFragmentDirections.actionPurchaseHistoryFragmentToAddShoppingFragment()
                 directions.productId = it.getProductId()
                 directions.time = it.getTime()
                 directions.buyingId = it.getBuyingId()!!.toInt()

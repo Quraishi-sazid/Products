@@ -1,0 +1,11 @@
+SELECT cp.category_id,cp.product_id,cat.category_name,pro.product_name FROM tbl_cp_user_mapping u 
+INNER JOIN tbl_category_product_mapping cp ON cp.category_product_mapping_id = u.category_product_mapping_id
+INNER join tbl_category cat ON cp.category_id = cat.category_id INNER JOIN tbl_product pro on pro.product_id = cp.product_id 
+WHERE user_id = 10 
+
+SELECT category_id,u.month,u.year,budget FROM tbl_user_month_mapping u INNER JOIN tbl_budget b
+ON u.user_month_mapping_id= b.user_month_mapping_id
+WHERE u.user_id =10
+
+SELECT cost,description,product_id,shopping_item_id,s.shopping_id,s.date FROM tbl_shopping s
+INNER JOIN tbl_shopping_item si on s.shopping_id = si.shopping_id WHERE s.user_id = 10

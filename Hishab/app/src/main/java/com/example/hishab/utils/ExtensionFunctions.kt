@@ -1,6 +1,6 @@
 package com.example.hishab.utils
 
-import com.google.gson.Gson
+import java.util.*
 
 /*
 inline fun <reified T> String.toTypedList():List<T>{
@@ -19,4 +19,25 @@ fun String.toIntList():List<Int>{
         responseList.add(Integer.parseInt(it))
     }
     return responseList
+}
+
+fun Date.getCalenderYear():Int {
+    var date: Date // your date
+    val cal = Calendar.getInstance()
+    cal.time = this
+    return cal[Calendar.YEAR]
+}
+
+fun Date.getCalenderMonth() : Int{
+    var date: Date // your date
+    val cal = Calendar.getInstance()
+    cal.time = this
+    return cal.get(Calendar.MONTH);
+}
+
+fun Date.getCalenderDay() : Int{
+    var date: Date // your date
+    val cal = Calendar.getInstance()
+    cal.time = this
+    return cal.get(Calendar.DAY_OF_MONTH);
 }

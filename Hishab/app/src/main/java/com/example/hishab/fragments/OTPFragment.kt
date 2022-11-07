@@ -13,6 +13,7 @@ import android.widget.EditText
 import android.widget.Toast
 import com.example.hishab.MainActivity
 import com.example.hishab.R
+import com.example.hishab.repository.IHistoryRepository
 import com.example.hishab.retrofit.ApiCallStatus
 import com.example.hishab.retrofit.ApiCaller
 import com.example.hishab.retrofit.request.LoginRequest
@@ -23,6 +24,7 @@ import com.example.hishab.utils.PreferenceHelper
 import com.example.hishab.retrofit.RetrofitHelper
 import com.google.firebase.auth.PhoneAuthProvider
 import com.google.firebase.messaging.FirebaseMessaging
+import kotlinx.coroutines.runBlocking
 
 
 class OTPFragment : Fragment() {
@@ -86,6 +88,10 @@ class OTPFragment : Fragment() {
                                                     .commit()
                                             }
                                             else{
+                                                runBlocking {
+                                                    var historyRepository=IHistoryRepository(requireContext().applicationContext)
+                                                    historyRepository.updateLocalDBFromRemote()
+                                                }
                                                 requireActivity().startActivity(Intent(requireContext(), MainActivity::class.java))
                                                 requireActivity().finish()
                                             }

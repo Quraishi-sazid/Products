@@ -1,10 +1,12 @@
 package com.example.hishab.hishabApp.controller;
 
+import com.example.hishab.hishabApp.apiModels.ICategoryProductResponse;
 import com.example.hishab.hishabApp.apiModels.CategoryRequest;
 import com.example.hishab.hishabApp.apiModels.CategoryResponse;
 import com.example.hishab.hishabApp.model.Category;
 import com.example.hishab.hishabApp.repository.ICategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -54,6 +56,13 @@ public class CategoryController {
     		responseList.add(new CategoryResponse(categoryRequest.getLocalId(), category.getCategoryId()));
     	});
     	return responseList;
+    }
+    @GetMapping("/getCategoryProductHistory")
+    List<ICategoryProductResponse>getCategoryProduct(@RequestParam("userId") int userId)
+    {
+    	List<ICategoryProductResponse> list = categoryRepository.findCategoryProduct(userId);
+    	return list;
+    	
     }
     
 }

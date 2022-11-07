@@ -28,9 +28,9 @@ class UserActivity : AppCompatActivity() {
         if (PreferenceHelper.get(Constant.User_Id, -1) == -1) {
             supportFragmentManager.beginTransaction().replace(R.id.container, LoginFragment())
                 .commit()
-        } else if (PreferenceHelper.get(Constant.UserName, null) == null)
+        } /*else if (PreferenceHelper.get(Constant.UserName, null) == null)
             supportFragmentManager.beginTransaction().replace(R.id.container, RegisterFragment())
-                .commit()
+                .commit()*/
         else {
             startActivity(Intent(this, MainActivity::class.java))
             finish()
